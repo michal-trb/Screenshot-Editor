@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -27,10 +29,11 @@ namespace screenerWpf
 
             Loaded += (sender, e) => drawableCanvas.Focus();
             CreateCanvasBitmap();
-
+            InitializeFontFamilyComboBox(); // Wywołaj metodę inicjalizującą ComboBox
+            InitializeFontSizeComboBox();
             arrowColorComboBox.SelectedIndex = 0; // Zakładając, że Czarny jest pierwszym elementem
             arrowThicknessComboBox.SelectedIndex = 1; // Zakładając, że "2" jest drugim elementem
-            
+
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
         }
 
@@ -126,9 +129,9 @@ namespace screenerWpf
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-           inputHandler.SaveButton_Click(sender, e);
+            inputHandler.SaveButton_Click(sender, e);
         }
-      
+
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             inputHandler.Canvas_MouseLeftButtonDown(sender, e);
@@ -152,6 +155,7 @@ namespace screenerWpf
 
         public void AddTextButton_Click(object sender, RoutedEventArgs e)
         {
+            IsTextToolSelected = true;
             inputHandler.AddTextButton_Click(sender, e);
         }
 
@@ -190,6 +194,81 @@ namespace screenerWpf
         public void ArrowColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             inputHandler.ArrowColorComboBox_SelectionChanged(sender, e);
+        }
+
+        private bool _isTextToolSelected;
+        public bool IsTextToolSelected
+        {
+            get { return _isTextToolSelected; }
+            set
+            {
+                _isTextToolSelected = value;
+                OnPropertyChanged(nameof(IsTextToolSelected));
+            }
+        }
+
+        private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (fontFamilyComboBox.SelectedItem is ComboBoxItem selectedFontFamilyItem)
+            {
+                var fontFamily = new FontFamily(selectedFontFamilyItem.Content.ToString());
+                inputHandler.FontFamilyComboBox_SelectionChanged(fontFamily);
+            }
+        }
+
+        private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (fontSizeComboBox.SelectedItem is ComboBoxItem selectedFontSizeItem
+                && double.TryParse(selectedFontSizeItem.Content.ToString(), out double fontSize))
+            {
+                inputHandler.FontSizeComboBox_SelectionChanged(fontSize);
+            }
+        }
+
+        private void InitializeFontFamilyComboBox()
+        {
+            var fontFamilies = new List<string>
+            {
+                "Arial",
+                "Calibri",
+                "Times New Roman",
+                "Verdana",
+                "Courier New"
+            };
+
+            foreach (var fontFamily in fontFamilies)
+            {
+                fontFamilyComboBox.Items.Add(new ComboBoxItem
+                {
+                    Content = fontFamily
+                });
+            }
+            var defaultFontFamily = fontFamilyComboBox.Items
+                .OfType<ComboBoxItem>()
+                .FirstOrDefault(item => item.Content.ToString() == "Arial");
+            if (defaultFontFamily != null)
+            {
+                fontFamilyComboBox.SelectedItem = defaultFontFamily;
+            }
+        }
+
+        private void InitializeFontSizeComboBox()
+        {
+            var fontSizes = new[] { 8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40 };
+            foreach (var size in fontSizes)
+            {
+                fontSizeComboBox.Items.Add(new ComboBoxItem
+                {
+                    Content = size.ToString()
+                });
+            }
+            var defaultFontSize = fontSizeComboBox.Items
+                .OfType<ComboBoxItem>()
+                .FirstOrDefault(item => item.Content.ToString() == "12");
+            if (defaultFontSize != null)
+            {
+                fontSizeComboBox.SelectedItem = defaultFontSize;
+            }
         }
     }
 }

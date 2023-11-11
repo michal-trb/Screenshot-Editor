@@ -22,6 +22,8 @@ namespace screenerWpf
         private double arrowThickness;
         private ComboBox arrowColorComboBox;
         private ComboBox arrowThicknessComboBox;
+        private FontFamily selectedFontFamily = new FontFamily("Arial");
+        private double selectedFontSize = 12.0;
 
 
         public CanvasInputHandler(
@@ -256,20 +258,20 @@ namespace screenerWpf
 
         private void CreateEditableText(Point location)
         {
-            // Create a TextBox for user to enter textv
+            // Create a TextBox for user to enter text
             editableTextBox = new TextBox
             {
-                Width = 100, // Assume a default width; you might want to adjust this
-                Height = 20, // Assume a default height; you might want to adjust this
+                Width = 200, // Adjust as needed
+                Height = 30, // Adjust as needed
                 Text = "New Text",
+                FontFamily = selectedFontFamily,
+                FontSize = selectedFontSize,
                 Foreground = new SolidColorBrush(Colors.Black),
                 Background = new SolidColorBrush(Colors.Transparent),
-                BorderThickness = new Thickness(0), // Hide the border for now
-                AcceptsReturn = false, // Set as needed
-                AcceptsTab = false, // Set as needed
+                BorderThickness = new Thickness(0),
+                AcceptsReturn = true,
+                AcceptsTab = true
             };
-            editableTextBox.KeyDown += EditableTextBox_KeyDown;
-
             Canvas.SetLeft(editableTextBox, location.X);
             Canvas.SetTop(editableTextBox, location.Y);
             drawableCanvas.Children.Add(editableTextBox);
@@ -301,6 +303,16 @@ namespace screenerWpf
             drawableCanvas.AddElement(drawableText);
             drawableCanvas.Children.Remove(textBox);
             editableTextBox = null; // Clear the temporary TextBox
+        }
+
+        public void FontFamilyComboBox_SelectionChanged(FontFamily selectedFontFamily)
+        {
+            this.selectedFontFamily = selectedFontFamily;
+        }
+
+        public void FontSizeComboBox_SelectionChanged(double fontSize)
+        {
+            this.selectedFontSize = fontSize;
         }
     }
 }

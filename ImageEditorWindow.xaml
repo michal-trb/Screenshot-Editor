@@ -51,6 +51,14 @@
                 <ComboBoxItem Content="10"/>
                 <!-- Dodaj więcej opcji grubości, jeśli potrzebujesz -->
             </ComboBox>
+
+            <Separator Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <Label Content="Rodzaj czcionki:" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="fontFamilyComboBox" SelectionChanged="FontFamilyComboBox_SelectionChanged" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            </ComboBox>
+            <Label Content="Rozmiar czcionki:" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="fontSizeComboBox" SelectionChanged="FontSizeComboBox_SelectionChanged" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            </ComboBox>
         </ToolBar>
         <Viewbox Grid.Row="1" Stretch="Uniform">
             <local:DrawableCanvas x:Name="drawableCanvas" Focusable="True" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseLeftButtonUp="Canvas_MouseLeftButtonUp" MouseMove="Canvas_MouseMove">
