@@ -29,8 +29,8 @@
             <Button Content="Add Text" Click="AddTextButton_Click"/>
             <!-- Nowe kontrolki do wyboru właściwości strzałki -->
             <Separator Visibility="{Binding IsArrowToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <Label Content="Kolor:" Visibility="{Binding IsDrawArrowSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <ComboBox x:Name="arrowColorComboBox" SelectionChanged="ArrowColorComboBox_SelectionChanged" Visibility="{Binding IsDrawArrowSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Label Content="Kolor:" Visibility="{Binding IsColorLabelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="colorComboBox" SelectionChanged="ColorComboBox_SelectionChanged" Visibility="{Binding IsColorLabelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBoxItem Content="Czarny" Background="Black"/>
                 <ComboBoxItem Content="Czerwony" Background="Red"/>
                 <ComboBoxItem Content="Zielony" Background="Green"/>
@@ -52,7 +52,6 @@
                 <!-- Dodaj więcej opcji grubości, jeśli potrzebujesz -->
             </ComboBox>
 
-            <Separator Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <Label Content="Rodzaj czcionki:" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <ComboBox x:Name="fontFamilyComboBox" SelectionChanged="FontFamilyComboBox_SelectionChanged" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
             </ComboBox>

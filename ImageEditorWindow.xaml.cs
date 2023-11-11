@@ -22,7 +22,7 @@ namespace screenerWpf
             this.initialImage = initialBitmap;
             this.inputHandler = new CanvasInputHandler(
                 drawableCanvas,
-                arrowColorComboBox,
+                colorComboBox,
                 arrowThicknessComboBox);
             drawableCanvas.Width = initialBitmap.PixelWidth;
             drawableCanvas.Height = initialBitmap.PixelHeight;
@@ -31,7 +31,7 @@ namespace screenerWpf
             CreateCanvasBitmap();
             InitializeFontFamilyComboBox(); // Wywołaj metodę inicjalizującą ComboBox
             InitializeFontSizeComboBox();
-            arrowColorComboBox.SelectedIndex = 0; // Zakładając, że Czarny jest pierwszym elementem
+            colorComboBox.SelectedIndex = 0; // Zakładając, że Czarny jest pierwszym elementem
             arrowThicknessComboBox.SelectedIndex = 1; // Zakładając, że "2" jest drugim elementem
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
@@ -150,12 +150,16 @@ namespace screenerWpf
         public void DrawArrowButton_Click(object sender, RoutedEventArgs e)
         {
             IsDrawArrowSelected = true;
+            IsTextToolSelected = false;
+            UpdateColorLabelVisibility();
             inputHandler.DrawArrowButton_Click(sender, e);
         }
 
         public void AddTextButton_Click(object sender, RoutedEventArgs e)
         {
             IsTextToolSelected = true;
+            IsDrawArrowSelected = false;
+            UpdateColorLabelVisibility();
             inputHandler.AddTextButton_Click(sender, e);
         }
 
@@ -164,18 +168,18 @@ namespace screenerWpf
             inputHandler.CommandBinding_DeleteExecuted(sender, e);
         }
 
-        private bool _isDrawArrowSelected;
+        private bool isDrawArrowSelected;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public bool IsDrawArrowSelected
         {
-            get { return _isDrawArrowSelected; }
+            get { return isDrawArrowSelected; }
             set
             {
-                if (_isDrawArrowSelected != value)
+                if (isDrawArrowSelected != value)
                 {
-                    _isDrawArrowSelected = value;
+                    isDrawArrowSelected = value;
                     OnPropertyChanged(nameof(IsDrawArrowSelected));
                 }
             }
@@ -191,18 +195,18 @@ namespace screenerWpf
             inputHandler.ArrowThicknessComboBox_SelectionChanged(sender, e);
         }
 
-        public void ArrowColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void ColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            inputHandler.ArrowColorComboBox_SelectionChanged(sender, e);
+            inputHandler.ColorComboBox_SelectionChanged(sender, e);
         }
 
-        private bool _isTextToolSelected;
+        private bool isTextToolSelected;
         public bool IsTextToolSelected
         {
-            get { return _isTextToolSelected; }
+            get { return isTextToolSelected; }
             set
             {
-                _isTextToolSelected = value;
+                isTextToolSelected = value;
                 OnPropertyChanged(nameof(IsTextToolSelected));
             }
         }
@@ -270,5 +274,21 @@ namespace screenerWpf
                 fontSizeComboBox.SelectedItem = defaultFontSize;
             }
         }
+        private bool _isColorLabelVisible;
+        public bool IsColorLabelVisible
+        {
+            get => _isColorLabelVisible;
+            set
+            {
+                _isColorLabelVisible = value;
+                OnPropertyChanged(nameof(IsColorLabelVisible));
+            }
+        }
+
+        private void UpdateColorLabelVisibility()
+        {
+            IsColorLabelVisible = IsDrawArrowSelected || IsTextToolSelected;
+        }
+
     }
 }

@@ -6,7 +6,10 @@ using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows.Media.Imaging;
-using System.ComponentModel;
+using System.Drawing;
+using Color = System.Windows.Media.Color;
+using FontFamily = System.Windows.Media.FontFamily;
+using Point = System.Windows.Point;
 
 namespace screenerWpf
 {
@@ -18,9 +21,9 @@ namespace screenerWpf
         private TextBox editableTextBox;
         private enum EditAction { None, DrawArrow, AddText, Move, Delete }
         private EditAction currentAction = EditAction.None;
-        private Color arrowColor;
+        private Color color;
         private double arrowThickness;
-        private ComboBox arrowColorComboBox;
+        private ComboBox colorComboBox;
         private ComboBox arrowThicknessComboBox;
         private FontFamily selectedFontFamily = new FontFamily("Arial");
         private double selectedFontSize = 12.0;
@@ -32,10 +35,10 @@ namespace screenerWpf
             ComboBox thicknessComboBox)
         {
             this.drawableCanvas = canvas;
-            this.arrowColorComboBox = colorComboBox;
+            this.colorComboBox = colorComboBox;
             this.arrowThicknessComboBox = thicknessComboBox;
 
-            arrowColor = Colors.Black;
+            color = Colors.Black;
             arrowThickness = 2.0;
 
             // Ustaw początkowy wybór dla rozwijanych list
@@ -52,7 +55,7 @@ namespace screenerWpf
                 currentArrow = new DrawableArrow
                 {
                     Position = startPoint,
-                    Color = arrowColor, // Użyj wybranego koloru
+                    Color = color, // Użyj wybranego koloru
                     Thickness = arrowThickness // Użyj wybranej grubości
                 };
                 drawableCanvas.AddElement(currentArrow);
@@ -106,14 +109,14 @@ namespace screenerWpf
         public void DrawArrowButton_Click(object sender, RoutedEventArgs e)
         {
             currentAction = EditAction.DrawArrow;
-            if (arrowColorComboBox.SelectedItem is ComboBoxItem selectedColorItem
+            if (colorComboBox.SelectedItem is ComboBoxItem selectedColorItem
                 && selectedColorItem.Background is SolidColorBrush colorBrush)
             {
-                arrowColor = colorBrush.Color;
+                color = colorBrush.Color;
             }
             else
             {
-                arrowColor = Colors.Black;
+                color = Colors.Black;
             }
 
             if (arrowThicknessComboBox.SelectedItem is ComboBoxItem selectedThicknessItem
@@ -136,12 +139,12 @@ namespace screenerWpf
             }
         }
 
-        public void ArrowColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void ColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (arrowColorComboBox.SelectedItem is ComboBoxItem selectedColorItem
+            if (colorComboBox.SelectedItem is ComboBoxItem selectedColorItem
                 && selectedColorItem.Background is SolidColorBrush colorBrush)
             {
-                arrowColor = colorBrush.Color;
+                color = colorBrush.Color;
             }
         }
 
@@ -266,7 +269,7 @@ namespace screenerWpf
                 Text = "New Text",
                 FontFamily = selectedFontFamily,
                 FontSize = selectedFontSize,
-                Foreground = new SolidColorBrush(Colors.Black),
+                Foreground = new SolidColorBrush(color),
                 Background = new SolidColorBrush(Colors.Transparent),
                 BorderThickness = new Thickness(0),
                 AcceptsReturn = true,
