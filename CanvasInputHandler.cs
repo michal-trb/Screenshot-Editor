@@ -6,10 +6,11 @@ using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using System.IO;
 using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace screenerWpf
 {
-    public class CanvasInputHandler
+    public class CanvasInputHandler 
     {
         public ObservableCollection<IDrawable> Elements { get; set; } = new ObservableCollection<IDrawable>();
         private DrawableCanvas drawableCanvas;
@@ -21,6 +22,7 @@ namespace screenerWpf
         private double arrowThickness;
         private ComboBox arrowColorComboBox;
         private ComboBox arrowThicknessComboBox;
+
 
         public CanvasInputHandler(
             DrawableCanvas canvas,
@@ -59,6 +61,7 @@ namespace screenerWpf
                 drawableCanvas.SelectElementAtPoint(e.GetPosition(drawableCanvas));
             }
         }
+
 
         public void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -102,13 +105,17 @@ namespace screenerWpf
             }
             else
             {
-                // Ustaw domyślny kolor, jeśli nic nie zostało wybrane
                 arrowColor = Colors.Black;
             }
+
             if (arrowThicknessComboBox.SelectedItem is ComboBoxItem selectedThicknessItem
                && double.TryParse(selectedThicknessItem.Content.ToString(), out double selectedThickness))
             {
                 arrowThickness = selectedThickness;
+            }
+            else
+            {
+                arrowThickness = 2.0;
             }
      
         }

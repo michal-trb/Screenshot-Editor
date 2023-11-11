@@ -65,7 +65,6 @@ namespace screenerWpf
             context.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 1), pathGeometry);
         }
 
-
         public override bool HitTest(Point point)
         {
             // Implement hit testing logic for arrow

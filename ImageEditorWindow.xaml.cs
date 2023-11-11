@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,11 +8,12 @@ using System.Windows.Media.Imaging;
 
 namespace screenerWpf
 {
-    public partial class ImageEditorWindow : Window
+    public partial class ImageEditorWindow : Window, INotifyPropertyChanged
     {
         private WriteableBitmap canvasBitmap;
         private BitmapSource initialImage;
         private CanvasInputHandler inputHandler;
+
         public ImageEditorWindow(BitmapSource initialBitmap)
         {
             InitializeComponent();
@@ -141,6 +143,7 @@ namespace screenerWpf
 
         public void DrawArrowButton_Click(object sender, RoutedEventArgs e)
         {
+            IsDrawArrowSelected = true;
             inputHandler.DrawArrowButton_Click(sender, e);
         }
 
@@ -152,6 +155,28 @@ namespace screenerWpf
         private void CommandBinding_DeleteExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             inputHandler.CommandBinding_DeleteExecuted(sender, e);
+        }
+
+        private bool _isDrawArrowSelected;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        public bool IsDrawArrowSelected
+        {
+            get { return _isDrawArrowSelected; }
+            set
+            {
+                if (_isDrawArrowSelected != value)
+                {
+                    _isDrawArrowSelected = value;
+                    OnPropertyChanged(nameof(IsDrawArrowSelected));
+                }
+            }
+        }
+
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

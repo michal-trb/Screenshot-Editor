@@ -10,7 +10,9 @@
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
-
+    <Window.DataContext>
+        <Binding RelativeSource="{RelativeSource Self}"/>
+    </Window.DataContext>
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Delete" Executed="CommandBinding_DeleteExecuted" />
     </Window.CommandBindings>
@@ -27,18 +29,17 @@
             <Button Content="Add Text" Click="AddTextButton_Click"/>
             <!-- Nowe kontrolki do wyboru właściwości strzałki -->
             <Separator Visibility="{Binding IsArrowToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <Label Content="Kolor:" Visibility="{Binding IsArrowToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <ComboBox x:Name="arrowColorComboBox" Visibility="{Binding IsArrowToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
-              SelectedIndex="0">
+            <Label Content="Kolor:" Visibility="{Binding IsDrawArrowSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="arrowColorComboBox" Visibility="{Binding IsDrawArrowSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBoxItem Content="Czarny" Background="Black"/>
                 <ComboBoxItem Content="Czerwony" Background="Red"/>
                 <ComboBoxItem Content="Zielony" Background="Green"/>
                 <ComboBoxItem Content="Niebieski" Background="Blue"/>
                 <!-- Dodaj więcej kolorów według potrzeb -->
             </ComboBox>
-            <Label Content="Grubość:" Visibility="{Binding IsArrowToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <ComboBox x:Name="arrowThicknessComboBox" Visibility="{Binding IsArrowToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ComboBoxItem Content="1"/>
+            <Label Content="Grubość:" Visibility="{Binding IsDrawArrowSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="arrowThicknessComboBox" Visibility="{Binding IsDrawArrowSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <ComboBoxItem Content="1"/>
                 <ComboBoxItem Content="2"/>
                 <ComboBoxItem Content="3"/>
                 <ComboBoxItem Content="4"/>
