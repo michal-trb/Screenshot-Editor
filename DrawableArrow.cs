@@ -30,7 +30,7 @@ namespace screenerWpf
             context.DrawLine(pen, Position, newEndPoint);
 
             // Rysowanie główki strzałki
-            DrawArrowHead(context, newEndPoint, EndPoint, headWidth, headLength);
+            DrawArrowHead(context, newEndPoint, EndPoint, headWidth, headLength, Color);
 
             if (IsSelected)
             {
@@ -40,7 +40,13 @@ namespace screenerWpf
             }
         }
 
-        private void DrawArrowHead(DrawingContext context, Point lineEndPoint, Point arrowEndPoint, double headWidth, double headHeight)
+        private void DrawArrowHead(
+            DrawingContext context,
+            Point lineEndPoint,
+            Point arrowEndPoint,
+            double headWidth,
+            double headHeight,
+            Color color)
         {
             // Kierunek strzałki
             Vector direction = arrowEndPoint - lineEndPoint;
@@ -62,7 +68,7 @@ namespace screenerWpf
             PathGeometry pathGeometry = new PathGeometry();
             pathGeometry.Figures.Add(pathFigure);
 
-            context.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 1), pathGeometry);
+            context.DrawGeometry(new SolidColorBrush(color), new Pen(new SolidColorBrush(color), 1), pathGeometry);
         }
 
         public override bool HitTest(Point point)
