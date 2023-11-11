@@ -22,7 +22,10 @@ namespace screenerWpf
         private ComboBox arrowColorComboBox;
         private ComboBox arrowThicknessComboBox;
 
-        public CanvasInputHandler(DrawableCanvas canvas, ComboBox colorComboBox, ComboBox arrowThicknessComboBox)
+        public CanvasInputHandler(
+            DrawableCanvas canvas,
+            ComboBox colorComboBox,
+            ComboBox arrowThicknessComboBox)
         {
             this.drawableCanvas = canvas;
             this.arrowColorComboBox = colorComboBox;
@@ -77,7 +80,9 @@ namespace screenerWpf
 
         public void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (currentAction == EditAction.DrawArrow && currentArrow != null && e.LeftButton == MouseButtonState.Pressed)
+            if (currentAction == EditAction.DrawArrow
+                && currentArrow != null
+                && e.LeftButton == MouseButtonState.Pressed)
             {
                 // Aktualizujemy końcowy punkt strzałki
                 Point currentPoint = e.GetPosition(drawableCanvas);
@@ -185,7 +190,11 @@ namespace screenerWpf
             {
                 Position = textLocation,
                 Text = textBox.Text,
-                Typeface = new Typeface(textBox.FontFamily, textBox.FontStyle, textBox.FontWeight, textBox.FontStretch),
+                Typeface = new Typeface(
+                    textBox.FontFamily,
+                    textBox.FontStyle,
+                    textBox.FontWeight,
+                    textBox.FontStretch),
                 FontSize = textBox.FontSize,
                 Color = (textBox.Foreground as SolidColorBrush).Color
             };
@@ -249,7 +258,11 @@ namespace screenerWpf
             {
                 Position = textLocation,
                 Text = textBox.Text,
-                Typeface = new Typeface(textBox.FontFamily, textBox.FontStyle, textBox.FontWeight, textBox.FontStretch),
+                Typeface = new Typeface(
+                    textBox.FontFamily,
+                    textBox.FontStyle,
+                    textBox.FontWeight,
+                    textBox.FontStretch),
                 FontSize = textBox.FontSize,
                 Color = (textBox.Foreground as SolidColorBrush).Color
             };

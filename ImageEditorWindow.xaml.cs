@@ -16,8 +16,10 @@ namespace screenerWpf
         {
             InitializeComponent();
             this.initialImage = initialBitmap;
-
-            this.inputHandler = new CanvasInputHandler(drawableCanvas, arrowColorComboBox, arrowThicknessComboBox);
+            this.inputHandler = new CanvasInputHandler(
+                drawableCanvas,
+                arrowColorComboBox,
+                arrowThicknessComboBox);
             drawableCanvas.Width = initialBitmap.PixelWidth;
             drawableCanvas.Height = initialBitmap.PixelHeight;
 
@@ -39,7 +41,11 @@ namespace screenerWpf
                     PixelFormats.Pbgra32,
                     null);
                 initialImage.CopyPixels(
-                    new Int32Rect(0, 0, initialImage.PixelWidth, initialImage.PixelHeight),
+                    new Int32Rect(
+                        0,
+                        0,
+                        initialImage.PixelWidth,
+                        initialImage.PixelHeight),
                     canvasBitmap.BackBuffer,
                     canvasBitmap.BackBufferStride * canvasBitmap.PixelHeight,
                     canvasBitmap.BackBufferStride);
@@ -91,7 +97,11 @@ namespace screenerWpf
                 DrawingVisual visual = new DrawingVisual();
                 using (DrawingContext context = visual.RenderOpen())
                 {
-                    context.DrawImage(initialImage, new Rect(0, 0, scaledWidth, scaledHeight));
+                    context.DrawImage(initialImage, new Rect(
+                        0,
+                        0,
+                        scaledWidth,
+                        scaledHeight));
                 }
                 renderBitmap.Render(visual);
 
@@ -99,7 +109,11 @@ namespace screenerWpf
                 int stride = scaledWidth * (renderBitmap.Format.BitsPerPixel / 8);
                 byte[] pixelData = new byte[stride * scaledHeight];
                 renderBitmap.CopyPixels(pixelData, stride, 0);
-                canvasBitmap.WritePixels(new Int32Rect(0, 0, scaledWidth, scaledHeight), pixelData, stride, 0);
+                canvasBitmap.WritePixels(
+                    new Int32Rect(0, 0, scaledWidth, scaledHeight),
+                    pixelData,
+                    stride,
+                    0);
 
                 UpdateCanvasBackground();
             }

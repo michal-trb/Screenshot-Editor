@@ -14,27 +14,41 @@ namespace screenerWpf
             if (context == null)
                 throw new System.ArgumentNullException("context");
 
-            // Draw the arrow line
+            // Obliczenie długości i szerokości główki strzałki
+            double headLength = Thickness + 10; // Możesz dostosować te wartości
+            double headWidth = Thickness + 5;
+
+            // Kierunek strzałki
+            Vector direction = EndPoint - Position;
+            direction.Normalize();
+
+            // Obliczenie nowego punktu końcowego dla linii, tak aby nie nachodziła na główkę
+            Point newEndPoint = EndPoint - direction * headLength;
+
+            // Rysowanie linii strzałki
             Pen pen = new Pen(new SolidColorBrush(Color), Thickness);
-            context.DrawLine(pen, Position, EndPoint);
-            DrawArrowHead(context, Position, EndPoint, Thickness+5, Thickness+10); // szerokość i wysokość główki do dostosowania
+            context.DrawLine(pen, Position, newEndPoint);
+
+            // Rysowanie główki strzałki
+            DrawArrowHead(context, newEndPoint, EndPoint, headWidth, headLength);
+
             if (IsSelected)
             {
-                Pen selectionPen = new Pen(Brushes.Red, 2); // Stwórz długopis do rysowania obwódki
-                Rect boundingBox = GetBounds(); // Musisz zaimplementować tę metodę aby zwróciła prostokąt otaczający element
+                Pen selectionPen = new Pen(Brushes.Red, 2); // Długopis do rysowania obwódki
+                Rect boundingBox = GetBounds();
                 context.DrawRectangle(null, selectionPen, boundingBox);
             }
         }
 
-        private void DrawArrowHead(DrawingContext context, Point startPoint, Point endPoint, double headWidth, double headHeight)
+        private void DrawArrowHead(DrawingContext context, Point lineEndPoint, Point arrowEndPoint, double headWidth, double headHeight)
         {
             // Kierunek strzałki
-            Vector direction = endPoint - startPoint;
+            Vector direction = arrowEndPoint - lineEndPoint;
             direction.Normalize();
 
             // Punkty na główce strzałki
-            Point point1 = endPoint - direction * headHeight + new Vector(-direction.Y, direction.X) * headWidth / 2;
-            Point point2 = endPoint - direction * headHeight - new Vector(-direction.Y, direction.X) * headWidth / 2;
+            Point point1 = arrowEndPoint - direction * headHeight + new Vector(-direction.Y, direction.X) * headWidth / 2;
+            Point point2 = arrowEndPoint - direction * headHeight - new Vector(-direction.Y, direction.X) * headWidth / 2;
 
             // Rysowanie główki strzałki
             PathFigure pathFigure = new PathFigure
@@ -42,7 +56,7 @@ namespace screenerWpf
                 StartPoint = point1,
                 IsClosed = true // Zamknięcie ścieżki
             };
-            pathFigure.Segments.Add(new LineSegment(endPoint, true));
+            pathFigure.Segments.Add(new LineSegment(arrowEndPoint, true));
             pathFigure.Segments.Add(new LineSegment(point2, true));
 
             PathGeometry pathGeometry = new PathGeometry();
@@ -50,6 +64,7 @@ namespace screenerWpf
 
             context.DrawGeometry(Brushes.Black, new Pen(Brushes.Black, 1), pathGeometry);
         }
+
 
         public override bool HitTest(Point point)
         {
