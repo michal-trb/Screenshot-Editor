@@ -27,11 +27,17 @@ namespace screenerWpf
         public CanvasInputHandler(
             DrawableCanvas canvas,
             ComboBox colorComboBox,
-            ComboBox arrowThicknessComboBox)
+            ComboBox thicknessComboBox)
         {
             this.drawableCanvas = canvas;
             this.arrowColorComboBox = colorComboBox;
-            this.arrowThicknessComboBox = arrowThicknessComboBox;
+            this.arrowThicknessComboBox = thicknessComboBox;
+
+            arrowColor = Colors.Black;
+            arrowThickness = 2.0;
+
+            // Ustaw początkowy wybór dla rozwijanych list
+
         }
 
         // Metody obsługujące zdarzenia myszy...
@@ -118,6 +124,23 @@ namespace screenerWpf
                 arrowThickness = 2.0;
             }
      
+        }
+        public void ArrowThicknessComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (arrowThicknessComboBox.SelectedItem is ComboBoxItem selectedThicknessItem
+                && double.TryParse(selectedThicknessItem.Content.ToString(), out double selectedThickness))
+            {
+                arrowThickness = selectedThickness;
+            }
+        }
+
+        public void ArrowColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (arrowColorComboBox.SelectedItem is ComboBoxItem selectedColorItem
+                && selectedColorItem.Background is SolidColorBrush colorBrush)
+            {
+                arrowColor = colorBrush.Color;
+            }
         }
 
         public void AddTextButton_Click(object sender, RoutedEventArgs e)

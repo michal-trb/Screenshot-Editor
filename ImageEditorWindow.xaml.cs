@@ -28,6 +28,9 @@ namespace screenerWpf
             Loaded += (sender, e) => drawableCanvas.Focus();
             CreateCanvasBitmap();
 
+            arrowColorComboBox.SelectedIndex = 0; // Zakładając, że Czarny jest pierwszym elementem
+            arrowThicknessComboBox.SelectedIndex = 1; // Zakładając, że "2" jest drugim elementem
+            
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
         }
 
@@ -177,6 +180,16 @@ namespace screenerWpf
         protected void OnPropertyChanged(string name)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        public void ArrowThicknessComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            inputHandler.ArrowThicknessComboBox_SelectionChanged(sender, e);
+        }
+
+        public void ArrowColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            inputHandler.ArrowColorComboBox_SelectionChanged(sender, e);
         }
     }
 }
