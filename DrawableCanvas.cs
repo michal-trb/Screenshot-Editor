@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -58,17 +59,56 @@ namespace screenerWpf
 
         private void DrawableCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            lastMousePosition = e.GetPosition(this);
             Point clickPoint = e.GetPosition(this);
+            lastMousePosition = clickPoint;
+            isDragging = false;
+
             for (int i = Elements.Count - 1; i >= 0; i--)
             {
                 if (Elements[i].HitTest(clickPoint))
                 {
                     SelectElement(Elements[i]);
                     isDragging = true;
+
+                    if (selectedElement is DrawableArrow arrow)
+                    {
+                        double tolerance = 30; // tolerancja w pikselach
+
+                        // Sprawdź, czy kliknięto blisko początku lub końca strzałki
+                        bool isNearStart = Math.Abs(arrow.Position.X - clickPoint.X) <= tolerance &&
+                                           Math.Abs(arrow.Position.Y - clickPoint.Y) <= tolerance;
+                        bool isNearEnd = Math.Abs(arrow.EndPoint.X - clickPoint.X) <= tolerance &&
+                                         Math.Abs(arrow.EndPoint.Y - clickPoint.Y) <= tolerance;
+
+                        if (isNearStart)
+                        {
+                            arrow.SetStartBeingDragged(true);
+                        }
+                        else if (isNearEnd)
+                        {
+                            arrow.SetEndBeingDragged(true);
+                        }
+                        else
+                        {
+                            // Jeśli nie jest blisko żadnego końca, przesuwamy całą strzałkę
+                            arrow.SetStartBeingDragged(false);
+                            arrow.SetEndBeingDragged(false);
+                        }
+                    }
+
                     break;
                 }
             }
+        }
+
+        private void DrawableCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (selectedElement is DrawableArrow arrow)
+            {
+                arrow.SetEndBeingDragged(false);
+                arrow.SetStartBeingDragged(false);
+            }
+            isDragging = false;
         }
 
         private void DrawableCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -81,11 +121,6 @@ namespace screenerWpf
                 lastMousePosition = currentPosition;
                 InvalidateVisual();
             }
-        }
-
-        private void DrawableCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            isDragging = false;
         }
 
         private void SelectElement(DrawableElement element)

@@ -8,6 +8,18 @@ namespace screenerWpf
     {
         public Point EndPoint { get; set; }
         public double Thickness { get; internal set; }
+        private bool isStartBeingDragged = false;
+        private bool isEndBeingDragged = false;
+
+        public void SetStartBeingDragged(bool value)
+        {
+            isStartBeingDragged = value;
+        }
+
+        public void SetEndBeingDragged(bool value)
+        {
+            isEndBeingDragged = value;
+        }
 
         public override void Draw(DrawingContext context)
         {
@@ -39,6 +51,7 @@ namespace screenerWpf
                 context.DrawRectangle(null, selectionPen, boundingBox);
             }
         }
+
 
         private void DrawArrowHead(
             DrawingContext context,
@@ -75,7 +88,7 @@ namespace screenerWpf
         {
             // Implement hit testing logic for arrow
             // This is a simple example and doesn't account for line thickness, etc.
-            double buffer = 5.0; // Hit test buffer
+            double buffer = 15.0; // Hit test buffer
             LineGeometry geometry = new LineGeometry(Position, EndPoint);
             return geometry.StrokeContains(new Pen(Brushes.Black, buffer), point);
         }
@@ -104,8 +117,21 @@ namespace screenerWpf
 
         public override void MoveBy(Vector delta)
         {
-            base.MoveBy(delta);
-            EndPoint = new Point(EndPoint.X + delta.X, EndPoint.Y + delta.Y);
+            if (isStartBeingDragged)
+            {
+                Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+            }
+            if (isEndBeingDragged)
+            {
+                EndPoint = new Point(EndPoint.X + delta.X, EndPoint.Y + delta.Y);
+            }
+            if (!isStartBeingDragged && !isEndBeingDragged)
+            {
+                // Przesuwamy całą strzałkę
+                base.MoveBy(delta);
+                EndPoint = new Point(EndPoint.X + delta.X, EndPoint.Y + delta.Y);
+            }
         }
+
     }
 }
