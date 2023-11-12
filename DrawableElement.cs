@@ -41,8 +41,8 @@ public abstract class DrawableElement : IDrawable
         throw new NotImplementedException();
     }
 
-    public void MoveBy(Vector delta)
+    public virtual void MoveBy(Vector delta)
     {
-        throw new NotImplementedException();
+        Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
     }
 }

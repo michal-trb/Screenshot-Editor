@@ -10,11 +10,15 @@ namespace screenerWpf
     {
         public List<DrawableElement> Elements { get; private set; } = new List<DrawableElement>();
         private DrawableElement selectedElement;
+        private Point lastMousePosition;
+        private bool isDragging;
 
         public DrawableCanvas()
         {
             MouseLeftButtonDown += DrawableCanvas_MouseLeftButtonDown;
             MouseRightButtonDown += DrawableCanvas_MouseRightButtonDown;
+            MouseLeftButtonUp += DrawableCanvas_MouseLeftButtonUp;
+            MouseMove += DrawableCanvas_MouseMove;
         }
 
         public ImageSource BackgroundImage
@@ -54,16 +58,34 @@ namespace screenerWpf
 
         private void DrawableCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            lastMousePosition = e.GetPosition(this);
             Point clickPoint = e.GetPosition(this);
-            // Iterate through elements in reverse order to select the topmost element
             for (int i = Elements.Count - 1; i >= 0; i--)
             {
                 if (Elements[i].HitTest(clickPoint))
                 {
                     SelectElement(Elements[i]);
+                    isDragging = true;
                     break;
                 }
             }
+        }
+
+        private void DrawableCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging && selectedElement != null && e.LeftButton == MouseButtonState.Pressed)
+            {
+                Point currentPosition = e.GetPosition(this);
+                Vector delta = currentPosition - lastMousePosition;
+                selectedElement.MoveBy(delta);
+                lastMousePosition = currentPosition;
+                InvalidateVisual();
+            }
+        }
+
+        private void DrawableCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            isDragging = false;
         }
 
         private void SelectElement(DrawableElement element)

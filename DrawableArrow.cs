@@ -101,5 +101,11 @@ namespace screenerWpf
             LineGeometry lineGeometry = new LineGeometry(Position, EndPoint);
             return lineGeometry.StrokeContains(new Pen(Brushes.Black, buffer), point);
         }
+
+        public override void MoveBy(Vector delta)
+        {
+            base.MoveBy(delta);
+            EndPoint = new Point(EndPoint.X + delta.X, EndPoint.Y + delta.Y);
+        }
     }
 }
