@@ -286,22 +286,6 @@ namespace screenerWpf
             editableTextBox.LostFocus += EditableTextBox_LostFocus; // Event when focus is lost
         }
 
-        private void CreateSpeechBubble(Point location)
-        {
-            currentSpeechBubble = new DrawableSpeechBubble
-            {
-                Position = location,
-                Size = new System.Windows.Size(100, 50), // Możesz dostosować rozmiar według potrzeb
-                Text = "Tekst dymku" // Możesz tutaj dodać logikę do wprowadzania tekstu przez użytkownika
-            };
-
-            Elements.Add(currentSpeechBubble);
-            drawableCanvas.AddElement(currentSpeechBubble);
-
-            currentSpeechBubble = null; // Resetuj obecny dymek, jeśli jest potrzebny tylko do jednorazowego użycia
-        }
-
-
         private void EditableTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -340,6 +324,56 @@ namespace screenerWpf
         public void SpeechBubbleButton_Click(object sender, RoutedEventArgs e)
         {
             currentAction = EditAction.AddBubble;
+        }
+
+        private void CreateSpeechBubble(Point location)
+        {
+            currentSpeechBubble = new DrawableSpeechBubble
+            {
+                Position = location,
+                Size = new System.Windows.Size(100, 50),
+                Text = "",
+                EndPoint = new Point(location.X-10, location.Y+60)
+            };
+
+            Elements.Add(currentSpeechBubble);
+            drawableCanvas.AddElement(currentSpeechBubble);
+            CreateEditableTextInSpeechBubble(location, currentSpeechBubble); // Tworzenie edytowalnego TextBox
+        }
+
+        private void CreateEditableTextInSpeechBubble(Point location, DrawableSpeechBubble speechBubble)
+        {
+            // Tworzenie TextBox dla wpisywania tekstu
+            editableTextBox = new TextBox
+            {
+                Width = speechBubble.Size.Width,
+                Height = speechBubble.Size.Height,
+                Text = speechBubble.Text,
+                FontFamily = selectedFontFamily,
+                FontSize = selectedFontSize,
+                Foreground = new SolidColorBrush(color),
+                Background = new SolidColorBrush(Colors.Transparent),
+                BorderThickness = new Thickness(0),
+                AcceptsReturn = true,
+                AcceptsTab = true
+            };
+
+            Canvas.SetLeft(editableTextBox, location.X);
+            Canvas.SetTop(editableTextBox, location.Y);
+            drawableCanvas.Children.Add(editableTextBox);
+            editableTextBox.Focus();
+            editableTextBox.LostFocus += (sender, e) => FinishTextEditingInSpeechBubble(sender as TextBox, speechBubble);
+        }
+
+        private void FinishTextEditingInSpeechBubble(TextBox textBox, DrawableSpeechBubble speechBubble)
+        {
+            if (textBox == null)
+                return;
+
+            speechBubble.Text = textBox.Text; // Aktualizacja tekstu w dymku
+            drawableCanvas.Children.Remove(textBox);
+            editableTextBox = null;
+            drawableCanvas.InvalidateVisual(); // Przerysowanie canvas, aby zaktualizować tekst w dymku
         }
     }
 }

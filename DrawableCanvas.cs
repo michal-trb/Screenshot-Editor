@@ -62,42 +62,82 @@ namespace screenerWpf
             Point clickPoint = e.GetPosition(this);
             lastMousePosition = clickPoint;
             isDragging = false;
+            bool elementSelected = false;
 
-            for (int i = Elements.Count - 1; i >= 0; i--)
+            // Najpierw sprawdź, czy użytkownik kliknął blisko ogonka jakiegokolwiek dymku
+            foreach (var element in Elements)
             {
-                if (Elements[i].HitTest(clickPoint))
+                if (element is DrawableSpeechBubble speechBubble)
                 {
-                    SelectElement(Elements[i]);
-                    isDragging = true;
+                    double tolerance = 40; // Tolerancja w pikselach
+                    bool isNearTailEnd = (speechBubble.EndPoint - clickPoint).Length <= tolerance;
 
-                    if (selectedElement is DrawableArrow arrow)
+                    if (isNearTailEnd)
                     {
-                        double tolerance = 30; // tolerancja w pikselach
-
-                        // Sprawdź, czy kliknięto blisko początku lub końca strzałki
-                        bool isNearStart = Math.Abs(arrow.Position.X - clickPoint.X) <= tolerance &&
-                                           Math.Abs(arrow.Position.Y - clickPoint.Y) <= tolerance;
-                        bool isNearEnd = Math.Abs(arrow.EndPoint.X - clickPoint.X) <= tolerance &&
-                                         Math.Abs(arrow.EndPoint.Y - clickPoint.Y) <= tolerance;
-
-                        if (isNearStart)
-                        {
-                            arrow.SetStartBeingDragged(true);
-                        }
-                        else if (isNearEnd)
-                        {
-                            arrow.SetEndBeingDragged(true);
-                        }
-                        else
-                        {
-                            // Jeśli nie jest blisko żadnego końca, przesuwamy całą strzałkę
-                            arrow.SetStartBeingDragged(false);
-                            arrow.SetEndBeingDragged(false);
-                        }
+                        SelectElement(speechBubble);
+                        speechBubble.SetTailBeingDragged(true);
+                        isDragging = true;
+                        elementSelected = true;
+                        break; // Zakończ pętlę, ponieważ znaleziono i obsłużono ogonek
                     }
-
-                    break;
                 }
+            }
+            if (!elementSelected)
+            {
+                for (int i = Elements.Count - 1; i >= 0; i--)
+                {
+                    if (Elements[i].HitTest(clickPoint))
+                    {
+                        SelectElement(Elements[i]);
+                        isDragging = true;
+                        elementSelected = true;
+
+                        if (selectedElement is DrawableArrow arrow)
+                        {
+
+                            double tolerance = 30; // tolerancja w pikselach
+
+                            // Sprawdź, czy kliknięto blisko początku lub końca strzałki
+                            bool isNearStart = Math.Abs(arrow.Position.X - clickPoint.X) <= tolerance &&
+                                               Math.Abs(arrow.Position.Y - clickPoint.Y) <= tolerance;
+                            bool isNearEnd = Math.Abs(arrow.EndPoint.X - clickPoint.X) <= tolerance &&
+                                             Math.Abs(arrow.EndPoint.Y - clickPoint.Y) <= tolerance;
+
+                            if (isNearStart)
+                            {
+                                arrow.SetStartBeingDragged(true);
+                            }
+                            else if (isNearEnd)
+                            {
+                                arrow.SetEndBeingDragged(true);
+                            }
+                            else
+                            {
+                                // Jeśli nie jest blisko żadnego końca, przesuwamy całą strzałkę
+                                arrow.SetStartBeingDragged(false);
+                                arrow.SetEndBeingDragged(false);
+                            }
+                        }
+                        // Logika dla innych elementów...
+
+                        break;
+                    }
+                }
+            }
+    
+            if (!elementSelected)
+            {
+                DeselectCurrentElement();
+            }
+        }
+
+        private void DeselectCurrentElement()
+        {
+            if (selectedElement != null)
+            {
+                selectedElement.IsSelected = false;
+                selectedElement = null;
+                InvalidateVisual(); // Przerysowanie canvas, aby odzwierciedlić zmianę stanu zaznaczenia
             }
         }
 
@@ -108,6 +148,11 @@ namespace screenerWpf
                 arrow.SetEndBeingDragged(false);
                 arrow.SetStartBeingDragged(false);
             }
+            else if (selectedElement is DrawableSpeechBubble speechBubble)
+            {
+                speechBubble.SetTailBeingDragged(false);
+            }
+
             isDragging = false;
         }
 
@@ -117,7 +162,15 @@ namespace screenerWpf
             {
                 Point currentPosition = e.GetPosition(this);
                 Vector delta = currentPosition - lastMousePosition;
-                selectedElement.MoveBy(delta);
+
+                if (selectedElement is DrawableSpeechBubble speechBubble && speechBubble.isTailBeingDragged)
+                {
+                    speechBubble.EndPoint = new Point(speechBubble.EndPoint.X + delta.X, speechBubble.EndPoint.Y + delta.Y);
+                }
+                else
+                {
+                    selectedElement.MoveBy(delta);
+                }
                 lastMousePosition = currentPosition;
                 InvalidateVisual();
             }
@@ -176,7 +229,7 @@ namespace screenerWpf
             Focus(); // Set focus to the DrawableCanvas to receive key events
                      // This will cause the canvas to be redrawn with the new selection state.
         }
-  
+
         public void DeleteSelectedElement()
         {
             if (selectedElement != null)

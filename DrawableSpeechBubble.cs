@@ -9,6 +9,9 @@ namespace screenerWpf
         public Point Position { get; set; }
         public Size Size { get; set; }
         public string Text { get; set; }
+        public Point EndPoint { get; set; } // Pozycja końca ogonka
+
+        public bool isTailBeingDragged = false;
 
         public DrawableSpeechBubble()
         {
@@ -16,15 +19,19 @@ namespace screenerWpf
             Position = new Point(0, 0);
             Size = new Size(100, 50); // Przykładowy domyślny rozmiar
             Text = "Tekst dymku";
+            EndPoint = new Point(Position.X - 15, Position.Y - 15); // Przykładowa pozycja końca ogonka
         }
 
         public override void Draw(DrawingContext context)
         {
-            // Rysowanie prostokąta dymku
+            double cornerRadius = 10.0; // Zaokrąglenie rogów dymku
             Rect rect = new Rect(Position, Size);
-            context.DrawRectangle(null, new Pen(Brushes.Black, 1), rect);
+            DrawSpeechBubbleTail(context, rect, EndPoint);
 
-            // Rysowanie tekstu w dymku
+            context.DrawRoundedRectangle(Brushes.White, new Pen(Brushes.Black, 1), rect, cornerRadius, cornerRadius);
+
+            // Rysowanie tekstu
+            Point textPosition = new Point(Position.X + cornerRadius, Position.Y + cornerRadius);
             FormattedText formattedText = new FormattedText(
                 Text,
                 System.Globalization.CultureInfo.CurrentCulture,
@@ -32,18 +39,31 @@ namespace screenerWpf
                 new Typeface("Arial"),
                 12,
                 Brushes.Black);
-
-            context.DrawText(formattedText, Position);
+            context.DrawText(formattedText, textPosition);
 
             if (IsSelected)
             {
-                // Create a red pen for the selection outline
                 Pen selectionPen = new Pen(Brushes.Red, 2);
-                // Get the bounds for the selection outline
-                Rect bounds = GetBounds();
-                // Draw the red outline around the text
-                context.DrawRectangle(null, selectionPen, bounds);
+                context.DrawRoundedRectangle(null, selectionPen, rect, cornerRadius, cornerRadius);
             }
+        }
+
+        private void DrawSpeechBubbleTail(DrawingContext context, Rect bubbleRect, Point endPoint)
+        {
+            // Punkt startowy ogonka na środku dolnej krawędzi dymku
+            Point tailStart = new Point(bubbleRect.Left + bubbleRect.Width / 2, bubbleRect.Top);
+
+            StreamGeometry tailGeometry = new StreamGeometry();
+            using (StreamGeometryContext geometryContext = tailGeometry.Open())
+            {
+                geometryContext.BeginFigure(tailStart, true /* is filled */, true /* is closed */);
+                geometryContext.LineTo(new Point(tailStart.X - 10, tailStart.Y + 10), true /* is stroked */, false /* is smooth join */);
+                geometryContext.LineTo(endPoint, true /* is stroked */, false /* is smooth join */);
+                geometryContext.LineTo(new Point(tailStart.X + 10, tailStart.Y + 25), true /* is stroked */, false /* is smooth join */);
+                geometryContext.LineTo(tailStart, true /* is stroked */, false /* is smooth join */);
+            }
+
+            context.DrawGeometry(Brushes.White, new Pen(Brushes.Black, 1), tailGeometry);
         }
 
         public override bool HitTest(Point point)
@@ -98,6 +118,11 @@ namespace screenerWpf
         public override void MoveBy(Vector delta)
         {
             Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+        }
+
+        public void SetTailBeingDragged(bool value)
+        {
+            isTailBeingDragged = value;
         }
     }
 }
