@@ -11,16 +11,17 @@ using Color = System.Windows.Media.Color;
 using FontFamily = System.Windows.Media.FontFamily;
 using Point = System.Windows.Point;
 using System;
+using Brushes = System.Windows.Media.Brushes;
 
 namespace screenerWpf
 {
-    public class CanvasInputHandler 
+    public class CanvasInputHandler
     {
         public ObservableCollection<IDrawable> Elements { get; set; } = new ObservableCollection<IDrawable>();
         private DrawableCanvas drawableCanvas;
         private DrawableArrow currentArrow; // Used to track the arrow being drawn
         private DrawableSpeechBubble currentSpeechBubble;
-        private TextBox editableTextBox;     
+        private TextBox editableTextBox;
         private enum EditAction { None, DrawArrow, AddText, Move, Delete, AddBubble }
         private EditAction currentAction = EditAction.None;
         private Color color;
@@ -131,7 +132,7 @@ namespace screenerWpf
             {
                 arrowThickness = 2.0;
             }
-     
+
         }
         public void ArrowThicknessComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -333,7 +334,7 @@ namespace screenerWpf
                 Position = location,
                 Size = new System.Windows.Size(100, 50),
                 Text = "",
-                EndPoint = new Point(location.X-10, location.Y+60)
+                EndPoint = new Point(location.X - 10, location.Y + 60)
             };
 
             Elements.Add(currentSpeechBubble);
@@ -343,26 +344,27 @@ namespace screenerWpf
 
         private void CreateEditableTextInSpeechBubble(Point location, DrawableSpeechBubble speechBubble)
         {
-            // Tworzenie TextBox dla wpisywania tekstu
             editableTextBox = new TextBox
             {
-                Width = speechBubble.Size.Width,
-                Height = speechBubble.Size.Height,
+                Width = speechBubble.Size.Width - 20, // Pozostawienie marginesów
+                Height = speechBubble.Size.Height - 20,
                 Text = speechBubble.Text,
                 FontFamily = selectedFontFamily,
                 FontSize = selectedFontSize,
-                Foreground = new SolidColorBrush(color),
-                Background = new SolidColorBrush(Colors.Transparent),
+                Foreground = Brushes.Transparent, // Ustawienie przeźroczystego tekstu
+                Background = Brushes.Transparent, // Ustawienie przeźroczystego tekstu
                 BorderThickness = new Thickness(0),
                 AcceptsReturn = true,
                 AcceptsTab = true
             };
 
-            Canvas.SetLeft(editableTextBox, location.X);
-            Canvas.SetTop(editableTextBox, location.Y);
+            // Ustawienie pozycji TextBox tak, aby był wycentrowany w dymku
+            Canvas.SetLeft(editableTextBox, location.X + 10); // Dodanie marginesu
+            Canvas.SetTop(editableTextBox, location.Y + 10);
             drawableCanvas.Children.Add(editableTextBox);
             editableTextBox.Focus();
             editableTextBox.LostFocus += (sender, e) => FinishTextEditingInSpeechBubble(sender as TextBox, speechBubble);
+            editableTextBox.TextChanged += (sender, e) => TextChangedInSpeechBubble(sender as TextBox, speechBubble);
         }
 
         private void FinishTextEditingInSpeechBubble(TextBox textBox, DrawableSpeechBubble speechBubble)
@@ -371,9 +373,47 @@ namespace screenerWpf
                 return;
 
             speechBubble.Text = textBox.Text; // Aktualizacja tekstu w dymku
-            drawableCanvas.Children.Remove(textBox);
-            editableTextBox = null;
+                                              // Usuwanie TextBox tylko jeśli edycja została zakończona
+            if (!textBox.IsKeyboardFocusWithin)
+            {
+                drawableCanvas.Children.Remove(textBox);
+                editableTextBox = null;
+            }
             drawableCanvas.InvalidateVisual(); // Przerysowanie canvas, aby zaktualizować tekst w dymku
         }
+
+        private void TextChangedInSpeechBubble(TextBox textBox, DrawableSpeechBubble speechBubble)
+        {
+            if (textBox == null)
+                return;
+
+            speechBubble.Text = textBox.Text; // Aktualizacja tekstu w dymku
+
+            // Obliczanie wymiarów tekstu
+            FormattedText formattedText = new FormattedText(
+                textBox.Text,
+                System.Globalization.CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface(textBox.FontFamily, textBox.FontStyle, textBox.FontWeight, textBox.FontStretch),
+                textBox.FontSize,
+                Brushes.Black);
+
+            // Dostosowanie rozmiaru dymku do tekstu
+            double minWidth = 100.0;
+            double minHeight = 50.0;
+            double bubbleWidth = Math.Max(minWidth, formattedText.WidthIncludingTrailingWhitespace + 20);
+            double bubbleHeight = Math.Max(minHeight, formattedText.Height + 20);
+
+            // Aktualizacja rozmiaru dymku
+            speechBubble.Size = new System.Windows.Size(bubbleWidth, bubbleHeight);
+
+            // Aktualizacja rozmiaru i pozycji TextBox
+            textBox.Width = bubbleWidth - 20;
+            textBox.Height = bubbleHeight - 20;
+            Canvas.SetLeft(textBox, speechBubble.Position.X + 10); // Aktualizacja pozycji TextBox
+            Canvas.SetTop(textBox, speechBubble.Position.Y + 10);
+
+            drawableCanvas.InvalidateVisual(); // Przerysowanie canvas, aby zaktualizować rozmiar dymku i TextBox
+        }
     }
-}
+    }

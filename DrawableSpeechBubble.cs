@@ -24,14 +24,11 @@ namespace screenerWpf
 
         public override void Draw(DrawingContext context)
         {
-            double cornerRadius = 10.0; // Zaokrąglenie rogów dymku
-            Rect rect = new Rect(Position, Size);
-            DrawSpeechBubbleTail(context, rect, EndPoint);
+            // Ustawienie minimalnych rozmiarów dymku
+            double minWidth = 100.0;
+            double minHeight = 50.0;
 
-            context.DrawRoundedRectangle(Brushes.White, new Pen(Brushes.Black, 1), rect, cornerRadius, cornerRadius);
-
-            // Rysowanie tekstu
-            Point textPosition = new Point(Position.X + cornerRadius, Position.Y + cornerRadius);
+            // Obliczanie wymiarów tekstu
             FormattedText formattedText = new FormattedText(
                 Text,
                 System.Globalization.CultureInfo.CurrentCulture,
@@ -39,8 +36,28 @@ namespace screenerWpf
                 new Typeface("Arial"),
                 12,
                 Brushes.Black);
+            Size textSize = new Size(formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
+
+            // Dostosowanie rozmiaru dymku do tekstu
+            double bubbleWidth = Math.Max(minWidth, textSize.Width + 20); // Dodatkowe miejsce na marginesy
+            double bubbleHeight = Math.Max(minHeight, textSize.Height + 20);
+
+            // Ustawianie nowego rozmiaru dymku
+            Size = new Size(bubbleWidth, bubbleHeight);
+            Rect rect = new Rect(Position, Size);
+
+            // Rysowanie ogonka dymku
+            DrawSpeechBubbleTail(context, rect, EndPoint);
+
+            // Rysowanie prostokąta dymku
+            double cornerRadius = 10.0;
+            context.DrawRoundedRectangle(Brushes.White, new Pen(Brushes.Black, 1), rect, cornerRadius, cornerRadius);
+
+            // Rysowanie tekstu
+            Point textPosition = new Point(Position.X + 10, Position.Y + 10); // Dodatkowe marginesy
             context.DrawText(formattedText, textPosition);
 
+            // Rysowanie ramki selekcyjnej, jeśli jest zaznaczony
             if (IsSelected)
             {
                 Pen selectionPen = new Pen(Brushes.Red, 2);
