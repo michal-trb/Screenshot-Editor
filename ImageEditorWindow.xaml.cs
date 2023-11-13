@@ -290,5 +290,9 @@ namespace screenerWpf
             IsColorLabelVisible = IsDrawArrowSelected || IsTextToolSelected;
         }
 
+        private void SpeechBubbleButton_Click(object sender, RoutedEventArgs e)
+        {
+            inputHandler.SpeechBubbleButton_Click(sender, e);
+        }
     }
 }

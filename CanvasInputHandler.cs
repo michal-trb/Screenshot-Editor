@@ -10,6 +10,7 @@ using System.Drawing;
 using Color = System.Windows.Media.Color;
 using FontFamily = System.Windows.Media.FontFamily;
 using Point = System.Windows.Point;
+using System;
 
 namespace screenerWpf
 {
@@ -18,8 +19,9 @@ namespace screenerWpf
         public ObservableCollection<IDrawable> Elements { get; set; } = new ObservableCollection<IDrawable>();
         private DrawableCanvas drawableCanvas;
         private DrawableArrow currentArrow; // Used to track the arrow being drawn
-        private TextBox editableTextBox;
-        private enum EditAction { None, DrawArrow, AddText, Move, Delete }
+        private DrawableSpeechBubble currentSpeechBubble;
+        private TextBox editableTextBox;     
+        private enum EditAction { None, DrawArrow, AddText, Move, Delete, AddBubble }
         private EditAction currentAction = EditAction.None;
         private Color color;
         private double arrowThickness;
@@ -40,9 +42,6 @@ namespace screenerWpf
 
             color = Colors.Black;
             arrowThickness = 2.0;
-
-            // Ustaw początkowy wybór dla rozwijanych list
-
         }
 
         // Metody obsługujące zdarzenia myszy...
@@ -66,13 +65,17 @@ namespace screenerWpf
                 Point location = e.GetPosition(drawableCanvas);
                 CreateEditableText(location);
             }
+            else if (currentAction == EditAction.AddBubble)
+            {
+                Point location = e.GetPosition(drawableCanvas);
+                CreateSpeechBubble(location);
+            }
             else
             {
                 // Implement the logic for selecting an element if clicked on
                 drawableCanvas.SelectElementAtPoint(e.GetPosition(drawableCanvas));
             }
         }
-
 
         public void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -283,6 +286,22 @@ namespace screenerWpf
             editableTextBox.LostFocus += EditableTextBox_LostFocus; // Event when focus is lost
         }
 
+        private void CreateSpeechBubble(Point location)
+        {
+            currentSpeechBubble = new DrawableSpeechBubble
+            {
+                Position = location,
+                Size = new System.Windows.Size(100, 50), // Możesz dostosować rozmiar według potrzeb
+                Text = "Tekst dymku" // Możesz tutaj dodać logikę do wprowadzania tekstu przez użytkownika
+            };
+
+            Elements.Add(currentSpeechBubble);
+            drawableCanvas.AddElement(currentSpeechBubble);
+
+            currentSpeechBubble = null; // Resetuj obecny dymek, jeśli jest potrzebny tylko do jednorazowego użycia
+        }
+
+
         private void EditableTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             TextBox textBox = (TextBox)sender;
@@ -316,6 +335,11 @@ namespace screenerWpf
         public void FontSizeComboBox_SelectionChanged(double fontSize)
         {
             this.selectedFontSize = fontSize;
+        }
+
+        public void SpeechBubbleButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentAction = EditAction.AddBubble;
         }
     }
 }
