@@ -10,7 +10,8 @@ namespace screenerWpf
         void Select(); // Define the method for selecting the element
         bool ContainsPoint(Point point);
         bool Contains(Point point);
-        void MoveBy(Vector delta);
-
+        void Move(Vector delta);
+        Point GetLocation();
+        Rect GetBounds();
     }
 }

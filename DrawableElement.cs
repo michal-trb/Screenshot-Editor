@@ -23,8 +23,10 @@ public abstract class DrawableElement : IDrawable
 
     public bool ContainsPoint(Point point)
     {
-        throw new System.NotImplementedException();
+        Rect elementBounds = GetBounds();
+        return elementBounds.Contains(point);
     }
+
 
     public void Draw(WriteableBitmap bitmap)
     {
@@ -41,8 +43,13 @@ public abstract class DrawableElement : IDrawable
         throw new NotImplementedException();
     }
 
-    public virtual void MoveBy(Vector delta)
+    public virtual void Move(Vector delta)
     {
         Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+    }
+
+    public Point GetLocation()
+    {
+        throw new NotImplementedException();
     }
 }

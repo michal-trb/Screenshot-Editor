@@ -132,7 +132,7 @@ namespace screenerWpf
             return new Rect(Position, new Size(width, height));
         }
 
-        public override void MoveBy(Vector delta)
+        public override void Move(Vector delta)
         {
             Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
         }

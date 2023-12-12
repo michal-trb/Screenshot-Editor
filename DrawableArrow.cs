@@ -115,7 +115,7 @@ namespace screenerWpf
             return lineGeometry.StrokeContains(new Pen(Brushes.Black, buffer), point);
         }
 
-        public override void MoveBy(Vector delta)
+        public override void Move(Vector delta)
         {
             if (isStartBeingDragged)
             {
@@ -128,7 +128,7 @@ namespace screenerWpf
             if (!isStartBeingDragged && !isEndBeingDragged)
             {
                 // Przesuwamy całą strzałkę
-                base.MoveBy(delta);
+                base.Move(delta);
                 EndPoint = new Point(EndPoint.X + delta.X, EndPoint.Y + delta.Y);
             }
         }

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Linq;
 
 namespace screenerWpf
 {
@@ -158,6 +159,7 @@ namespace screenerWpf
 
         private void DrawableCanvas_MouseMove(object sender, MouseEventArgs e)
         {
+            //This code is only for draging Tail in speechBubble
             if (isDragging && selectedElement != null && e.LeftButton == MouseButtonState.Pressed)
             {
                 Point currentPosition = e.GetPosition(this);
@@ -166,10 +168,6 @@ namespace screenerWpf
                 if (selectedElement is DrawableSpeechBubble speechBubble && speechBubble.isTailBeingDragged)
                 {
                     speechBubble.EndPoint = new Point(speechBubble.EndPoint.X + delta.X, speechBubble.EndPoint.Y + delta.Y);
-                }
-                else
-                {
-                    selectedElement.MoveBy(delta);
                 }
                 lastMousePosition = currentPosition;
                 InvalidateVisual();
@@ -230,14 +228,27 @@ namespace screenerWpf
                      // This will cause the canvas to be redrawn with the new selection state.
         }
 
-        public void DeleteSelectedElement()
+        internal void RemoveElement(IDrawable selectedElement)
         {
             if (selectedElement != null)
             {
-                Elements.Remove(selectedElement);
-                selectedElement = null;
+                Elements.Remove((DrawableElement)selectedElement);
                 InvalidateVisual(); // Redraw the canvas
             }
+        }
+
+        internal IDrawable FindElementAt(Point position)
+        {
+            // Przykładowa implementacja może przejrzeć wszystkie rysowane elementy
+            // i sprawdzić, czy dany punkt jest w ich obszarze.
+            foreach (IDrawable element in Elements)
+            {
+                if (element.ContainsPoint(position))
+                {
+                    return element;
+                }
+            }
+            return null;
         }
     }
 }
