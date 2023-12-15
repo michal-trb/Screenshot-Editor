@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,6 +15,9 @@ namespace screenerWpf
         private DrawableElement selectedElement;
         private Point lastMousePosition;
         private bool isDragging;
+
+        private const double SpeechBubbleTailTolerance = 40; // Tolerance in pixels
+        private const double ArrowTolerance = 30; // Tolerance in pixels
 
         public DrawableCanvas()
         {
@@ -63,74 +67,70 @@ namespace screenerWpf
             Point clickPoint = e.GetPosition(this);
             lastMousePosition = clickPoint;
             isDragging = false;
-            bool elementSelected = false;
 
-            // Najpierw sprawdź, czy użytkownik kliknął blisko ogonka jakiegokolwiek dymku
-            foreach (var element in Elements)
-            {
-                if (element is DrawableSpeechBubble speechBubble)
-                {
-                    double tolerance = 40; // Tolerancja w pikselach
-                    bool isNearTailEnd = (speechBubble.EndPoint - clickPoint).Length <= tolerance;
-
-                    if (isNearTailEnd)
-                    {
-                        SelectElement(speechBubble);
-                        speechBubble.SetTailBeingDragged(true);
-                        isDragging = true;
-                        elementSelected = true;
-                        break; // Zakończ pętlę, ponieważ znaleziono i obsłużono ogonek
-                    }
-                }
-            }
-            if (!elementSelected)
-            {
-                for (int i = Elements.Count - 1; i >= 0; i--)
-                {
-                    if (Elements[i].HitTest(clickPoint))
-                    {
-                        SelectElement(Elements[i]);
-                        isDragging = true;
-                        elementSelected = true;
-
-                        if (selectedElement is DrawableArrow arrow)
-                        {
-
-                            double tolerance = 30; // tolerancja w pikselach
-
-                            // Sprawdź, czy kliknięto blisko początku lub końca strzałki
-                            bool isNearStart = Math.Abs(arrow.Position.X - clickPoint.X) <= tolerance &&
-                                               Math.Abs(arrow.Position.Y - clickPoint.Y) <= tolerance;
-                            bool isNearEnd = Math.Abs(arrow.EndPoint.X - clickPoint.X) <= tolerance &&
-                                             Math.Abs(arrow.EndPoint.Y - clickPoint.Y) <= tolerance;
-
-                            if (isNearStart)
-                            {
-                                arrow.SetStartBeingDragged(true);
-                            }
-                            else if (isNearEnd)
-                            {
-                                arrow.SetEndBeingDragged(true);
-                            }
-                            else
-                            {
-                                // Jeśli nie jest blisko żadnego końca, przesuwamy całą strzałkę
-                                arrow.SetStartBeingDragged(false);
-                                arrow.SetEndBeingDragged(false);
-                            }
-                        }
-                        // Logika dla innych elementów...
-
-                        break;
-                    }
-                }
-            }
-    
-            if (!elementSelected)
+            if (!TrySelectSpeechBubbleTail(clickPoint) 
+                && !TrySelectElement(clickPoint))
             {
                 DeselectCurrentElement();
             }
         }
+
+        private bool TrySelectSpeechBubbleTail(Point clickPoint)
+        {
+            foreach (var element in Elements.OfType<DrawableSpeechBubble>())
+            {
+                if (IsNearPoint(element.EndPoint, clickPoint, SpeechBubbleTailTolerance))
+                {
+                    HandleElementSelection(element, tailBeingDragged: true);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool TrySelectElement(Point clickPoint)
+        {
+            for (int i = Elements.Count - 1; i >= 0; i--)
+            {
+                if (Elements[i].HitTest(clickPoint))
+                {
+                    HandleElementSelection(Elements[i]);
+                    HandleArrowSpecificLogic(Elements[i], clickPoint);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void HandleElementSelection(DrawableElement element, bool tailBeingDragged = false)
+        {
+            SelectElement(element);
+            isDragging = true;
+
+            if (element is DrawableSpeechBubble speechBubble)
+            {
+                speechBubble.SetTailBeingDragged(tailBeingDragged);
+            }
+        }
+
+        private void HandleArrowSpecificLogic(DrawableElement element, Point clickPoint)
+        {
+            if (element is DrawableArrow arrow)
+            {
+                arrow.SetStartBeingDragged(IsNearPoint(arrow.Position, clickPoint, ArrowTolerance));
+                arrow.SetEndBeingDragged(IsNearPoint(arrow.EndPoint, clickPoint, ArrowTolerance));
+            }
+            // Add logic for other element types if necessary
+        }
+
+        private bool IsNearPoint(Point point1, Point point2, double tolerance)
+        {
+            return Math.Abs(point1.X - point2.X) <= tolerance &&
+                   Math.Abs(point1.Y - point2.Y) <= tolerance;
+        }
+
 
         private void DeselectCurrentElement()
         {
