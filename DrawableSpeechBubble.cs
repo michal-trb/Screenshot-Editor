@@ -85,30 +85,14 @@ namespace screenerWpf
 
         public override bool HitTest(Point point)
         {
-            // Tworzenie FormattedText dla wymiarów tekstu
-            FormattedText formattedText = new FormattedText(
-                Text,
-                System.Globalization.CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                new Typeface("Arial"),
-                12,
-                Brushes.Black); // Używamy czcionki i koloru dla dymku
-
-            // Tworzenie geometrii na podstawie tekstu i prostokąta dymku
-            Geometry textGeometry = formattedText.BuildGeometry(Position);
+            // Tworzenie prostokątnej geometrii na podstawie Position i Size
             Rect rect = new Rect(Position, Size);
             Geometry rectangleGeometry = new RectangleGeometry(rect);
 
-            // Łączenie geometrii tekstu i prostokąta
-            CombinedGeometry combinedGeometry = new CombinedGeometry(GeometryCombineMode.Union, rectangleGeometry, textGeometry);
-
-            // Rozszerzenie geometrii o bufor dla łatwiejszego kliknięcia
-            double hitTestBuffer = 20.0;
-            Geometry inflatedGeometry = combinedGeometry.GetWidenedPathGeometry(new Pen(Brushes.Black, hitTestBuffer));
-
-            // Sprawdzenie, czy punkt znajduje się w rozszerzonej geometrii
-            return inflatedGeometry.FillContains(point);
+            // Sprawdzenie, czy punkt znajduje się w obrębie geometrii prostokąta
+            return rectangleGeometry.FillContains(point);
         }
+
 
         public override Rect GetBounds()
         {

@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Xml.Linq;
 
 namespace screenerWpf
 {
     public class DrawableCanvas : Canvas
     {
-        public List<DrawableElement> Elements { get; private set; } = new List<DrawableElement>();
+        private ElementManager elementManager = new ElementManager();
         private DrawableElement selectedElement;
         private Point lastMousePosition;
         private bool isDragging;
@@ -33,30 +31,24 @@ namespace screenerWpf
             set { SetValue(BackgroundImageProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for BackgroundImage
         public static readonly DependencyProperty BackgroundImageProperty =
-            DependencyProperty.Register("BackgroundImage", typeof(ImageSource), typeof(DrawableCanvas),
-                new PropertyMetadata(null, OnBackgroundImageChanged));
+            DependencyProperty.Register("BackgroundImage", typeof(ImageSource), typeof(DrawableCanvas), new PropertyMetadata(null, OnBackgroundImageChanged));
 
         private static void OnBackgroundImageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            // Przy zmianie właściwości BackgroundImage wymuś ponowne narysowanie
             (d as DrawableCanvas)?.InvalidateVisual();
         }
 
         protected override void OnRender(DrawingContext dc)
         {
-            // Rysowanie obrazu tła
             if (BackgroundImage != null)
             {
                 Rect rect = new Rect(0, 0, ActualWidth, ActualHeight);
                 dc.DrawImage(BackgroundImage, rect);
             }
 
-            // Rysowanie pozostałych elementów
             base.OnRender(dc);
-
-            foreach (var element in Elements)
+            foreach (var element in elementManager.Elements)
             {
                 element.Draw(dc);
             }
@@ -68,7 +60,7 @@ namespace screenerWpf
             lastMousePosition = clickPoint;
             isDragging = false;
 
-            if (!TrySelectSpeechBubbleTail(clickPoint) 
+            if (!TrySelectSpeechBubbleTail(clickPoint)
                 && !TrySelectElement(clickPoint))
             {
                 DeselectCurrentElement();
@@ -77,7 +69,7 @@ namespace screenerWpf
 
         private bool TrySelectSpeechBubbleTail(Point clickPoint)
         {
-            foreach (var element in Elements.OfType<DrawableSpeechBubble>())
+            foreach (var element in elementManager.Elements.OfType<DrawableSpeechBubble>())
             {
                 if (IsNearPoint(element.EndPoint, clickPoint, SpeechBubbleTailTolerance))
                 {
@@ -85,22 +77,18 @@ namespace screenerWpf
                     return true;
                 }
             }
-
             return false;
         }
 
         private bool TrySelectElement(Point clickPoint)
         {
-            for (int i = Elements.Count - 1; i >= 0; i--)
+            var element = elementManager.GetElementAtPoint(clickPoint);
+            if (element != null)
             {
-                if (Elements[i].HitTest(clickPoint))
-                {
-                    HandleElementSelection(Elements[i]);
-                    HandleArrowSpecificLogic(Elements[i], clickPoint);
-                    return true;
-                }
+                HandleElementSelection(element);
+                HandleArrowSpecificLogic(element, clickPoint);
+                return true;
             }
-
             return false;
         }
 
@@ -122,15 +110,12 @@ namespace screenerWpf
                 arrow.SetStartBeingDragged(IsNearPoint(arrow.Position, clickPoint, ArrowTolerance));
                 arrow.SetEndBeingDragged(IsNearPoint(arrow.EndPoint, clickPoint, ArrowTolerance));
             }
-            // Add logic for other element types if necessary
         }
 
         private bool IsNearPoint(Point point1, Point point2, double tolerance)
         {
-            return Math.Abs(point1.X - point2.X) <= tolerance &&
-                   Math.Abs(point1.Y - point2.Y) <= tolerance;
+            return Math.Abs(point1.X - point2.X) <= tolerance && Math.Abs(point1.Y - point2.Y) <= tolerance;
         }
-
 
         private void DeselectCurrentElement()
         {
@@ -138,7 +123,7 @@ namespace screenerWpf
             {
                 selectedElement.IsSelected = false;
                 selectedElement = null;
-                InvalidateVisual(); // Przerysowanie canvas, aby odzwierciedlić zmianę stanu zaznaczenia
+                InvalidateVisual();
             }
         }
 
@@ -153,13 +138,11 @@ namespace screenerWpf
             {
                 speechBubble.SetTailBeingDragged(false);
             }
-
             isDragging = false;
         }
 
         private void DrawableCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            //This code is only for draging Tail in speechBubble
             if (isDragging && selectedElement != null && e.LeftButton == MouseButtonState.Pressed)
             {
                 Point currentPosition = e.GetPosition(this);
@@ -186,69 +169,52 @@ namespace screenerWpf
             if (selectedElement != null)
             {
                 selectedElement.IsSelected = true;
-                // You might want to bring the selected element to the front
-                Elements.Remove(selectedElement);
-                Elements.Add(selectedElement);
+                elementManager.BringToFront(selectedElement);
             }
 
-            InvalidateVisual(); // Redraw canvas
+            InvalidateVisual();
         }
 
         private void DrawableCanvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (selectedElement != null)
             {
-                Elements.Remove(selectedElement);
+                elementManager.RemoveElement(selectedElement);
                 selectedElement = null;
-                InvalidateVisual(); // Redraw canvas
+                InvalidateVisual();
             }
-
             this.Focus();
         }
 
-        // Method to add drawable elements to the canvas
         public void AddElement(DrawableElement element)
         {
-            Elements.Add(element);
-            InvalidateVisual(); // Redraw canvas
+            elementManager.AddElement(element);
+            InvalidateVisual();
         }
 
         public void SelectElementAtPoint(Point point)
         {
-            foreach (var element in Elements) // Use the initialized list 'Elements' instead of 'drawableElements'
+            var element = elementManager.GetElementAtPoint(point);
+            if (element != null)
             {
-                if (element.HitTest(point)) // Assuming 'HitTest' is a method to determine if the point hits the element
-                {
-                    SelectElement(element);
-                    break; // If you want only the first hit element to be selected, otherwise remove this line for multi-selection.
-                }
+                SelectElement(element);
             }
             InvalidateVisual();
-            Focus(); // Set focus to the DrawableCanvas to receive key events
-                     // This will cause the canvas to be redrawn with the new selection state.
+            Focus();
         }
 
         internal void RemoveElement(IDrawable selectedElement)
         {
             if (selectedElement != null)
             {
-                Elements.Remove((DrawableElement)selectedElement);
-                InvalidateVisual(); // Redraw the canvas
+                elementManager.RemoveElement((DrawableElement)selectedElement);
+                InvalidateVisual();
             }
         }
 
         internal IDrawable FindElementAt(Point position)
         {
-            // Przykładowa implementacja może przejrzeć wszystkie rysowane elementy
-            // i sprawdzić, czy dany punkt jest w ich obszarze.
-            foreach (IDrawable element in Elements)
-            {
-                if (element.ContainsPoint(position))
-                {
-                    return element;
-                }
-            }
-            return null;
+            return elementManager.GetElementAtPoint(position);
         }
     }
 }

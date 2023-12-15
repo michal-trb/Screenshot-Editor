@@ -15,8 +15,8 @@ namespace screenerWpf
 
         private ComboBox colorComboBox;
         private ComboBox arrowThicknessComboBox;
-        private FontFamily selectedFontFamily = new FontFamily("Arial");
-        private double selectedFontSize = 12.0;
+        public static FontFamily selectedFontFamily = new FontFamily("Arial");
+        public static double selectedFontSize = 12.0;
 
         public CanvasInputHandler(
             DrawableCanvas canvas,
@@ -33,9 +33,7 @@ namespace screenerWpf
             actionHandler = new CanvasActionHandler(
                 canvas,
                 initialColor,
-                initialThickness,
-                selectedFontFamily,
-                selectedFontSize);
+                initialThickness);
             selectionHandler = new CanvasSelectionHandler(drawableCanvas);
             editingHandler = new CanvasEditingHandler(drawableCanvas);
             savingHandler = new CanvasSavingHandler(drawableCanvas);
@@ -138,12 +136,12 @@ namespace screenerWpf
 
         public void FontFamilyComboBox_SelectionChanged(FontFamily selectedFontFamily)
         {
-            this.selectedFontFamily = selectedFontFamily;
+            selectedFontFamily = selectedFontFamily;
         }
 
         public void FontSizeComboBox_SelectionChanged(double fontSize)
         {
-            this.selectedFontSize = fontSize;
+            selectedFontSize = fontSize;
         }
     }
 }

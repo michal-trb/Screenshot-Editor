@@ -17,15 +17,12 @@ namespace screenerWpf
         private double arrowThickness;
         private TextBox editableTextBox;
         private FontFamily selectedFontFamily = new FontFamily("Arial");
-        private double selectedFontSize = 12.0;
 
-        public CanvasActionHandler(DrawableCanvas canvas, Color initialColor, double initialThickness, FontFamily selectedFontFamily, double selectedFontSize)
+        public CanvasActionHandler(DrawableCanvas canvas, Color initialColor, double initialThickness)
         {
             drawableCanvas = canvas;
             color = initialColor;
             arrowThickness = initialThickness;
-            this.selectedFontFamily = selectedFontFamily;
-            this.selectedFontSize = selectedFontSize;
         }
 
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
@@ -136,8 +133,8 @@ namespace screenerWpf
                 Width = 200, // Adjust as needed
                 Height = 30, // Adjust as needed
                 Text = "New Text",
-                FontFamily = selectedFontFamily,
-                FontSize = selectedFontSize,
+                FontFamily = CanvasInputHandler.selectedFontFamily,
+                FontSize = CanvasInputHandler.selectedFontSize,
                 Foreground = new SolidColorBrush(color),
                 Background = new SolidColorBrush(Colors.Transparent),
                 BorderThickness = new Thickness(0),
@@ -148,8 +145,11 @@ namespace screenerWpf
             Canvas.SetTop(editableTextBox, location.Y);
             drawableCanvas.Children.Add(editableTextBox);
 
-            editableTextBox.Focus(); // Immediately allow typing
-            editableTextBox.LostFocus += EditableTextBox_LostFocus; // Event when focus is lost
+            if (editableTextBox != null )
+            {
+                editableTextBox.Focus(); // Immediately allow typing
+                editableTextBox.LostFocus += EditableTextBox_LostFocus; // Event when focus is lost
+            }
         }
         private void EditableTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -188,8 +188,8 @@ namespace screenerWpf
                 Width = speechBubble.Size.Width - 20, // Pozostawienie marginesów
                 Height = speechBubble.Size.Height - 20,
                 Text = speechBubble.Text,
-                FontFamily = selectedFontFamily,
-                FontSize = selectedFontSize,
+                FontFamily = CanvasInputHandler.selectedFontFamily,
+                FontSize = CanvasInputHandler.selectedFontSize,
                 Foreground = Brushes.Transparent, // Ustawienie przeźroczystego tekstu
                 Background = Brushes.Transparent, // Ustawienie przeźroczystego tekstu
                 BorderThickness = new Thickness(0),
