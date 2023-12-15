@@ -6,7 +6,7 @@ using System.Windows.Media;
 
 namespace screenerWpf
 {
-    public enum EditAction { None, DrawArrow, AddText, Move, Delete, AddBubble }
+    public enum EditAction { None, DrawArrow, AddText, Move, Delete, AddBubble, DrawRectangle }
 
     public class CanvasActionHandler
     {
@@ -16,7 +16,6 @@ namespace screenerWpf
         private Color color;
         private double arrowThickness;
         private TextBox editableTextBox;
-        private FontFamily selectedFontFamily = new FontFamily("Arial");
 
         public CanvasActionHandler(DrawableCanvas canvas, Color initialColor, double initialThickness)
         {
@@ -38,12 +37,30 @@ namespace screenerWpf
                 case EditAction.AddBubble:
                     StartAddingSpeechBubble(e);
                     break;
+                case EditAction.DrawRectangle:
+                    StartDrawingRectangle(e);
+                    break;
                 default:
                     SelectElementAtMousePosition(e);
                     break;
             }
         }
-    
+
+        private void StartDrawingRectangle(MouseButtonEventArgs e)
+        {
+            Point startPoint = e.GetPosition(drawableCanvas);
+
+            var rectangle = new DrawableRectangle
+            {
+                Position = startPoint,
+                Color = color,
+                // Ustaw początkowy rozmiar na 0, aby zaktualizować go podczas ruchu myszy
+                Size = new Size(0, 0)
+            };
+            drawableCanvas.AddElement(rectangle);
+            currentDrawable = rectangle;
+        }
+
         public void HandleLeftButtonUp(MouseButtonEventArgs e)
         {
             if (currentAction == EditAction.DrawArrow && currentDrawable is DrawableArrow arrow)
@@ -59,6 +76,10 @@ namespace screenerWpf
             if (currentAction == EditAction.DrawArrow && currentDrawable is DrawableArrow arrow)
             {
                 UpdateDrawingArrow(arrow, e.GetPosition(drawableCanvas), e.LeftButton == MouseButtonState.Pressed);
+            }
+            else if (currentAction == EditAction.DrawRectangle && currentDrawable is DrawableRectangle rectangle)
+            {
+                UpdateDrawingRectangle(rectangle, e.GetPosition(drawableCanvas), e.LeftButton == MouseButtonState.Pressed);
             }
         }
 
@@ -81,6 +102,21 @@ namespace screenerWpf
             if (!isDrawing) return;
 
             arrow.EndPoint = currentPoint;
+            drawableCanvas.InvalidateVisual();
+        }
+
+        private void UpdateDrawingRectangle(DrawableRectangle rectangle, Point currentPoint, bool isDrawing)
+        {
+            if (!isDrawing) return;
+
+            // Obliczanie nowego rozmiaru prostokąta na podstawie różnicy między początkowym a bieżącym punktem
+            double width = Math.Abs(currentPoint.X - rectangle.Position.X);
+            double height = Math.Abs(currentPoint.Y - rectangle.Position.Y);
+
+            // Aktualizacja rozmiaru prostokąta
+            rectangle.Size = new Size(width, height);
+
+            // Odświeżenie płótna
             drawableCanvas.InvalidateVisual();
         }
 

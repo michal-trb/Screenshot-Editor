@@ -45,24 +45,5 @@ namespace screenerWpf
             Elements.Remove(element);
             Elements.Add(element);
         }
-
-        public void SendToBack(DrawableElement element)
-        {
-            if (element == null)
-            {
-                throw new System.ArgumentNullException(nameof(element));
-            }
-
-            // Usuń i wstaw na początku listy
-            Elements.Remove(element);
-            Elements.Insert(0, element);
-        }
-
-        public void ClearAllElements()
-        {
-            Elements.Clear();
-        }
-
-        // Dodatkowe metody, które mogą być potrzebne
     }
 }

@@ -86,6 +86,5 @@ namespace screenerWpf
         {
             return selectedElement;
         }
-        // Dodatkowe metody, np. dla zaznaczania wielu elementów...
     }
 }

@@ -27,6 +27,7 @@
             <Button Content="Save" Click="SaveButton_Click"/>
             <Button Content="Draw Arrow" Click="DrawArrowButton_Click"/>
             <Button Content="Add Text" Click="AddTextButton_Click"/>
+            <Button Content="Draw Rect" Click="DrawRectButton_Click"/>
             <Button x:Name="speechBubbleButton" Content="Dymek Czatu" Click="SpeechBubbleButton_Click"/>
             <!-- Nowe kontrolki do wyboru właściwości strzałki -->
             <Separator Visibility="{Binding IsArrowToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />

@@ -162,6 +162,15 @@ namespace screenerWpf
             UpdateColorLabelVisibility();
             inputHandler.AddTextButton_Click(sender, e);
         }
+        
+
+        public void DrawRectButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsDrawRectSelected = true;
+            IsTextToolSelected = false;
+            UpdateColorLabelVisibility();
+            inputHandler.DrawRectButton_Click(sender, e);
+        }
 
         private void CommandBinding_DeleteExecuted(object sender, ExecutedRoutedEventArgs e)
         {
@@ -201,6 +210,9 @@ namespace screenerWpf
         }
 
         private bool isTextToolSelected;
+
+        public bool IsDrawRectSelected;
+
         public bool IsTextToolSelected
         {
             get { return isTextToolSelected; }

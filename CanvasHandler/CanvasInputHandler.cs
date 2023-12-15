@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -65,6 +66,12 @@ namespace screenerWpf
             UpdateDrawingColorAndThickness();
         }
 
+        internal void DrawRectButton_Click(object sender, RoutedEventArgs e)
+        {
+            actionHandler.SetCurrentAction(EditAction.DrawRectangle);
+            UpdateDrawingColorAndThickness();
+        }
+
         public void AddTextButton_Click(object sender, RoutedEventArgs e)
         {
             actionHandler.SetCurrentAction(EditAction.AddText);
@@ -127,7 +134,6 @@ namespace screenerWpf
                 }
             }
         }
-
 
         public void CommandBinding_DeleteExecuted(object sender, ExecutedRoutedEventArgs e)
         {
