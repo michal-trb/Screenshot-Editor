@@ -71,7 +71,7 @@ namespace screenerWpf
         {
             foreach (var element in elementManager.Elements.OfType<DrawableSpeechBubble>())
             {
-                if (IsNearPoint(element.EndPoint, clickPoint, SpeechBubbleTailTolerance))
+                if (IsNearPoint(element.EndTailPoint, clickPoint, SpeechBubbleTailTolerance))
                 {
                     HandleElementSelection(element, tailBeingDragged: true);
                     return true;
@@ -150,7 +150,7 @@ namespace screenerWpf
 
                 if (selectedElement is DrawableSpeechBubble speechBubble && speechBubble.isTailBeingDragged)
                 {
-                    speechBubble.EndPoint = new Point(speechBubble.EndPoint.X + delta.X, speechBubble.EndPoint.Y + delta.Y);
+                    speechBubble.EndTailPoint = new Point(speechBubble.EndTailPoint.X + delta.X, speechBubble.EndTailPoint.Y + delta.Y);
                 }
                 lastMousePosition = currentPosition;
                 InvalidateVisual();

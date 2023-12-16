@@ -15,6 +15,7 @@ namespace screenerWpf
         private WriteableBitmap canvasBitmap;
         private BitmapSource initialImage;
         private CanvasInputHandler inputHandler;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ImageEditorWindow(BitmapSource initialBitmap)
         {
@@ -145,51 +146,9 @@ namespace screenerWpf
             inputHandler.Canvas_MouseMove(sender, e);
         }
 
-        public void DrawArrowButton_Click(object sender, RoutedEventArgs e)
-        {
-            IsDrawArrowSelected = true;
-            IsTextToolSelected = false;
-            UpdateColorLabelVisibility();
-            inputHandler.DrawArrowButton_Click(sender, e);
-        }
-
-        public void AddTextButton_Click(object sender, RoutedEventArgs e)
-        {
-            IsTextToolSelected = true;
-            IsDrawArrowSelected = false;
-            UpdateColorLabelVisibility();
-            inputHandler.AddTextButton_Click(sender, e);
-        }
-        
-
-        public void DrawRectButton_Click(object sender, RoutedEventArgs e)
-        {
-            IsDrawRectSelected = true;
-            IsTextToolSelected = false;
-            UpdateColorLabelVisibility();
-            inputHandler.DrawRectButton_Click(sender, e);
-        }
-
         private void CommandBinding_DeleteExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             inputHandler.CommandBinding_DeleteExecuted(sender, e);
-        }
-
-        private bool isDrawArrowSelected;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public bool IsDrawArrowSelected
-        {
-            get { return isDrawArrowSelected; }
-            set
-            {
-                if (isDrawArrowSelected != value)
-                {
-                    isDrawArrowSelected = value;
-                    OnPropertyChanged(nameof(IsDrawArrowSelected));
-                }
-            }
         }
 
         protected void OnPropertyChanged(string name)
@@ -213,20 +172,6 @@ namespace screenerWpf
             {
                 // Update the current color in the canvas
                 inputHandler.ColorComboBox_SelectionChanged(colorBrush.Color);
-            }
-        }
-
-        private bool isTextToolSelected;
-
-        public bool IsDrawRectSelected;
-
-        public bool IsTextToolSelected
-        {
-            get { return isTextToolSelected; }
-            set
-            {
-                isTextToolSelected = value;
-                OnPropertyChanged(nameof(IsTextToolSelected));
             }
         }
 
@@ -293,25 +238,90 @@ namespace screenerWpf
                 fontSizeComboBox.SelectedItem = defaultFontSize;
             }
         }
-        private bool _isColorLabelVisible;
-        public bool IsColorLabelVisible
+
+        private bool isColorComboBoxSelected;
+
+        public bool IsColorComboBoxSelected
         {
-            get => _isColorLabelVisible;
+            get => isColorComboBoxSelected;
             set
             {
-                _isColorLabelVisible = value;
-                OnPropertyChanged(nameof(IsColorLabelVisible));
+                isColorComboBoxSelected = value;
+                OnPropertyChanged(nameof(IsColorComboBoxSelected));
             }
         }
 
-        private void UpdateColorLabelVisibility()
+        private bool isThicknessComboBoxSelected;
+
+        public bool IsThicknessComboBoxSelected
         {
-            IsColorLabelVisible = IsDrawArrowSelected || IsTextToolSelected;
+            get { return isThicknessComboBoxSelected; }
+            set
+            {
+                isThicknessComboBoxSelected = value;
+                OnPropertyChanged(nameof(IsThicknessComboBoxSelected));
+            }
+        }
+
+        private bool isFontFamilySelected;
+
+        public bool IsFontFamilySelected
+        {
+            get { return isFontFamilySelected; }
+            set
+            {
+                isFontFamilySelected = value;
+                OnPropertyChanged(nameof(IsFontFamilySelected));
+            }
+        }
+
+        private bool isFontSizeSelected;
+
+        public bool IsFontSizeSelected
+        {
+            get { return isFontSizeSelected; }
+            set
+            {
+                isFontSizeSelected = value;
+                OnPropertyChanged(nameof(IsFontSizeSelected));
+            }
+        }
+        public void DrawArrowButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsThicknessComboBoxSelected = true;
+            IsColorComboBoxSelected = true;
+            IsFontSizeSelected = false;
+            IsFontFamilySelected = false;
+            inputHandler.DrawArrowButton_Click(sender, e);
+        }
+
+        public void AddTextButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsThicknessComboBoxSelected = false;
+            IsColorComboBoxSelected = true;
+            IsFontSizeSelected = true;
+            IsFontFamilySelected = true;
+            inputHandler.AddTextButton_Click(sender, e);
+        }
+
+
+        public void DrawRectButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsThicknessComboBoxSelected = true;
+            IsColorComboBoxSelected = true;
+            IsFontSizeSelected = false;
+            IsFontFamilySelected = false;
+            inputHandler.DrawRectButton_Click(sender, e);
         }
 
         private void SpeechBubbleButton_Click(object sender, RoutedEventArgs e)
         {
+            IsThicknessComboBoxSelected = true;
+            IsColorComboBoxSelected = true;
+            IsFontSizeSelected = true;
+            IsFontFamilySelected = true;
             inputHandler.SpeechBubbleButton_Click(sender, e);
         }
+
     }
 }

@@ -30,17 +30,16 @@
             <Button Content="Draw Rect" Click="DrawRectButton_Click"/>
             <Button x:Name="speechBubbleButton" Content="Dymek Czatu" Click="SpeechBubbleButton_Click"/>
             <!-- Nowe kontrolki do wyboru właściwości strzałki -->
-            <Separator Visibility="{Binding IsArrowToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <Label Content="Kolor:" Visibility="{Binding IsColorLabelVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <ComboBox x:Name="colorComboBox" SelectionChanged="ColorComboBox_SelectionChanged" Visibility="{Binding IsColorLabelVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Label Content="Kolor:" Visibility="{Binding IsColorComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="colorComboBox" SelectionChanged="ColorComboBox_SelectionChanged" Visibility="{Binding IsColorComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBoxItem Content="Czarny" Background="Black"/>
                 <ComboBoxItem Content="Czerwony" Background="Red"/>
                 <ComboBoxItem Content="Zielony" Background="Green"/>
                 <ComboBoxItem Content="Niebieski" Background="Blue"/>
                 <!-- Dodaj więcej kolorów według potrzeb -->
             </ComboBox>
-            <Label Content="Grubość:" Visibility="{Binding IsDrawArrowSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <ComboBox x:Name="arrowThicknessComboBox" SelectionChanged="ArrowThicknessComboBox_SelectionChanged" Visibility="{Binding IsDrawArrowSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Label Content="Grubość:" Visibility="{Binding IsThicknessComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="arrowThicknessComboBox" SelectionChanged="ArrowThicknessComboBox_SelectionChanged" Visibility="{Binding IsThicknessComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
             <ComboBoxItem Content="1"/>
                 <ComboBoxItem Content="2"/>
                 <ComboBoxItem Content="3"/>
@@ -54,11 +53,11 @@
                 <!-- Dodaj więcej opcji grubości, jeśli potrzebujesz -->
             </ComboBox>
 
-            <Label Content="Rodzaj czcionki:" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <ComboBox x:Name="fontFamilyComboBox" SelectionChanged="FontFamilyComboBox_SelectionChanged" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Label Content="Rodzaj czcionki:" Visibility="{Binding IsFontFamilySelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="fontFamilyComboBox" SelectionChanged="FontFamilyComboBox_SelectionChanged" Visibility="{Binding IsFontFamilySelected, Converter={StaticResource BooleanToVisibilityConverter}}">
             </ComboBox>
-            <Label Content="Rozmiar czcionki:" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <ComboBox x:Name="fontSizeComboBox" SelectionChanged="FontSizeComboBox_SelectionChanged" Visibility="{Binding IsTextToolSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Label Content="Rozmiar czcionki:" Visibility="{Binding IsFontSizeSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="fontSizeComboBox" SelectionChanged="FontSizeComboBox_SelectionChanged" Visibility="{Binding IsFontSizeSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
             </ComboBox>
         </ToolBar>
         <Viewbox Grid.Row="1" Stretch="Uniform">

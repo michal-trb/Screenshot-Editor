@@ -24,8 +24,9 @@ namespace screenerWpf.CanvasHandler.Drawers
             CurrentRectangle = new DrawableRectangle
             {
                 Position = startPoint,
-                Color = CanvasInputHandler.GetCurrentColor(),
-                Size = new Size(0, 0)
+                Size = new Size(0, 0),
+                StrokeColor = CanvasInputHandler.GetCurrentColor(),
+                StrokeThickness = CanvasInputHandler.GetCurrentThickness(),
             };
             DrawableCanvas.AddElement(CurrentRectangle);
         }

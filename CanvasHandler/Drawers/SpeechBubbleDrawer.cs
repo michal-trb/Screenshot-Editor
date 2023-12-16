@@ -25,8 +25,11 @@ namespace screenerWpf.CanvasHandler.Drawers
                 Position = location,
                 Size = new Size(100, 50),
                 Text = InitialText,
-                EndPoint = new Point(location.X + 50, location.Y + 50),
                 Color = CanvasInputHandler.GetCurrentColor(),
+                FontSize = CanvasInputHandler.GetCurrentFontSize(),
+                Typeface = CanvasInputHandler.GetCurrentTypeface(),
+                EndTailPoint = new Point(location.X - 15, location.Y - 15),
+                Brush = new SolidColorBrush(CanvasInputHandler.GetCurrentColor())
             };
             DrawableCanvas.AddElement(CurrentSpeechBubble);
 
@@ -42,7 +45,7 @@ namespace screenerWpf.CanvasHandler.Drawers
                 Text = speechBubble.Text,
                 FontFamily = CanvasInputHandler.GetCurrentFontFamily(),
                 FontSize = CanvasInputHandler.GetCurrentFontSize(),
-                Foreground = new SolidColorBrush(CanvasInputHandler.GetCurrentColor()),
+                Foreground = new SolidColorBrush(Colors.Transparent),
                 Background = new SolidColorBrush(Colors.Transparent),
                 BorderThickness = new Thickness(0),
                 AcceptsReturn = true,
@@ -79,14 +82,14 @@ namespace screenerWpf.CanvasHandler.Drawers
                 return;
 
             speechBubble.Text = textBox.Text; // Aktualizacja tekstu w dymku
+            double fontSize = textBox.FontSize;
 
-            // Obliczanie wymiarów tekstu
             FormattedText formattedText = new FormattedText(
                 textBox.Text,
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
-                CanvasInputHandler.GetCurrentTypeface(),
-                CanvasInputHandler.GetCurrentFontSize(),
+                new Typeface(textBox.FontFamily, textBox.FontStyle, textBox.FontWeight, textBox.FontStretch),
+                fontSize, // Użyj aktualnego rozmiaru czcionki
                 new SolidColorBrush(CanvasInputHandler.GetCurrentColor()));
 
             // Dostosowanie rozmiaru dymku do tekstu

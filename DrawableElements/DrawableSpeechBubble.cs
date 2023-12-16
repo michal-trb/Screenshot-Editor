@@ -9,17 +9,16 @@ namespace screenerWpf
         public Point Position { get; set; }
         public Size Size { get; set; }
         public string Text { get; set; }
-        public Point EndPoint { get; set; } // Pozycja końca ogonka
+        public Point EndTailPoint { get; set; } // Pozycja końca ogonka
+        public double FontSize { get; set; } // Dodana właściwość
+        public Typeface Typeface { get; set; } // Dodana właściwość
+        public Brush Brush { get; set; } // Dodana właściwość
 
         public bool isTailBeingDragged = false;
 
         public DrawableSpeechBubble()
         {
-            // Inicjalizacja domyślnych wartości
-            Position = new Point(0, 0);
-            Size = new Size(100, 50); // Przykładowy domyślny rozmiar
-            Text = "Tekst dymku";
-            EndPoint = new Point(Position.X - 15, Position.Y - 15); // Przykładowa pozycja końca ogonka
+
         }
 
         public override void Draw(DrawingContext context)
@@ -33,9 +32,9 @@ namespace screenerWpf
                 Text,
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
-                new Typeface("Arial"),
-                12,
-                Brushes.Black);
+                Typeface,
+                FontSize, // Użyj aktualnego rozmiaru czcionki
+                Brush);
             Size textSize = new Size(formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
 
             // Dostosowanie rozmiaru dymku do tekstu
@@ -47,7 +46,7 @@ namespace screenerWpf
             Rect rect = new Rect(Position, Size);
 
             // Rysowanie ogonka dymku
-            DrawSpeechBubbleTail(context, rect, EndPoint);
+            DrawSpeechBubbleTail(context, rect, EndTailPoint);
 
             // Rysowanie prostokąta dymku
             double cornerRadius = 10.0;
