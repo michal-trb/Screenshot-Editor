@@ -6,9 +6,7 @@ namespace screenerWpf
     public class DrawableRectangle : DrawableElement
     {
         public Point Position { get; set; }
-        public Point EndPoint { get; set; }
         public Size Size { get; set; }
-        public Color FillColor { get; set; }
         public Color StrokeColor { get; set; }
         public double StrokeThickness { get; set; }
 
@@ -16,7 +14,6 @@ namespace screenerWpf
         {
             Position = new Point(0, 0);
             Size = new Size(100, 50); // Domyślny rozmiar
-            FillColor = Colors.LightGray; // Domyślny kolor wypełnienia
             StrokeColor = Colors.Black; // Domyślny kolor obrysu
             StrokeThickness = 1.0; // Domyślna grubość obrysu
         }
@@ -27,7 +24,7 @@ namespace screenerWpf
                 throw new System.ArgumentNullException("context");
 
             Rect rect = new Rect(Position, Size);
-            Brush fillBrush = new SolidColorBrush(FillColor);
+            Brush fillBrush = new SolidColorBrush();
             Pen strokePen = new Pen(new SolidColorBrush(StrokeColor), StrokeThickness);
 
             context.DrawRectangle(fillBrush, strokePen, rect);

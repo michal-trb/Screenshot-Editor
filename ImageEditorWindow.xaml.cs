@@ -21,9 +21,7 @@ namespace screenerWpf
             InitializeComponent();
             this.initialImage = initialBitmap;
             this.inputHandler = new CanvasInputHandler(
-                drawableCanvas,
-                colorComboBox,
-                arrowThicknessComboBox);
+                drawableCanvas);
             drawableCanvas.Width = initialBitmap.PixelWidth;
             drawableCanvas.Height = initialBitmap.PixelHeight;
 
@@ -201,12 +199,21 @@ namespace screenerWpf
 
         public void ArrowThicknessComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            inputHandler.ArrowThicknessComboBox_SelectionChanged(sender, e);
+            if (arrowThicknessComboBox.SelectedItem is ComboBoxItem selectedThicknessItem
+                && double.TryParse(selectedThicknessItem.Content.ToString(), out double selectedThickness))
+            {
+                inputHandler.ArrowThicknessComboBox_SelectionChanged(selectedThickness);
+            }
         }
 
         public void ColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            inputHandler.ColorComboBox_SelectionChanged(sender, e);
+            if (colorComboBox.SelectedItem is ComboBoxItem selectedColorItem
+                && selectedColorItem.Background is SolidColorBrush colorBrush)
+            {
+                // Update the current color in the canvas
+                inputHandler.ColorComboBox_SelectionChanged(colorBrush.Color);
+            }
         }
 
         private bool isTextToolSelected;

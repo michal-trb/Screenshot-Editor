@@ -14,27 +14,18 @@ namespace screenerWpf
         private CanvasEditingHandler editingHandler;
         private CanvasSavingHandler savingHandler;
 
-        private ComboBox colorComboBox;
-        private ComboBox arrowThicknessComboBox;
-        public static FontFamily selectedFontFamily = new FontFamily("Arial");
-        public static double selectedFontSize = 12.0;
+        public static FontFamily SelectedFontFamily { get; private set; } = new FontFamily("Arial");
+        public static double SelectedFontSize { get; private set; } = 12.0;
+        public static double ArrowThickness { get; private set; } = 2.0;
+        public static Color SelectedColor { get; private set; } = Colors.Black;
 
         public CanvasInputHandler(
-            DrawableCanvas canvas,
-            ComboBox colorComboBox,
-            ComboBox thicknessComboBox)
+            DrawableCanvas canvas)
         {
             drawableCanvas = canvas;
-            this.colorComboBox = colorComboBox;
-            this.arrowThicknessComboBox = thicknessComboBox;
-
-            Color initialColor = Colors.Black;
-            double initialThickness = 2.0;
 
             actionHandler = new CanvasActionHandler(
-                canvas,
-                initialColor,
-                initialThickness);
+                canvas);
             selectionHandler = new CanvasSelectionHandler(drawableCanvas);
             editingHandler = new CanvasEditingHandler(drawableCanvas);
             savingHandler = new CanvasSavingHandler(drawableCanvas);
@@ -93,34 +84,6 @@ namespace screenerWpf
             actionHandler.SetCurrentAction(EditAction.AddBubble);
         }
 
-        public void ColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (colorComboBox.SelectedItem is ComboBoxItem selectedColorItem
-                && selectedColorItem.Background is SolidColorBrush colorBrush)
-            {
-                UpdateDrawingColor(colorBrush.Color);
-            }
-        }
-
-        public void ArrowThicknessComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (arrowThicknessComboBox.SelectedItem is ComboBoxItem selectedThicknessItem
-                && double.TryParse(selectedThicknessItem.Content.ToString(), out double selectedThickness))
-            {
-                UpdateArrowThickness(selectedThickness);
-            }
-        }
-
-        private void UpdateDrawingColor(Color newColor)
-        {
-            actionHandler.UpdateDrawingColor(newColor);
-        }
-
-        private void UpdateArrowThickness(double newThickness)
-        {
-            actionHandler.UpdateArrowThickness(newThickness);
-        }
-
         public void EditTextButton_Click(object sender, RoutedEventArgs e)
         {
             if (selectionHandler.HasSelectedElement())
@@ -142,12 +105,50 @@ namespace screenerWpf
 
         public void FontFamilyComboBox_SelectionChanged(FontFamily selectedFontFamily)
         {
-            selectedFontFamily = selectedFontFamily;
+            SelectedFontFamily = selectedFontFamily;
         }
 
         public void FontSizeComboBox_SelectionChanged(double fontSize)
         {
-            selectedFontSize = fontSize;
+            SelectedFontSize = fontSize;
+        }
+
+        public void ColorComboBox_SelectionChanged(Color comboBox)
+        {
+            SelectedColor = comboBox;
+        }
+
+        public void ArrowThicknessComboBox_SelectionChanged(double comboBoxArrowThickness)
+        {
+            ArrowThickness = comboBoxArrowThickness;
+        }
+
+        public static Color GetCurrentColor()
+        {
+            return SelectedColor;
+        }
+
+        public static Typeface GetCurrentTypeface()
+        {
+            // Zwróć aktualny rodzaj czcionki
+            return new Typeface(SelectedFontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+        }
+
+        public static FontFamily GetCurrentFontFamily()
+        {
+            // Zwróć aktualny rodzaj czcionki
+            return SelectedFontFamily;
+        }
+
+        public static double GetCurrentFontSize()
+        {
+            // Zwróć aktualny rozmiar czcionki
+            return SelectedFontSize;
+        }
+
+        public static double GetCurrentThickness()
+        {
+            return ArrowThickness;
         }
     }
 }

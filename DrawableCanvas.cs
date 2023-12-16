@@ -183,7 +183,7 @@ namespace screenerWpf
                 selectedElement = null;
                 InvalidateVisual();
             }
-            this.Focus();
+            Focus();
         }
 
         public void AddElement(DrawableElement element)
