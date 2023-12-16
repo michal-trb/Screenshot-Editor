@@ -99,7 +99,7 @@ namespace screenerWpf.CanvasHandler.Drawers
             double bubbleHeight = Math.Max(minHeight, formattedText.Height + 20);
 
             // Aktualizacja rozmiaru dymku
-            speechBubble.Size = new System.Windows.Size(bubbleWidth, bubbleHeight);
+            speechBubble.Size = new Size(bubbleWidth, bubbleHeight);
 
             // Aktualizacja rozmiaru i pozycji TextBox
             textBox.Width = bubbleWidth - 20;

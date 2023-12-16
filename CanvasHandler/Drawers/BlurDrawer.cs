@@ -59,42 +59,45 @@ namespace screenerWpf.CanvasHandler.Drawers
                 return; // Nie rysuj, jeśli szerokość lub wysokość jest zerowa lub ujemna
             }
 
-            // Definiowanie wycinka z oryginalnego obrazu
-            Int32Rect cropRect = new Int32Rect(
-                (int)CurrentBlurArea.Position.X,
-                (int)CurrentBlurArea.Position.Y,
-                (int)CurrentBlurArea.Size.Width,
-                (int)CurrentBlurArea.Size.Height);
-
-            // Tworzenie CroppedBitmap na podstawie wycinka
-            CroppedBitmap croppedBitmap = new CroppedBitmap(originalBitmap, cropRect);
-
-            // Tworzenie DrawingVisual do nałożenia efektu rozmycia
+            // Tworzenie DrawingVisual z efektem rozmycia
             DrawingVisual visual = new DrawingVisual();
             using (DrawingContext dc = visual.RenderOpen())
             {
-                // Rysowanie CroppedBitmap
-                dc.DrawImage(croppedBitmap, new Rect(0, 0, cropRect.Width, cropRect.Height));
+                // Definiowanie wycinka z oryginalnego obrazu
+                Int32Rect cropRect = new Int32Rect(
+                    (int)CurrentBlurArea.Position.X,
+                    (int)CurrentBlurArea.Position.Y,
+                    (int)CurrentBlurArea.Size.Width,
+                    (int)CurrentBlurArea.Size.Height);
+
+                // Tworzenie CroppedBitmap na podstawie wycinka
+                CroppedBitmap croppedBitmap = new CroppedBitmap(originalBitmap, cropRect);
+
+                // Tworzenie tymczasowego DrawingVisual do nałożenia efektu rozmycia
+                DrawingVisual tempVisual = new DrawingVisual();
+                using (DrawingContext tempDc = tempVisual.RenderOpen())
+                {
+                    tempDc.DrawImage(croppedBitmap, new Rect(0, 0, cropRect.Width, cropRect.Height));
+                }
+
+                // Stosowanie efektu rozmycia
+                tempVisual.Effect = new BlurEffect { Radius = 2 };
+
+                // Renderowanie tempVisual do RenderTargetBitmap
+                RenderTargetBitmap blurredBitmap = new RenderTargetBitmap(
+                    cropRect.Width,
+                    cropRect.Height,
+                    96, // DpiX
+                    96, // DpiY
+                    PixelFormats.Pbgra32);
+                blurredBitmap.Render(tempVisual);
+
+                // Rysowanie RenderTargetBitmap na głównym DrawingVisual
+                dc.DrawImage(blurredBitmap, new Rect(0, 0, cropRect.Width, cropRect.Height));
             }
 
-            // Stosowanie efektu rozmycia
-            visual.Effect = new BlurEffect { Radius = 10 };
-
-            // Renderowanie zmodyfikowanego obrazu na nową RenderTargetBitmap
-            RenderTargetBitmap tempBitmap = new RenderTargetBitmap(
-                cropRect.Width,
-                cropRect.Height,
-                originalBitmap.DpiX,
-                originalBitmap.DpiY,
-                PixelFormats.Pbgra32);
-            tempBitmap.Render(visual);
-
-            // Rysowanie zmodyfikowanego obrazu na TemporaryVisualElement w odpowiednim miejscu
-            using (DrawingContext dc = TemporaryVisualElement.Visual.RenderOpen())
-            {
-                // Rysowanie tempBitmap na TemporaryVisualElement
-                dc.DrawImage(tempBitmap, new Rect(CurrentBlurArea.Position, CurrentBlurArea.Size));
-            }
+            // Aktualizacja Visual w TemporaryVisualElement
+            TemporaryVisualElement.Visual = visual;
         }
 
 
@@ -109,7 +112,7 @@ namespace screenerWpf.CanvasHandler.Drawers
                 BlurEffect = new BlurEffect { Radius = 10 }
             };
 
-            TemporaryVisualElement = new DrawableVisualElement
+            TemporaryVisualElement = new DrawableVisualElement(DrawableCanvas)
             {
                 Visual = new DrawingVisual(),
                 Position = startPoint,

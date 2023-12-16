@@ -14,6 +14,8 @@ namespace screenerWpf
         private DrawableElement selectedElement;
         private Point lastMousePosition;
         private bool isDragging;
+        private bool isFirstClick = true;
+        private RenderTargetBitmap originalTargetBitmap;
 
         private const double SpeechBubbleTailTolerance = 40; // Tolerance in pixels
         private const double ArrowTolerance = 30; // Tolerance in pixels
@@ -37,7 +39,10 @@ namespace screenerWpf
 
         private static void OnBackgroundImageChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            (d as DrawableCanvas)?.InvalidateVisual();
+            if (d is DrawableCanvas canvas)
+            {
+                canvas.InvalidateVisual();
+            }
         }
 
         protected override void OnRender(DrawingContext dc)
@@ -57,6 +62,11 @@ namespace screenerWpf
 
         private void DrawableCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            if (isFirstClick)
+            {
+                originalTargetBitmap = GetRenderTargetBitmap();
+            }
+
             Point clickPoint = e.GetPosition(this);
             lastMousePosition = clickPoint;
             isDragging = false;
@@ -239,6 +249,11 @@ namespace screenerWpf
             renderBitmap.Render(visual);
 
             return renderBitmap;
+        }
+
+        internal RenderTargetBitmap GetOriginalTargetBitmap()
+        {
+            return originalTargetBitmap;
         }
     }
 }
