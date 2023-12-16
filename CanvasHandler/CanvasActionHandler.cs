@@ -7,7 +7,9 @@ using System.Windows.Media;
 
 namespace screenerWpf
 {
-    public enum EditAction { None, DrawArrow, AddText, Move, Delete, AddBubble, DrawRectangle }
+    public enum EditAction { None, DrawArrow, AddText, Move, Delete, AddBubble, DrawRectangle,
+        Blur
+    }
 
     public class CanvasActionHandler
     {
@@ -20,6 +22,7 @@ namespace screenerWpf
         private RectangleDrawer rectangleDrawer;
         private SpeechBubbleDrawer speechBubbleDrawer;
         private TextDrawer textDrawer;
+        private BlurDrawer blurDrawer;
 
         public CanvasActionHandler(DrawableCanvas canvas)
         {
@@ -30,6 +33,7 @@ namespace screenerWpf
             rectangleDrawer = new RectangleDrawer(canvas);
             speechBubbleDrawer = new SpeechBubbleDrawer(canvas);
             textDrawer = new TextDrawer(canvas);
+            blurDrawer = new BlurDrawer(canvas);
         }
 
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
@@ -47,6 +51,9 @@ namespace screenerWpf
                     break;
                 case EditAction.DrawRectangle:
                     rectangleDrawer.StartDrawing(e);
+                    break;
+                case EditAction.Blur:
+                    blurDrawer.StartDrawing(e);
                     break;
                 default:
                     SelectElementAtMousePosition(e);
@@ -71,6 +78,9 @@ namespace screenerWpf
                 case EditAction.DrawRectangle:
                     rectangleDrawer.FinishDrawing();
                     break;
+                case EditAction.Blur:
+                    blurDrawer.FinishDrawing();
+                    break;
             }
 
             currentAction = EditAction.None;
@@ -86,6 +96,9 @@ namespace screenerWpf
                     break;
                 case EditAction.DrawRectangle:
                     rectangleDrawer.UpdateDrawing(e);
+                    break;
+                case EditAction.Blur:
+                    blurDrawer.UpdateDrawing(e);
                     break;
             }
         }

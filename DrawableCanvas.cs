@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace screenerWpf
 {
@@ -215,6 +216,29 @@ namespace screenerWpf
         internal IDrawable FindElementAt(Point position)
         {
             return elementManager.GetElementAtPoint(position);
+        }
+
+        internal RenderTargetBitmap GetRenderTargetBitmap()
+        {
+            // Ustalenie wymiarów bitmapy - powinny odpowiadać wymiarom płótna
+            int width = (int)Math.Ceiling(ActualWidth);
+            int height = (int)Math.Ceiling(ActualHeight);
+
+            // Utworzenie bitmapy renderującej
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+
+            // Utworzenie wizualizacji na podstawie płótna
+            DrawingVisual visual = new DrawingVisual();
+            using (DrawingContext context = visual.RenderOpen())
+            {
+                VisualBrush brush = new VisualBrush(this);
+                context.DrawRectangle(brush, null, new Rect(new Point(), new Size(width, height)));
+            }
+
+            // Renderowanie wizualizacji na bitmapie
+            renderBitmap.Render(visual);
+
+            return renderBitmap;
         }
     }
 }

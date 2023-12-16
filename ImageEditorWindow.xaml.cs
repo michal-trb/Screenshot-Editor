@@ -323,5 +323,13 @@ namespace screenerWpf
             inputHandler.SpeechBubbleButton_Click(sender, e);
         }
 
+        private void BlurButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsThicknessComboBoxSelected = false;
+            IsColorComboBoxSelected = false;
+            IsFontSizeSelected = false;
+            IsFontFamilySelected = false;
+            inputHandler.BlurButton_Click(sender, e);
+        }
     }
 }

@@ -84,6 +84,11 @@ namespace screenerWpf
             actionHandler.SetCurrentAction(EditAction.AddBubble);
         }
 
+        public void BlurButton_Click(object sender, RoutedEventArgs e)
+        {
+            actionHandler.SetCurrentAction(EditAction.Blur);
+        }
+
         public void EditTextButton_Click(object sender, RoutedEventArgs e)
         {
             if (selectionHandler.HasSelectedElement())

@@ -28,7 +28,8 @@
             <Button Content="Draw Arrow" Click="DrawArrowButton_Click"/>
             <Button Content="Add Text" Click="AddTextButton_Click"/>
             <Button Content="Draw Rect" Click="DrawRectButton_Click"/>
-            <Button x:Name="speechBubbleButton" Content="Dymek Czatu" Click="SpeechBubbleButton_Click"/>
+            <Button Content="Blur" Click="BlurButton_Click"/>
+            <Button Content="Dymek Czatu" Click="SpeechBubbleButton_Click"/>
             <!-- Nowe kontrolki do wyboru właściwości strzałki -->
             <Label Content="Kolor:" Visibility="{Binding IsColorComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <ComboBox x:Name="colorComboBox" SelectionChanged="ColorComboBox_SelectionChanged" Visibility="{Binding IsColorComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}">

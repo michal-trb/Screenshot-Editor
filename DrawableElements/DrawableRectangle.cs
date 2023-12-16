@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Media;
 
 namespace screenerWpf
@@ -9,7 +10,8 @@ namespace screenerWpf
         public Size Size { get; set; }
         public Color StrokeColor { get; set; }
         public double StrokeThickness { get; set; }
-
+        private enum DragHandle { None, TopLeft, TopRight, BottomLeft, BottomRight }
+        private DragHandle currentDragHandle = DragHandle.None;
         public DrawableRectangle()
         {
             Position = new Point(0, 0);
@@ -40,7 +42,22 @@ namespace screenerWpf
         public override bool HitTest(Point point)
         {
             Rect rect = new Rect(Position, Size);
-            return rect.Contains(point);
+            currentDragHandle = DragHandle.None;
+
+            if (IsNearCorner(point, Position)) currentDragHandle = DragHandle.TopLeft;
+            else if (IsNearCorner(point, new Point(Position.X + Size.Width, Position.Y))) currentDragHandle = DragHandle.TopRight;
+            else if (IsNearCorner(point, new Point(Position.X, Position.Y + Size.Height))) currentDragHandle = DragHandle.BottomLeft;
+            else if (IsNearCorner(point, new Point(Position.X + Size.Width, Position.Y + Size.Height))) currentDragHandle = DragHandle.BottomRight;
+
+            return rect.Contains(point) || currentDragHandle != DragHandle.None;
+        }
+
+
+        private bool IsNearCorner(Point point, Point corner)
+        {
+            // Metoda sprawdzająca, czy punkt znajduje się blisko narożnika
+            double tolerance = 10; // Możesz dostosować tolerancję
+            return (Math.Abs(point.X - corner.X) <= tolerance && Math.Abs(point.Y - corner.Y) <= tolerance);
         }
 
         public override Rect GetBounds()
@@ -50,7 +67,27 @@ namespace screenerWpf
 
         public override void Move(Vector delta)
         {
-            Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+            switch (currentDragHandle)
+            {
+                case DragHandle.None:
+                    Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+                    break;
+                case DragHandle.TopLeft:
+                    Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+                    Size = new Size(Size.Width - delta.X, Size.Height - delta.Y);
+                    break;
+                case DragHandle.TopRight:
+                    Size = new Size(Size.Width + delta.X, Size.Height - delta.Y);
+                    Position = new Point(Position.X, Position.Y + delta.Y);
+                    break;
+                case DragHandle.BottomLeft:
+                    Size = new Size(Size.Width - delta.X, Size.Height + delta.Y);
+                    Position = new Point(Position.X + delta.X, Position.Y);
+                    break;
+                case DragHandle.BottomRight:
+                    Size = new Size(Size.Width + delta.X, Size.Height + delta.Y);
+                    break;
+            }
         }
     }
 }
