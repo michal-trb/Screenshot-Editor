@@ -8,15 +8,10 @@ namespace screenerWpf.CanvasHandler.Drawers
     public class TextDrawer : DrawableElementDrawer
     {
         private TextBox editableTextBox;
-        public Color Color { get; set; }
-        public Typeface Typeface { get; set; }
-        public double FontSize { get; set; }
 
-        public TextDrawer(DrawableCanvas canvas, Color color, Typeface typeface, double fontSize) : base(canvas)
+        public TextDrawer(DrawableCanvas canvas) : base(canvas)
         {
-            Color = color;
-            Typeface = typeface;
-            FontSize = fontSize;
+
         }
 
         public override void StartDrawing(MouseButtonEventArgs e)
@@ -29,9 +24,9 @@ namespace screenerWpf.CanvasHandler.Drawers
                 Width = 200, // Adjust as needed
                 Height = 30, // Adjust as needed
                 Text = "New Text",
-                FontFamily = Typeface.FontFamily,
-                FontSize = FontSize,
-                Foreground = new SolidColorBrush(Color),
+                FontFamily = CanvasInputHandler.GetCurrentFontFamily(),
+                FontSize = CanvasInputHandler.GetCurrentFontSize(),
+                Foreground = new SolidColorBrush(CanvasInputHandler.GetCurrentColor()),
                 Background = new SolidColorBrush(Colors.Transparent),
                 BorderThickness = new Thickness(0),
                 AcceptsReturn = true,
@@ -57,13 +52,9 @@ namespace screenerWpf.CanvasHandler.Drawers
             {
                 Position = textLocation,
                 Text = textBox.Text,
-                Typeface = new Typeface(
-                    textBox.FontFamily,
-                    textBox.FontStyle,
-                    textBox.FontWeight,
-                    textBox.FontStretch),
-                FontSize = textBox.FontSize,
-                Color = Color
+                Typeface = CanvasInputHandler.GetCurrentTypeface(),
+                FontSize = CanvasInputHandler.GetCurrentFontSize(),
+                Color = CanvasInputHandler.GetCurrentColor(),
             };
 
             // Add DrawableText to the list of drawable elements and remove the TextBox

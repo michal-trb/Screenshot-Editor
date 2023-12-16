@@ -10,12 +10,10 @@ namespace screenerWpf.CanvasHandler.Drawers
     {
         private DrawableSpeechBubble CurrentSpeechBubble { get; set; }
         private TextBox EditableTextBox { get; set; }
-        public Color Color { get; set; }
         public string InitialText { get; set; }
 
-        public SpeechBubbleDrawer(DrawableCanvas canvas, Color color, string initialText = "") : base(canvas)
+        public SpeechBubbleDrawer(DrawableCanvas canvas, string initialText = "") : base(canvas)
         {
-            Color = color;
             InitialText = initialText;
         }
 
@@ -28,7 +26,7 @@ namespace screenerWpf.CanvasHandler.Drawers
                 Size = new Size(100, 50),
                 Text = InitialText,
                 EndPoint = new Point(location.X + 50, location.Y + 50),
-                Color = Color
+                Color = CanvasInputHandler.GetCurrentColor(),
             };
             DrawableCanvas.AddElement(CurrentSpeechBubble);
 
@@ -87,9 +85,9 @@ namespace screenerWpf.CanvasHandler.Drawers
                 textBox.Text,
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
-                new Typeface(textBox.FontFamily, textBox.FontStyle, textBox.FontWeight, textBox.FontStretch),
-                textBox.FontSize,
-                Brushes.Black);
+                CanvasInputHandler.GetCurrentTypeface(),
+                CanvasInputHandler.GetCurrentFontSize(),
+                new SolidColorBrush(CanvasInputHandler.GetCurrentColor()));
 
             // Dostosowanie rozmiaru dymku do tekstu
             double minWidth = 100.0;

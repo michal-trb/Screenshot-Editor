@@ -12,11 +12,10 @@ namespace screenerWpf.CanvasHandler.Drawers
     public class RectangleDrawer : DrawableElementDrawer
     {
         private DrawableRectangle CurrentRectangle { get; set; }
-        public Color Color { get; set; }
 
-        public RectangleDrawer(DrawableCanvas canvas, Color color) : base(canvas)
+        public RectangleDrawer(DrawableCanvas canvas) : base(canvas)
         {
-            Color = color;
+
         }
 
         public override void StartDrawing(MouseButtonEventArgs e)
@@ -25,7 +24,7 @@ namespace screenerWpf.CanvasHandler.Drawers
             CurrentRectangle = new DrawableRectangle
             {
                 Position = startPoint,
-                Color = Color,
+                Color = CanvasInputHandler.GetCurrentColor(),
                 Size = new Size(0, 0)
             };
             DrawableCanvas.AddElement(CurrentRectangle);

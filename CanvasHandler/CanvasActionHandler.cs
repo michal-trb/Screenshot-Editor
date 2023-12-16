@@ -27,17 +27,9 @@ namespace screenerWpf
 
             // Inicjalizacja obiektów Drawer
             arrowDrawer = new ArrowDrawer(currentDrawable, canvas);
-            rectangleDrawer = new RectangleDrawer(
-                canvas,
-                CanvasInputHandler.GetCurrentColor());
-            speechBubbleDrawer = new SpeechBubbleDrawer(
-                canvas,
-                CanvasInputHandler.GetCurrentColor());
-            textDrawer = new TextDrawer(
-                canvas,
-                CanvasInputHandler.GetCurrentColor(),
-                CanvasInputHandler.GetCurrentTypeface(), 
-                CanvasInputHandler.GetCurrentFontSize());
+            rectangleDrawer = new RectangleDrawer(canvas);
+            speechBubbleDrawer = new SpeechBubbleDrawer(canvas);
+            textDrawer = new TextDrawer(canvas);
         }
 
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
