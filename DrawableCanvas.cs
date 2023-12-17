@@ -155,18 +155,7 @@ namespace screenerWpf
 
         private void DrawableCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isDragging && selectedElement != null && e.LeftButton == MouseButtonState.Pressed)
-            {
-                Point currentPosition = e.GetPosition(this);
-                Vector delta = currentPosition - lastMousePosition;
-
-                if (selectedElement is DrawableSpeechBubble speechBubble && speechBubble.isTailBeingDragged)
-                {
-                    speechBubble.EndTailPoint = new Point(speechBubble.EndTailPoint.X + delta.X, speechBubble.EndTailPoint.Y + delta.Y);
-                }
-                lastMousePosition = currentPosition;
-                InvalidateVisual();
-            }
+           
         }
 
         private void SelectElement(DrawableElement element)
