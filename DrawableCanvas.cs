@@ -65,6 +65,7 @@ namespace screenerWpf
             if (isFirstClick)
             {
                 originalTargetBitmap = GetRenderTargetBitmap();
+                isFirstClick = false;
             }
 
             Point clickPoint = e.GetPosition(this);

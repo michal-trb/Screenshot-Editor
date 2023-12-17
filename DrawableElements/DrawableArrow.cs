@@ -4,12 +4,16 @@ using System.Windows.Media;
 
 namespace screenerWpf
 {
-    public class DrawableArrow : DrawableElement
+    public class DrawableArrow : DrawableWithHandles
     {
         public Point EndPoint { get; set; }
         public double Thickness { get; internal set; }
         private bool isStartBeingDragged = false;
         private bool isEndBeingDragged = false;
+
+        public DrawableArrow() : base(2) 
+        {
+        }
 
         public void SetStartBeingDragged(bool value)
         {
@@ -46,9 +50,9 @@ namespace screenerWpf
 
             if (IsSelected)
             {
-                Pen selectionPen = new Pen(Brushes.Red, 2); // Długopis do rysowania obwódki
-                Rect boundingBox = GetBounds();
-                context.DrawRectangle(null, selectionPen, boundingBox);
+                HandlePoints[0] = Position; // Początek strzałki
+                HandlePoints[1] = EndPoint; // Koniec strzałki
+                DrawSelectionHandles(context);
             }
         }
 

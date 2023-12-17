@@ -7,11 +7,11 @@ using System;
 public abstract class DrawableElement : IDrawable
 {
     public Point Position { get; set; }
+    public Size Size { get; set; }
     public Color Color { get; set; }
     public bool IsSelected { get; set; }
 
     public abstract void Draw(DrawingContext context);
-    public abstract bool HitTest(Point point);
     public abstract Rect GetBounds();
 
     // Implement the Select method from IDrawable
@@ -51,5 +51,12 @@ public abstract class DrawableElement : IDrawable
     public Point GetLocation()
     {
         throw new NotImplementedException();
+    }
+
+    public virtual bool HitTest(Point point)
+    {
+        Rect rect = new Rect(Position, Size);
+        Geometry rectangleGeometry = new RectangleGeometry(rect);
+        return rectangleGeometry.FillContains(point);
     }
 }

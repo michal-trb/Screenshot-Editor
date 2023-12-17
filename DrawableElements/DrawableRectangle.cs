@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace screenerWpf
 {
-    public class DrawableRectangle : DrawableElement
+    public class DrawableRectangle : DrawableWithHandles
     {
         public Point Position { get; set; }
         public Size Size { get; set; }
@@ -12,7 +12,7 @@ namespace screenerWpf
         public double StrokeThickness { get; set; }
         private enum DragHandle { None, TopLeft, TopRight, BottomLeft, BottomRight }
         private DragHandle currentDragHandle = DragHandle.None;
-        public DrawableRectangle()
+        public DrawableRectangle() : base(4)
         {
             Position = new Point(0, 0);
             Size = new Size(100, 50); // Domyślny rozmiar
@@ -31,12 +31,19 @@ namespace screenerWpf
 
             context.DrawRectangle(fillBrush, strokePen, rect);
 
-            // Rysowanie ramki selekcyjnej, jeśli element jest zaznaczony
             if (IsSelected)
             {
-                Pen selectionPen = new Pen(Brushes.Red, 2);
-                context.DrawRectangle(null, selectionPen, rect);
+                UpdateHandlePoints(rect);
+                DrawSelectionHandles(context);
             }
+        }
+
+        private void UpdateHandlePoints(Rect rect)
+        {
+            HandlePoints[0] = rect.TopLeft; // Lewy górny narożnik
+            HandlePoints[1] = rect.TopRight; // Prawy górny narożnik
+            HandlePoints[2] = rect.BottomLeft; // Lewy dolny narożnik
+            HandlePoints[3] = rect.BottomRight; // Prawy dolny narożnik
         }
 
         public override bool HitTest(Point point)

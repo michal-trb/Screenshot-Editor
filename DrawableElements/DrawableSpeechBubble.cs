@@ -4,7 +4,7 @@ using System.Windows.Media;
 
 namespace screenerWpf
 {
-    public class DrawableSpeechBubble : DrawableElement
+    public class DrawableSpeechBubble : DrawableWithHandles
     {
         public Point Position { get; set; }
         public Size Size { get; set; }
@@ -16,7 +16,7 @@ namespace screenerWpf
 
         public bool isTailBeingDragged = false;
 
-        public DrawableSpeechBubble()
+        public DrawableSpeechBubble() : base(1)
         {
 
         }
@@ -59,8 +59,8 @@ namespace screenerWpf
             // Rysowanie ramki selekcyjnej, jeśli jest zaznaczony
             if (IsSelected)
             {
-                Pen selectionPen = new Pen(Brushes.Red, 2);
-                context.DrawRoundedRectangle(null, selectionPen, rect, cornerRadius, cornerRadius);
+                HandlePoints[0] = EndTailPoint; // Pozycja uchwytu na końcówce ogonka
+                DrawSelectionHandles(context);
             }
         }
 
@@ -84,14 +84,15 @@ namespace screenerWpf
 
         public override bool HitTest(Point point)
         {
-            // Tworzenie prostokątnej geometrii na podstawie Position i Size
-            Rect rect = new Rect(Position, Size);
-            Geometry rectangleGeometry = new RectangleGeometry(rect);
+            // Utwórz geometrię obejmującą zarówno ciało dymku, jak i ogonek
+            GeometryGroup geometryGroup = new GeometryGroup();
+            Rect bubbleRect = new Rect(Position, Size);
+            geometryGroup.Children.Add(new RectangleGeometry(bubbleRect));
+            geometryGroup.Children.Add(new LineGeometry(bubbleRect.BottomLeft, EndTailPoint)); // Przykładowa geometria dla ogonka
 
-            // Sprawdzenie, czy punkt znajduje się w obrębie geometrii prostokąta
-            return rectangleGeometry.FillContains(point);
+            // Sprawdzenie, czy punkt znajduje się w obrębie geometrii
+            return geometryGroup.FillContains(point) || IsNearHandle(point, EndTailPoint);
         }
-
 
         public override Rect GetBounds()
         {
@@ -117,12 +118,33 @@ namespace screenerWpf
 
         public override void Move(Vector delta)
         {
-            Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+            if (isTailBeingDragged)
+            {
+                // Przesuwanie tylko ogonka
+                EndTailPoint = new Point(EndTailPoint.X + delta.X, EndTailPoint.Y + delta.Y);
+            }
+            else
+            {
+                // Przesuwanie całego dymku
+                Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+
+                // Aktualizacja pozycji ogonka względem przesunięcia całego dymku
+                // Jeśli ogonek ma zachować swoją pozycję względem ekranu, a nie dymku, 
+                // ta linia powinna być zakomentowana lub usunięta.
+                EndTailPoint = new Point(EndTailPoint.X + delta.X, EndTailPoint.Y + delta.Y);
+            }
         }
+
 
         public void SetTailBeingDragged(bool value)
         {
             isTailBeingDragged = value;
+        }
+
+        private bool IsNearHandle(Point point, Point handle)
+        {
+            double handleRadius = 10; // Promień, w którym punkt jest uznawany za bliski uchwytowi
+            return (point - handle).Length <= handleRadius;
         }
     }
 }
