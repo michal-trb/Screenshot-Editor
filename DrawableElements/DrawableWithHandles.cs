@@ -32,6 +32,7 @@ public abstract class DrawableWithHandles : DrawableElement
         position += offset;
         context.DrawRectangle(brush, null, new Rect(position, new Size(size, size)));
     }
+
     protected abstract void UpdateHandlePoints(); // Abstrakcyjna metoda do aktualizacji pozycji uchwytów
 
     protected bool IsNearCorner(Point point, Point corner)
@@ -39,11 +40,10 @@ public abstract class DrawableWithHandles : DrawableElement
         double tolerance = 10; // Możesz dostosować tolerancję
         return (Math.Abs(point.X - corner.X) <= tolerance && Math.Abs(point.Y - corner.Y) <= tolerance);
     }
+
     public override void Move(Vector delta)
     {
-        // Logika przesunięcia elementu. Klasa pochodna może dostosować tę metodę, jeśli potrzebna jest dodatkowa logika.
         base.Move(delta);
         UpdateHandlePoints(); // Aktualizacja pozycji uchwytów po przesunięciu
     }
-    // Pozostałe metody abstrakcyjne i właściwości...
 }

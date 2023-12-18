@@ -86,7 +86,7 @@ namespace screenerWpf
 
         public void BlurButton_Click(object sender, RoutedEventArgs e)
         {
-            actionHandler.SetCurrentAction(EditAction.Blur);
+            actionHandler.SetCurrentAction(EditAction.DrawBlur);
         }
 
         public void EditTextButton_Click(object sender, RoutedEventArgs e)

@@ -17,6 +17,7 @@ namespace screenerWpf.DrawableElements
         public DrawingVisual Visual { get; set; }
         private DrawableCanvas Canvas { get; set; }
         private enum DragHandle { None, TopLeft, TopRight, BottomLeft, BottomRight }
+
         private DragHandle currentDragHandle = DragHandle.None;
         public DrawableBlur(DrawableCanvas canvas) : base(4)
         {

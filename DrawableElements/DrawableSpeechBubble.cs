@@ -10,9 +10,9 @@ namespace screenerWpf
         public Size Size { get; set; }
         public string Text { get; set; }
         public Point EndTailPoint { get; set; } // Pozycja końca ogonka
-        public double FontSize { get; set; } // Dodana właściwość
-        public Typeface Typeface { get; set; } // Dodana właściwość
-        public Brush Brush { get; set; } // Dodana właściwość
+        public double FontSize { get; set; } 
+        public Typeface Typeface { get; set; }
+        public Brush Brush { get; set; } 
 
         public bool isTailBeingDragged = false;
 

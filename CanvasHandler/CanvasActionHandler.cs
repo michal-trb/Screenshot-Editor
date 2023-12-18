@@ -8,7 +8,7 @@ using System.Windows.Media;
 namespace screenerWpf
 {
     public enum EditAction { None, DrawArrow, AddText, Move, Delete, AddBubble, DrawRectangle,
-        Blur
+        DrawBlur
     }
 
     public class CanvasActionHandler
@@ -52,7 +52,7 @@ namespace screenerWpf
                 case EditAction.DrawRectangle:
                     rectangleDrawer.StartDrawing(e);
                     break;
-                case EditAction.Blur:
+                case EditAction.DrawBlur:
                     blurDrawer.StartDrawing(e);
                     break;
                 default:
@@ -78,7 +78,7 @@ namespace screenerWpf
                 case EditAction.DrawRectangle:
                     rectangleDrawer.FinishDrawing();
                     break;
-                case EditAction.Blur:
+                case EditAction.DrawBlur:
                     blurDrawer.FinishDrawing();
                     break;
             }
@@ -97,7 +97,7 @@ namespace screenerWpf
                 case EditAction.DrawRectangle:
                     rectangleDrawer.UpdateDrawing(e);
                     break;
-                case EditAction.Blur:
+                case EditAction.DrawBlur:
                     blurDrawer.UpdateDrawing(e);
                     break;
             }
