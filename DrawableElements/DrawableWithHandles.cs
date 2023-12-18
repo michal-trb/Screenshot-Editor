@@ -17,25 +17,33 @@ public abstract class DrawableWithHandles : DrawableElement
     // Metody wspólne dla wszystkich elementów z uchwytami
     protected void DrawSelectionHandles(DrawingContext context)
     {
+        if (!IsSelected) return;
+
         Brush handleBrush = Brushes.Red; // Kolor uchwytu
         foreach (var point in HandlePoints)
         {
-            DrawHandle(context, point);
+            DrawHandle(context, point, handleBrush, handleSize);
         }
     }
 
-    private void DrawHandle(DrawingContext context, Point position)
+    private void DrawHandle(DrawingContext context, Point position, Brush brush, double size)
     {
-        Vector offset = new Vector(-handleSize / 2, -handleSize / 2);
+        Vector offset = new Vector(-size / 2, -size / 2);
         position += offset;
-        context.DrawRectangle(Brushes.Red, null, new Rect(position, new Size(handleSize, handleSize)));
+        context.DrawRectangle(brush, null, new Rect(position, new Size(size, size)));
     }
+    protected abstract void UpdateHandlePoints(); // Abstrakcyjna metoda do aktualizacji pozycji uchwytów
 
     protected bool IsNearCorner(Point point, Point corner)
     {
         double tolerance = 10; // Możesz dostosować tolerancję
         return (Math.Abs(point.X - corner.X) <= tolerance && Math.Abs(point.Y - corner.Y) <= tolerance);
     }
-
+    public override void Move(Vector delta)
+    {
+        // Logika przesunięcia elementu. Klasa pochodna może dostosować tę metodę, jeśli potrzebna jest dodatkowa logika.
+        base.Move(delta);
+        UpdateHandlePoints(); // Aktualizacja pozycji uchwytów po przesunięciu
+    }
     // Pozostałe metody abstrakcyjne i właściwości...
 }

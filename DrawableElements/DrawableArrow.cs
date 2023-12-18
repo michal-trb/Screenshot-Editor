@@ -50,12 +50,15 @@ namespace screenerWpf
 
             if (IsSelected)
             {
-                HandlePoints[0] = Position; // Początek strzałki
-                HandlePoints[1] = EndPoint; // Koniec strzałki
-                DrawSelectionHandles(context);
+                UpdateHandlePoints(); // Aktualizuj pozycje uchwytów
+                DrawSelectionHandles(context); // Narysuj uchwyty
             }
         }
-
+        protected override void UpdateHandlePoints()
+        {
+            HandlePoints[0] = Position; // Początek strzałki
+            HandlePoints[1] = EndPoint; // Koniec strzałki
+        }
 
         private void DrawArrowHead(
             DrawingContext context,

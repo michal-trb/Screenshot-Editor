@@ -10,22 +10,17 @@ namespace screenerWpf
 {
     public class DrawableCanvas : Canvas
     {
-        private ElementManager elementManager = new ElementManager();
+        public ElementManager elementManager = new ElementManager();
         private DrawableElement selectedElement;
         private Point lastMousePosition;
         private bool isDragging;
-        private bool isFirstClick = true;
-        private RenderTargetBitmap originalTargetBitmap;
+        public bool isFirstClick = true;
+        public RenderTargetBitmap originalTargetBitmap;
 
-        private const double SpeechBubbleTailTolerance = 40; // Tolerance in pixels
-        private const double ArrowTolerance = 30; // Tolerance in pixels
 
         public DrawableCanvas()
         {
-            MouseLeftButtonDown += DrawableCanvas_MouseLeftButtonDown;
-            MouseRightButtonDown += DrawableCanvas_MouseRightButtonDown;
-            MouseLeftButtonUp += DrawableCanvas_MouseLeftButtonUp;
-            MouseMove += DrawableCanvas_MouseMove;
+
         }
 
         public ImageSource BackgroundImage
@@ -60,104 +55,6 @@ namespace screenerWpf
             }
         }
 
-        private void DrawableCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (isFirstClick)
-            {
-                originalTargetBitmap = GetRenderTargetBitmap();
-                isFirstClick = false;
-            }
-
-            Point clickPoint = e.GetPosition(this);
-            lastMousePosition = clickPoint;
-            isDragging = false;
-
-            if (!TrySelectSpeechBubbleTail(clickPoint)
-                && !TrySelectElement(clickPoint))
-            {
-                DeselectCurrentElement();
-            }
-        }
-
-        private bool TrySelectSpeechBubbleTail(Point clickPoint)
-        {
-            foreach (var element in elementManager.Elements.OfType<DrawableSpeechBubble>())
-            {
-                if (IsNearPoint(element.EndTailPoint, clickPoint, SpeechBubbleTailTolerance))
-                {
-                    HandleElementSelection(element, tailBeingDragged: true);
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private bool TrySelectElement(Point clickPoint)
-        {
-            var element = elementManager.GetElementAtPoint(clickPoint);
-            if (element != null)
-            {
-                HandleElementSelection(element);
-                HandleArrowSpecificLogic(element, clickPoint);
-                return true;
-            }
-            return false;
-        }
-
-        private void HandleElementSelection(DrawableElement element, bool tailBeingDragged = false)
-        {
-            SelectElement(element);
-            isDragging = true;
-
-            if (element is DrawableSpeechBubble speechBubble)
-            {
-                speechBubble.SetTailBeingDragged(tailBeingDragged);
-            }
-        }
-
-        private void HandleArrowSpecificLogic(DrawableElement element, Point clickPoint)
-        {
-            if (element is DrawableArrow arrow)
-            {
-                arrow.SetStartBeingDragged(IsNearPoint(arrow.Position, clickPoint, ArrowTolerance));
-                arrow.SetEndBeingDragged(IsNearPoint(arrow.EndPoint, clickPoint, ArrowTolerance));
-            }
-        }
-
-        private bool IsNearPoint(Point point1, Point point2, double tolerance)
-        {
-            return Math.Abs(point1.X - point2.X) <= tolerance && Math.Abs(point1.Y - point2.Y) <= tolerance;
-        }
-
-        private void DeselectCurrentElement()
-        {
-            if (selectedElement != null)
-            {
-                selectedElement.IsSelected = false;
-                selectedElement = null;
-                InvalidateVisual();
-            }
-        }
-
-        private void DrawableCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (selectedElement is DrawableArrow arrow)
-            {
-                arrow.SetEndBeingDragged(false);
-                arrow.SetStartBeingDragged(false);
-            }
-            else if (selectedElement is DrawableSpeechBubble speechBubble)
-            {
-                speechBubble.SetTailBeingDragged(false);
-            }
-            isDragging = false;
-        }
-
-        private void DrawableCanvas_MouseMove(object sender, MouseEventArgs e)
-        {
-           
-        }
-
         private void SelectElement(DrawableElement element)
         {
             if (selectedElement != null)
@@ -174,17 +71,6 @@ namespace screenerWpf
             }
 
             InvalidateVisual();
-        }
-
-        private void DrawableCanvas_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (selectedElement != null)
-            {
-                elementManager.RemoveElement(selectedElement);
-                selectedElement = null;
-                InvalidateVisual();
-            }
-            Focus();
         }
 
         public void AddElement(DrawableElement element)
@@ -211,11 +97,6 @@ namespace screenerWpf
                 elementManager.RemoveElement((DrawableElement)selectedElement);
                 InvalidateVisual();
             }
-        }
-
-        internal IDrawable FindElementAt(Point position)
-        {
-            return elementManager.GetElementAtPoint(position);
         }
 
         internal RenderTargetBitmap GetRenderTargetBitmap()

@@ -25,25 +25,18 @@ namespace screenerWpf
             if (context == null)
                 throw new System.ArgumentNullException("context");
 
+            // Najpierw rysuj elementy specyficzne dla tej klasy
             Rect rect = new Rect(Position, Size);
             Brush fillBrush = new SolidColorBrush();
             Pen strokePen = new Pen(new SolidColorBrush(StrokeColor), StrokeThickness);
-
             context.DrawRectangle(fillBrush, strokePen, rect);
 
+            // Następnie rysuj uchwyty, jeśli element jest zaznaczony
             if (IsSelected)
             {
-                UpdateHandlePoints(rect);
-                DrawSelectionHandles(context);
+                UpdateHandlePoints(); // Aktualizuj pozycje uchwytów
+                DrawSelectionHandles(context); // Narysuj uchwyty
             }
-        }
-
-        private void UpdateHandlePoints(Rect rect)
-        {
-            HandlePoints[0] = rect.TopLeft; // Lewy górny narożnik
-            HandlePoints[1] = rect.TopRight; // Prawy górny narożnik
-            HandlePoints[2] = rect.BottomLeft; // Lewy dolny narożnik
-            HandlePoints[3] = rect.BottomRight; // Prawy dolny narożnik
         }
 
         public override bool HitTest(Point point)
@@ -59,6 +52,14 @@ namespace screenerWpf
             return rect.Contains(point) || currentDragHandle != DragHandle.None;
         }
 
+        protected override void UpdateHandlePoints()
+        {
+            Rect rect = new Rect(Position, Size);
+            HandlePoints[0] = rect.TopLeft;     // Lewy górny
+            HandlePoints[1] = rect.TopRight;    // Prawy górny
+            HandlePoints[2] = rect.BottomLeft;  // Lewy dolny
+            HandlePoints[3] = rect.BottomRight; // Prawy dolny
+        }
 
         private bool IsNearCorner(Point point, Point corner)
         {

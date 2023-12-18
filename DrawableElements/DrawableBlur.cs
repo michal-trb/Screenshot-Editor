@@ -45,12 +45,13 @@ namespace screenerWpf.DrawableElements
             }
             if (IsSelected)
             {
-                UpdateHandlePoints(rect);
+                UpdateHandlePoints();
                 DrawSelectionHandles(context);
             }
         }
-        private void UpdateHandlePoints(Rect rect)
+        protected override void UpdateHandlePoints()
         {
+            Rect rect = new Rect(Position, Size);
             HandlePoints[0] = rect.TopLeft; // Lewy górny narożnik
             HandlePoints[1] = rect.TopRight; // Prawy górny narożnik
             HandlePoints[2] = rect.BottomLeft; // Lewy dolny narożnik

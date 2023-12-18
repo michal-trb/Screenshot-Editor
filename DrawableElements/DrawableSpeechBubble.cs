@@ -59,8 +59,8 @@ namespace screenerWpf
             // Rysowanie ramki selekcyjnej, jeśli jest zaznaczony
             if (IsSelected)
             {
-                HandlePoints[0] = EndTailPoint; // Pozycja uchwytu na końcówce ogonka
-                DrawSelectionHandles(context);
+                UpdateHandlePoints(); // Aktualizuj pozycje uchwytów
+                DrawSelectionHandles(context); // Narysuj uchwyty
             }
         }
 
@@ -80,6 +80,11 @@ namespace screenerWpf
             }
 
             context.DrawGeometry(Brushes.White, new Pen(Brushes.Black, 1), tailGeometry);
+        }
+
+        protected override void UpdateHandlePoints()
+        {
+            HandlePoints[0] = EndTailPoint; // Pozycja uchwytu na końcówce ogonka
         }
 
         public override bool HitTest(Point point)

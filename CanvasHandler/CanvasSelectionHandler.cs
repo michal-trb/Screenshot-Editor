@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -10,6 +12,9 @@ namespace screenerWpf
         private IDrawable selectedElement;
         private Point lastMousePosition;
 
+        private const double SpeechBubbleTailTolerance = 40; // Tolerance in pixels
+        private const double ArrowTolerance = 30; // Tolerance in pixels
+
         public CanvasSelectionHandler(DrawableCanvas canvas)
         {
             drawableCanvas = canvas;
@@ -18,8 +23,58 @@ namespace screenerWpf
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
         {
             Point clickPosition = e.GetPosition(drawableCanvas);
-            SelectElementAt(clickPosition);
             lastMousePosition = clickPosition;
+
+            if (drawableCanvas.isFirstClick)
+            {
+                drawableCanvas.originalTargetBitmap = drawableCanvas.GetRenderTargetBitmap();
+                drawableCanvas.isFirstClick = false;
+            }
+
+            if (!TrySelectSpeechBubbleTail(clickPosition) && !TrySelectElement(clickPosition))
+            {
+                DeselectCurrentElement();
+            }
+        }
+
+        private bool TrySelectSpeechBubbleTail(Point clickPoint)
+        {
+            foreach (var element in drawableCanvas.elementManager.Elements.OfType<DrawableSpeechBubble>())
+            {
+                if (IsNearPoint(element.EndTailPoint, clickPoint, SpeechBubbleTailTolerance))
+                {
+                    selectedElement = element;
+                    element.SetTailBeingDragged(true);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private bool TrySelectElement(Point clickPoint)
+        {
+            var element = drawableCanvas.elementManager.GetElementAtPoint(clickPoint);
+            if (element != null)
+            {
+                selectedElement = element;
+                HandleArrowSpecificLogic(element, clickPoint);
+                return true;
+            }
+            return false;
+        }
+
+        private void HandleArrowSpecificLogic(DrawableElement element, Point clickPoint)
+        {
+            if (element is DrawableArrow arrow)
+            {
+                arrow.SetStartBeingDragged(IsNearPoint(arrow.Position, clickPoint, ArrowTolerance));
+                arrow.SetEndBeingDragged(IsNearPoint(arrow.EndPoint, clickPoint, ArrowTolerance));
+            }
+        }
+
+        private bool IsNearPoint(Point point1, Point point2, double tolerance)
+        {
+            return Math.Abs(point1.X - point2.X) <= tolerance && Math.Abs(point1.Y - point2.Y) <= tolerance;
         }
 
         public void HandleMouseMove(MouseEventArgs e)
@@ -28,41 +83,30 @@ namespace screenerWpf
             {
                 Point currentMousePosition = e.GetPosition(drawableCanvas);
                 Vector delta = currentMousePosition - lastMousePosition;
-                MoveSelectedElement(delta);
+                selectedElement.Move(delta);
                 lastMousePosition = currentMousePosition;
+                drawableCanvas.InvalidateVisual();
             }
         }
+
 
         public void HandleLeftButtonUp(MouseButtonEventArgs e)
         {
-            // Zakończ przesuwanie elementu lub zakończ selekcję, jeśli to konieczne
-            lastMousePosition = new Point();
-        }
-
-        private void SelectElementAt(Point position)
-        {
-            IDrawable element = drawableCanvas.FindElementAt(position);
-            if (element != null)
+            if (selectedElement is DrawableSpeechBubble speechBubble)
             {
-                selectedElement = element;
+                speechBubble.SetTailBeingDragged(false);
             }
-            else
+            else if (selectedElement is DrawableArrow arrow)
             {
-                DeselectCurrentElement();
+                arrow.SetEndBeingDragged(false);
+                arrow.SetStartBeingDragged(false);
             }
-        }
-
-        private void MoveSelectedElement(Vector delta)
-        {
-            if (selectedElement == null) return;
-
-            selectedElement.Move(delta);
-            drawableCanvas.InvalidateVisual(); // Odświeżenie płótna
         }
 
         private void DeselectCurrentElement()
         {
             selectedElement = null;
+            drawableCanvas.InvalidateVisual(); // Odświeżenie płótna
         }
 
         public void DeleteSelectedElement()
