@@ -30,8 +30,10 @@ namespace screenerWpf
             CreateCanvasBitmap();
             InitializeFontFamilyComboBox(); // Wywołaj metodę inicjalizującą ComboBox
             InitializeFontSizeComboBox();
+            InitializeTransparencyComboBox();
             colorComboBox.SelectedIndex = 0; // Zakładając, że Czarny jest pierwszym elementem
             arrowThicknessComboBox.SelectedIndex = 1; // Zakładając, że "2" jest drugim elementem
+            transparencyComboBox.SelectedIndex = 10;
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
         }
@@ -193,6 +195,15 @@ namespace screenerWpf
             }
         }
 
+        private void TransparencyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (transparencyComboBox.SelectedItem is ComboBoxItem selectedTransparencyItem
+                && double.TryParse(selectedTransparencyItem.Content.ToString(), out double transparency))
+            {
+                inputHandler.TransparencyComboBox_SelectionChanged(transparency);
+            }
+        }
+
         private void InitializeFontFamilyComboBox()
         {
             var fontFamilies = new List<string>
@@ -239,6 +250,25 @@ namespace screenerWpf
             }
         }
 
+        private void InitializeTransparencyComboBox()
+        {
+            var transparencySizes = new[] { 10,20,30,40,50,60,70,80,90,100 };
+            foreach (var size in transparencySizes)
+            {
+                transparencyComboBox.Items.Add(new ComboBoxItem
+                {
+                    Content = size.ToString()
+                });
+            }
+            var defaultFontSize = transparencyComboBox.Items
+                .OfType<ComboBoxItem>()
+                .FirstOrDefault(item => item.Content.ToString() == "100");
+            if (defaultFontSize != null)
+            {
+                transparencyComboBox.SelectedItem = defaultFontSize;
+            }
+        }
+
         private bool isColorComboBoxSelected;
 
         public bool IsColorComboBoxSelected
@@ -275,6 +305,18 @@ namespace screenerWpf
             }
         }
 
+        private bool isTransparencySelected;
+
+        public bool IsTransparencySelected
+        {
+            get { return isTransparencySelected; }
+            set
+            {
+                isTransparencySelected = value;
+                OnPropertyChanged(nameof(IsTransparencySelected));
+            }
+        }
+
         private bool isFontSizeSelected;
 
         public bool IsFontSizeSelected
@@ -292,6 +334,8 @@ namespace screenerWpf
             IsColorComboBoxSelected = true;
             IsFontSizeSelected = false;
             IsFontFamilySelected = false;
+            IsTransparencySelected = false;
+
             inputHandler.DrawArrowButton_Click(sender, e);
         }
 
@@ -301,6 +345,8 @@ namespace screenerWpf
             IsColorComboBoxSelected = true;
             IsFontSizeSelected = true;
             IsFontFamilySelected = true;
+            IsTransparencySelected = false;
+
             inputHandler.AddTextButton_Click(sender, e);
         }
 
@@ -311,6 +357,8 @@ namespace screenerWpf
             IsColorComboBoxSelected = true;
             IsFontSizeSelected = false;
             IsFontFamilySelected = false;
+            IsTransparencySelected = true;
+
             inputHandler.DrawRectButton_Click(sender, e);
         }
 
@@ -320,6 +368,8 @@ namespace screenerWpf
             IsColorComboBoxSelected = true;
             IsFontSizeSelected = true;
             IsFontFamilySelected = true;
+            IsTransparencySelected = false;
+
             inputHandler.SpeechBubbleButton_Click(sender, e);
         }
 
@@ -329,7 +379,19 @@ namespace screenerWpf
             IsColorComboBoxSelected = false;
             IsFontSizeSelected = false;
             IsFontFamilySelected = false;
+            IsTransparencySelected = false;
+
             inputHandler.BlurButton_Click(sender, e);
+        }
+
+        private void BrushButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsThicknessComboBoxSelected = true;
+            IsColorComboBoxSelected = true;
+            IsFontSizeSelected = false;
+            IsFontFamilySelected = false;
+            IsTransparencySelected = true;
+            inputHandler.BrushButton_Click(sender, e);
         }
     }
 }

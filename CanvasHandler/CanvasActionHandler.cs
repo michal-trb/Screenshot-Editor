@@ -8,7 +8,7 @@ using System.Windows.Media;
 namespace screenerWpf
 {
     public enum EditAction { None, DrawArrow, AddText, Move, Delete, AddBubble, DrawRectangle,
-        DrawBlur
+        DrawBlur, BrushPainting
     }
 
     public class CanvasActionHandler
@@ -23,7 +23,7 @@ namespace screenerWpf
         private SpeechBubbleDrawer speechBubbleDrawer;
         private TextDrawer textDrawer;
         private BlurDrawer blurDrawer;
-
+        private BrushDrawer brushDrawer;
         public CanvasActionHandler(DrawableCanvas canvas)
         {
             drawableCanvas = canvas;
@@ -34,6 +34,7 @@ namespace screenerWpf
             speechBubbleDrawer = new SpeechBubbleDrawer(canvas);
             textDrawer = new TextDrawer(canvas);
             blurDrawer = new BlurDrawer(canvas);
+            brushDrawer = new BrushDrawer(canvas);
         }
 
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
@@ -54,6 +55,9 @@ namespace screenerWpf
                     break;
                 case EditAction.DrawBlur:
                     blurDrawer.StartDrawing(e);
+                    break;
+                case EditAction.BrushPainting:
+                    brushDrawer.StartDrawing(e);
                     break;
                 default:
                     SelectElementAtMousePosition(e);
@@ -81,6 +85,9 @@ namespace screenerWpf
                 case EditAction.DrawBlur:
                     blurDrawer.FinishDrawing();
                     break;
+                case EditAction.BrushPainting:
+                    brushDrawer.FinishDrawing();
+                    break;
             }
 
             currentAction = EditAction.None;
@@ -99,6 +106,9 @@ namespace screenerWpf
                     break;
                 case EditAction.DrawBlur:
                     blurDrawer.UpdateDrawing(e);
+                    break;
+                case EditAction.BrushPainting:
+                    brushDrawer.UpdateDrawing(e);
                     break;
             }
         }

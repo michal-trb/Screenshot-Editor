@@ -30,6 +30,7 @@
             <Button Content="Draw Rect" Click="DrawRectButton_Click"/>
             <Button Content="Blur" Click="BlurButton_Click"/>
             <Button Content="Dymek Czatu" Click="SpeechBubbleButton_Click"/>
+            <Button Content="Brush" Click="BrushButton_Click"/>
             <!-- Nowe kontrolki do wyboru właściwości strzałki -->
             <Label Content="Kolor:" Visibility="{Binding IsColorComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <ComboBox x:Name="colorComboBox" SelectionChanged="ColorComboBox_SelectionChanged" Visibility="{Binding IsColorComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -59,6 +60,9 @@
             </ComboBox>
             <Label Content="Rozmiar czcionki:" Visibility="{Binding IsFontSizeSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
             <ComboBox x:Name="fontSizeComboBox" SelectionChanged="FontSizeComboBox_SelectionChanged" Visibility="{Binding IsFontSizeSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
+            </ComboBox>
+            <Label Content="Transparętność:" Visibility="{Binding IsTransparencySelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox x:Name="transparencyComboBox" SelectionChanged="TransparencyComboBox_SelectionChanged" Visibility="{Binding IsTransparencySelected, Converter={StaticResource BooleanToVisibilityConverter}}">
             </ComboBox>
         </ToolBar>
         <Viewbox Grid.Row="1" Stretch="Uniform">

@@ -12,8 +12,6 @@ namespace screenerWpf
     {
         public ElementManager elementManager = new ElementManager();
         private DrawableElement selectedElement;
-        private Point lastMousePosition;
-        private bool isDragging;
         public bool isFirstClick = true;
         public RenderTargetBitmap originalTargetBitmap;
 

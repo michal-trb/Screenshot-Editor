@@ -17,6 +17,7 @@ namespace screenerWpf
         public static FontFamily SelectedFontFamily { get; private set; } = new FontFamily("Arial");
         public static double SelectedFontSize { get; private set; } = 12.0;
         public static double ArrowThickness { get; private set; } = 2.0;
+        public static double Transparency { get; private set; } = 0;
         public static Color SelectedColor { get; private set; } = Colors.Black;
 
         public CanvasInputHandler(
@@ -89,6 +90,11 @@ namespace screenerWpf
             actionHandler.SetCurrentAction(EditAction.DrawBlur);
         }
 
+        public void BrushButton_Click(object sender, RoutedEventArgs e)
+        {
+            actionHandler.SetCurrentAction(EditAction.BrushPainting);
+        }
+
         public void EditTextButton_Click(object sender, RoutedEventArgs e)
         {
             if (selectionHandler.HasSelectedElement())
@@ -128,6 +134,10 @@ namespace screenerWpf
             ArrowThickness = comboBoxArrowThickness;
         }
 
+        internal void TransparencyComboBox_SelectionChanged(double transparency)
+        {
+            Transparency = transparency;
+        }
         public static Color GetCurrentColor()
         {
             return SelectedColor;
@@ -154,6 +164,11 @@ namespace screenerWpf
         public static double GetCurrentThickness()
         {
             return ArrowThickness;
+        }
+
+        public static double GetCurrentTransparency()
+        {
+            return Transparency;
         }
     }
 }
