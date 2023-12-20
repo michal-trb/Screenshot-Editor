@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Interop; // Added for Imaging.CreateBitmapSourceFromHBitmap
 using System.IO;
 using System.Management;
+using System.Reflection;
 
 namespace screenerWpf
 {
@@ -24,28 +25,56 @@ namespace screenerWpf
             }
         }
 
+        // ...
+
+        private void SaveScreenshot(Bitmap bitmap)
+        {
+            ImageEditorWindow editor = new ImageEditorWindow(ConvertBitmapToBitmapSource(bitmap));
+            editor.ShowDialog();
+        }
+
+        // ...
+
+        private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
+        {
+            using (MemoryStream memory = new MemoryStream())
+            {
+                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
+                memory.Position = 0;
+                BitmapImage bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                return bitmapImage;
+            }
+        }
+
         private void BtnCaptureArea_Click(object sender, RoutedEventArgs e)
         {
             AreaSelector selector = new AreaSelector();
             bool? result = selector.ShowDialog();
             if (result == true)
             {
-                var area = new System.Drawing.Rectangle((int)selector.SelectedRectangle.X,
-                                                                        (int)selector.SelectedRectangle.Y,
-                                                                        (int)selector.SelectedRectangle.Width,
-                                                                        (int)selector.SelectedRectangle.Height);
+                // Pobranie skalowania DPI
+                var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
+                var dpiYProperty = typeof(SystemParameters).GetProperty("Dpi", BindingFlags.NonPublic | BindingFlags.Static);
+                var dpiX = (int)dpiXProperty.GetValue(null, null);
+                var dpiY = (int)dpiYProperty.GetValue(null, null);
+
+                // Przeliczenie na rzeczywiste piksele
+                var area = new System.Drawing.Rectangle(
+                    (int)(selector.SelectedRectangle.X / (96d / dpiX)),
+                    (int)(selector.SelectedRectangle.Y / (96d / dpiY)),
+                    (int)(selector.SelectedRectangle.Width / (96d / dpiX)),
+                    (int)(selector.SelectedRectangle.Height / (96d / dpiY)));
+
                 using (Bitmap bitmap = CaptureSelectedArea(area))
                 {
                     SaveScreenshot(bitmap);
                 }
             }
             selector.Close();
-        }
-
-        private void SaveScreenshot(Bitmap bitmap)
-        {
-            ImageEditorWindow editor = new ImageEditorWindow(ConvertBitmapToBitmapSource(bitmap));
-            editor.ShowDialog();
         }
 
         public Bitmap CaptureScreen()
@@ -82,21 +111,6 @@ namespace screenerWpf
                 g.CopyFromScreen(area.Location, System.Drawing.Point.Empty, area.Size);
             }
             return bitmap;
-        }
-
-        private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
-        {
-            using (System.IO.MemoryStream memory = new System.IO.MemoryStream())
-            {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
-                memory.Position = 0;
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-                return bitmapImage;
-            }
         }
     }
 }
