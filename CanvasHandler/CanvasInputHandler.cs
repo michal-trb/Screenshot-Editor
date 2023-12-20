@@ -1,4 +1,5 @@
-﻿using System;
+﻿using screenerWpf.DrawableElements;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -51,6 +52,20 @@ namespace screenerWpf
             actionHandler.HandleMouseMove(e);
         }
 
+        public void Canvas_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.C && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                actionHandler.HandleCopy();
+                e.Handled = true;
+            }
+            if (e.Key == Key.V && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+            {
+                actionHandler.HandlePaste();
+                e.Handled = true;
+            }
+        }
+
         // Metody obsługi przycisków i innych akcji
         public void DrawArrowButton_Click(object sender, RoutedEventArgs e)
         {
@@ -93,6 +108,11 @@ namespace screenerWpf
         public void BrushButton_Click(object sender, RoutedEventArgs e)
         {
             actionHandler.SetCurrentAction(EditAction.BrushPainting);
+        }
+
+        public void RecognizeTextButton_Click(object sender, RoutedEventArgs e)
+        {
+            actionHandler.SetCurrentAction(EditAction.RecognizeText);
         }
 
         public void EditTextButton_Click(object sender, RoutedEventArgs e)

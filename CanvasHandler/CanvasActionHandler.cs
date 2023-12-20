@@ -1,14 +1,17 @@
 ﻿using screenerWpf.CanvasHandler.Drawers;
+using screenerWpf.DrawableElements;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace screenerWpf
 {
     public enum EditAction { None, DrawArrow, AddText, Move, Delete, AddBubble, DrawRectangle,
-        DrawBlur, BrushPainting
+        DrawBlur, BrushPainting,
+        RecognizeText
     }
 
     public class CanvasActionHandler
@@ -24,6 +27,8 @@ namespace screenerWpf
         private TextDrawer textDrawer;
         private BlurDrawer blurDrawer;
         private BrushDrawer brushDrawer;
+        private TextRecognitionHandler textRecognitionHandler;
+
         public CanvasActionHandler(DrawableCanvas canvas)
         {
             drawableCanvas = canvas;
@@ -35,6 +40,7 @@ namespace screenerWpf
             textDrawer = new TextDrawer(canvas);
             blurDrawer = new BlurDrawer(canvas);
             brushDrawer = new BrushDrawer(canvas);
+            textRecognitionHandler = new TextRecognitionHandler(canvas);
         }
 
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
@@ -58,6 +64,9 @@ namespace screenerWpf
                     break;
                 case EditAction.BrushPainting:
                     brushDrawer.StartDrawing(e);
+                    break;
+                case EditAction.RecognizeText:
+                    textRecognitionHandler.StartRecognizeFromImage();
                     break;
                 default:
                     SelectElementAtMousePosition(e);
@@ -111,6 +120,35 @@ namespace screenerWpf
                     brushDrawer.UpdateDrawing(e);
                     break;
             }
+        }
+
+        public void HandlePaste()
+        {
+            if (Clipboard.ContainsImage())
+            {
+                var imageSource = Clipboard.GetImage();
+                Point canvasPosition = new Point(10, 10); // Przykładowa pozycja na płótnie
+                var drawableImage = new DrawableImage(imageSource, canvasPosition);
+                drawableCanvas.AddElement(drawableImage);
+            }
+        }
+
+        public void HandleCopy()
+        {
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+                (int)drawableCanvas.ActualWidth,
+                (int)drawableCanvas.ActualHeight,
+                96, 96, PixelFormats.Pbgra32);
+
+            DrawingVisual visual = new DrawingVisual();
+            using (DrawingContext context = visual.RenderOpen())
+            {
+                VisualBrush canvasBrush = new VisualBrush(drawableCanvas);
+                context.DrawRectangle(canvasBrush, null, new Rect(new Point(), new Size(drawableCanvas.ActualWidth, drawableCanvas.ActualHeight)));
+            }
+
+            renderBitmap.Render(visual);
+            Clipboard.SetImage(renderBitmap);
         }
 
         public void SetCurrentAction(EditAction action)

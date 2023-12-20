@@ -36,6 +36,7 @@ namespace screenerWpf
             transparencyComboBox.SelectedIndex = 10;
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
+            drawableCanvas.PreviewKeyDown += inputHandler.Canvas_PreviewKeyDown;
         }
 
         private void CreateCanvasBitmap()
@@ -393,5 +394,14 @@ namespace screenerWpf
             IsTransparencySelected = true;
             inputHandler.BrushButton_Click(sender, e);
         }
+        private void RecognizeTextButton_Click(object sender, RoutedEventArgs e)
+        {
+            IsThicknessComboBoxSelected = false;
+            IsColorComboBoxSelected = true;
+            IsFontSizeSelected = false;
+            IsFontFamilySelected = false;
+            IsTransparencySelected = false;
+            inputHandler.RecognizeTextButton_Click(sender, e);
+        }        
     }
 }
