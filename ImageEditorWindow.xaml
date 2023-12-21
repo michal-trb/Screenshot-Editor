@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:screenerWpf"
         mc:Ignorable="d"
         Title="Image Editor" Height="600" Width="920"
-        Background="#1E1E1E">
+        Background="#1E1E1E"
+        WindowStyle="None" AllowsTransparency="True">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
@@ -19,38 +20,38 @@
             <Setter Property="Margin" Value="5"/>
         </Style>
 
-            <!-- Definicja stylu RoundedButtonStyle -->
-            <Style x:Key="RoundedButtonStyle" TargetType="Button">
-                <Setter Property="Margin" Value="10"/>
-                <Setter Property="Background" Value="#3E3E42"/>
-                <Setter Property="BorderBrush" Value="#007ACC"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="Height" Value="30"/>
-                <Setter Property="Width" Value="120"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="border"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="10">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                          VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#505962"/>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="border" Property="Background" Value="#70787C"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
+        <!-- Definicja stylu RoundedButtonStyle -->
+        <Style x:Key="RoundedButtonStyle" TargetType="Button">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Background" Value="#3E3E42"/>
+            <Setter Property="BorderBrush" Value="#007ACC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                             Background="{TemplateBinding Background}"
+                             BorderBrush="{TemplateBinding BorderBrush}"
+                             BorderThickness="{TemplateBinding BorderThickness}"
+                             CornerRadius="10">
+                            <ContentPresenter HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#505962"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#70787C"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
         <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Foreground" Value="White"/>
@@ -98,17 +99,27 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="30"/>
+            <!-- Pasek tytułu -->
+            <RowDefinition Height="50"/>
+            <!-- Przestrzeń dla StackPanel -->
             <RowDefinition Height="*"/>
+            <!-- Główna zawartość -->
             <RowDefinition Height="Auto"/>
+            <!-- Dolny pasek -->
         </Grid.RowDefinitions>
-        <StackPanel
-            Grid.Column="0"
-            Grid.Row="0"
-            Grid.RowSpan="3"
-            Background="#2D2D30"
-            Orientation="Vertical"
-            HorizontalAlignment="Center">
+        <!-- Niestandardowy pasek tytułu -->
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="#2D2D30" Height="30" VerticalAlignment="Top">
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button Content="_" Click="MinimizeButton_Click" Width="20" Background="#FF303030" Foreground="White"/>
+                <Button Content="[]" Click="MaximizeRestoreButton_Click" Width="20" Background="#FF303030" Foreground="White"/>
+                <Button Content="X" Click="CloseButton_Click" Width="20" Background="#FF303030" Foreground="White"/>
+            </StackPanel>
+        </Border>
+        <!-- PRZYCISKI 
+ -->
+
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center">
             <Button Content="Save" Click="SaveButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
             <Button Content="Draw Arrow" Click="DrawArrowButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
             <Button Content="Add Text" Click="AddTextButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
@@ -119,7 +130,7 @@
             <Button Content="Recognize Text" Click="RecognizeTextButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
         </StackPanel>
         <!-- Horizontal StackPanel for ComboBoxes and Labels -->
-        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#2D2D30">
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Background="#2D2D30">
             <Label x:Name="colorLabel" Content="Color:" Style="{StaticResource LabelStyle}" Visibility="Collapsed"/>
             <ComboBox x:Name="colorComboBox" SelectionChanged="ColorComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}" Visibility="Collapsed">
                 <ComboBoxItem Content="Czarny" Background="Black"/>
@@ -149,7 +160,7 @@
         </StackPanel>
 
         <!-- ViewBox for DrawableCanvas -->
-        <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="1">
+        <Border Grid.Row="2" Grid.Column="1" BorderBrush="#FF3E3E42" BorderThickness="1">
             <Viewbox Stretch="Uniform">
                 <local:DrawableCanvas
                     x:Name="drawableCanvas" 
@@ -187,12 +198,7 @@
                 </local:DrawableCanvas>
             </Viewbox>
         </Border>
-        <StackPanel 
-            Grid.Column="1" 
-            Grid.Row="2"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            Background="#2D2D30">
+        <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#2D2D30">
             <Button 
                 Content="Save" 
                 Click="SaveButton_Click" 

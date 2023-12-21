@@ -17,6 +17,28 @@ namespace screenerWpf
             InitializeComponent();
         }
 
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeRestoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+        }
+
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
         private void BtnCaptureFull_Click(object sender, RoutedEventArgs e)
         {
             using (Bitmap bitmap = CaptureScreen())
@@ -25,15 +47,11 @@ namespace screenerWpf
             }
         }
 
-        // ...
-
         private void SaveScreenshot(Bitmap bitmap)
         {
             ImageEditorWindow editor = new ImageEditorWindow(ConvertBitmapToBitmapSource(bitmap));
             editor.ShowDialog();
         }
-
-        // ...
 
         private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
         {
