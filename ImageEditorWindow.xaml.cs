@@ -38,7 +38,7 @@ namespace screenerWpf
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
             drawableCanvas.PreviewKeyDown += inputHandler.Canvas_PreviewKeyDown;
         }
-
+      
         private void CreateCanvasBitmap()
         {
             if (initialImage != null)
@@ -269,139 +269,90 @@ namespace screenerWpf
                 transparencyComboBox.SelectedItem = defaultFontSize;
             }
         }
-
-        private bool isColorComboBoxSelected;
-
-        public bool IsColorComboBoxSelected
-        {
-            get => isColorComboBoxSelected;
-            set
-            {
-                isColorComboBoxSelected = value;
-                OnPropertyChanged(nameof(IsColorComboBoxSelected));
-            }
-        }
-
-        private bool isThicknessComboBoxSelected;
-
-        public bool IsThicknessComboBoxSelected
-        {
-            get { return isThicknessComboBoxSelected; }
-            set
-            {
-                isThicknessComboBoxSelected = value;
-                OnPropertyChanged(nameof(IsThicknessComboBoxSelected));
-            }
-        }
-
-        private bool isFontFamilySelected;
-
-        public bool IsFontFamilySelected
-        {
-            get { return isFontFamilySelected; }
-            set
-            {
-                isFontFamilySelected = value;
-                OnPropertyChanged(nameof(IsFontFamilySelected));
-            }
-        }
-
-        private bool isTransparencySelected;
-
-        public bool IsTransparencySelected
-        {
-            get { return isTransparencySelected; }
-            set
-            {
-                isTransparencySelected = value;
-                OnPropertyChanged(nameof(IsTransparencySelected));
-            }
-        }
-
-        private bool isFontSizeSelected;
-
-        public bool IsFontSizeSelected
-        {
-            get { return isFontSizeSelected; }
-            set
-            {
-                isFontSizeSelected = value;
-                OnPropertyChanged(nameof(IsFontSizeSelected));
-            }
-        }
         public void DrawArrowButton_Click(object sender, RoutedEventArgs e)
         {
-            IsThicknessComboBoxSelected = true;
-            IsColorComboBoxSelected = true;
-            IsFontSizeSelected = false;
-            IsFontFamilySelected = false;
-            IsTransparencySelected = false;
+            SetVisibility(true, colorLabel, colorComboBox);
+            SetVisibility(true, thicknessLabel, arrowThicknessComboBox);
+            SetVisibility(false, fontFamilyLabel, fontFamilyComboBox);
+            SetVisibility(false, fontSizeLabel, fontSizeComboBox);
+            SetVisibility(false, transparencyLabel, transparencyComboBox);
 
             inputHandler.DrawArrowButton_Click(sender, e);
         }
 
         public void AddTextButton_Click(object sender, RoutedEventArgs e)
         {
-            IsThicknessComboBoxSelected = false;
-            IsColorComboBoxSelected = true;
-            IsFontSizeSelected = true;
-            IsFontFamilySelected = true;
-            IsTransparencySelected = false;
+            SetVisibility(true, colorLabel, colorComboBox);
+            SetVisibility(false, thicknessLabel, arrowThicknessComboBox);
+            SetVisibility(true, fontFamilyLabel, fontFamilyComboBox);
+            SetVisibility(true, fontSizeLabel, fontSizeComboBox);
+            SetVisibility(false, transparencyLabel, transparencyComboBox);
 
             inputHandler.AddTextButton_Click(sender, e);
         }
 
-
         public void DrawRectButton_Click(object sender, RoutedEventArgs e)
         {
-            IsThicknessComboBoxSelected = true;
-            IsColorComboBoxSelected = true;
-            IsFontSizeSelected = false;
-            IsFontFamilySelected = false;
-            IsTransparencySelected = true;
+            SetVisibility(true, thicknessLabel, arrowThicknessComboBox);
+            SetVisibility(true, colorLabel, colorComboBox);
+            SetVisibility(false, fontFamilyLabel, fontFamilyComboBox);
+            SetVisibility(false, fontSizeLabel, fontSizeComboBox);
+            SetVisibility(true, transparencyLabel, transparencyComboBox);
 
             inputHandler.DrawRectButton_Click(sender, e);
         }
 
         private void SpeechBubbleButton_Click(object sender, RoutedEventArgs e)
         {
-            IsThicknessComboBoxSelected = true;
-            IsColorComboBoxSelected = true;
-            IsFontSizeSelected = true;
-            IsFontFamilySelected = true;
-            IsTransparencySelected = false;
+            SetVisibility(true, thicknessLabel, arrowThicknessComboBox);
+            SetVisibility(true, colorLabel, colorComboBox);
+            SetVisibility(true, fontFamilyLabel, fontFamilyComboBox);
+            SetVisibility(true, fontSizeLabel, fontSizeComboBox);
+            SetVisibility(false, transparencyLabel, transparencyComboBox);
 
             inputHandler.SpeechBubbleButton_Click(sender, e);
         }
 
         private void BlurButton_Click(object sender, RoutedEventArgs e)
         {
-            IsThicknessComboBoxSelected = false;
-            IsColorComboBoxSelected = false;
-            IsFontSizeSelected = false;
-            IsFontFamilySelected = false;
-            IsTransparencySelected = false;
+            SetVisibility(false, thicknessLabel, arrowThicknessComboBox);
+            SetVisibility(false, colorLabel, colorComboBox);
+            SetVisibility(false, fontFamilyLabel, fontFamilyComboBox);
+            SetVisibility(false, fontSizeLabel, fontSizeComboBox);
+            SetVisibility(false, transparencyLabel, transparencyComboBox);
 
             inputHandler.BlurButton_Click(sender, e);
         }
 
         private void BrushButton_Click(object sender, RoutedEventArgs e)
         {
-            IsThicknessComboBoxSelected = true;
-            IsColorComboBoxSelected = true;
-            IsFontSizeSelected = false;
-            IsFontFamilySelected = false;
-            IsTransparencySelected = true;
+            SetVisibility(true, thicknessLabel, arrowThicknessComboBox);
+            SetVisibility(true, colorLabel, colorComboBox);
+            SetVisibility(false, fontFamilyLabel, fontFamilyComboBox);
+            SetVisibility(false, fontSizeLabel, fontSizeComboBox);
+            SetVisibility(true, transparencyLabel, transparencyComboBox);
+
             inputHandler.BrushButton_Click(sender, e);
         }
+
         private void RecognizeTextButton_Click(object sender, RoutedEventArgs e)
         {
-            IsThicknessComboBoxSelected = false;
-            IsColorComboBoxSelected = true;
-            IsFontSizeSelected = false;
-            IsFontFamilySelected = false;
-            IsTransparencySelected = false;
+            SetVisibility(false, thicknessLabel, arrowThicknessComboBox);
+            SetVisibility(true, colorLabel, colorComboBox);
+            SetVisibility(false, fontFamilyLabel, fontFamilyComboBox);
+            SetVisibility(false, fontSizeLabel, fontSizeComboBox);
+            SetVisibility(false, transparencyLabel, transparencyComboBox);
+
             inputHandler.RecognizeTextButton_Click(sender, e);
-        }        
+        }
+
+        private void SetVisibility(bool isVisible, Label label, ComboBox comboBox)
+        {
+            var visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+            label.Visibility = visibility;
+            comboBox.Visibility = visibility;
+        }
     }
+
+
 }
