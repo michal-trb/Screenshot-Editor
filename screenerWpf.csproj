@@ -9,10 +9,14 @@
 
   <ItemGroup>
     <None Remove="tessdata\eng.traineddata" />
+    <None Remove="tessdata\pol.traineddata" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="tessdata\eng.traineddata">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tessdata\pol.traineddata">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

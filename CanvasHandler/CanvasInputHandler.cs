@@ -1,6 +1,4 @@
-﻿using screenerWpf.DrawableElements;
-using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -112,9 +110,9 @@ namespace screenerWpf
 
         public void RecognizeTextButton_Click(object sender, RoutedEventArgs e)
         {
-            actionHandler.SetCurrentAction(EditAction.RecognizeText);
+            var textRecognitionHandler = new TextRecognitionHandler(drawableCanvas);
+            textRecognitionHandler.StartRecognizeFromImage();
         }
-
         public void EditTextButton_Click(object sender, RoutedEventArgs e)
         {
             if (selectionHandler.HasSelectedElement())

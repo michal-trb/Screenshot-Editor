@@ -27,7 +27,6 @@ namespace screenerWpf
         private TextDrawer textDrawer;
         private BlurDrawer blurDrawer;
         private BrushDrawer brushDrawer;
-        private TextRecognitionHandler textRecognitionHandler;
 
         public CanvasActionHandler(DrawableCanvas canvas)
         {
@@ -40,7 +39,6 @@ namespace screenerWpf
             textDrawer = new TextDrawer(canvas);
             blurDrawer = new BlurDrawer(canvas);
             brushDrawer = new BrushDrawer(canvas);
-            textRecognitionHandler = new TextRecognitionHandler(canvas);
         }
 
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
@@ -64,9 +62,6 @@ namespace screenerWpf
                     break;
                 case EditAction.BrushPainting:
                     brushDrawer.StartDrawing(e);
-                    break;
-                case EditAction.RecognizeText:
-                    textRecognitionHandler.StartRecognizeFromImage();
                     break;
                 default:
                     SelectElementAtMousePosition(e);
