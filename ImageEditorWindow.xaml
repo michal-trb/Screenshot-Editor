@@ -9,6 +9,7 @@
         Background="#1E1E1E">
 
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <Style x:Key="LabelStyle" TargetType="Label">
             <Setter Property="Foreground" Value="White"/>
         </Style>
@@ -21,8 +22,22 @@
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Width" Value="120"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="10">
+                            <!-- Tutaj dodano zaokrąglone rogi -->
+                            <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
-
+        
         <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Background" Value="#2D2D30"/>
@@ -69,7 +84,13 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Background="#2D2D30" Orientation="Vertical" HorizontalAlignment="Center">
+        <StackPanel
+            Grid.Column="0"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Background="#2D2D30"
+            Orientation="Vertical"
+            HorizontalAlignment="Center">
             <Button Content="Save" Click="SaveButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
             <Button Content="Draw Arrow" Click="DrawArrowButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
             <Button Content="Add Text" Click="AddTextButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
@@ -80,16 +101,35 @@
             <Button Content="Recognize Text" Click="RecognizeTextButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
         </StackPanel>
         <!-- Horizontal StackPanel for ComboBoxes and Labels -->
-        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Background="#2D2D30">
-            <Label Content="Color:" Style="{StaticResource LabelStyle}"/>
-            <ComboBox x:Name="colorComboBox" SelectionChanged="ColorComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}">
+        <StackPanel
+            Grid.Column="1"
+            Grid.Row="0"
+            Orientation="Horizontal" 
+            HorizontalAlignment="Right"
+            Background="#2D2D30">
+            <Label 
+                Content="Color:" 
+                Style="{StaticResource LabelStyle}"
+				Visibility="{Binding IsColorComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox 
+                x:Name="colorComboBox" 
+                SelectionChanged="ColorComboBox_SelectionChanged" 
+                Style="{StaticResource CustomComboBoxStyle}"
+				Visibility="{Binding IsColorComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBoxItem Content="Czarny" Background="Black"/>
                 <ComboBoxItem Content="Czerwony" Background="Red"/>
                 <ComboBoxItem Content="Zielony" Background="Green"/>
                 <ComboBoxItem Content="Niebieski" Background="Blue"/>
             </ComboBox>
-            <Label Content="Thickness:" Style="{StaticResource LabelStyle}"/>
-            <ComboBox x:Name="arrowThicknessComboBox" SelectionChanged="ArrowThicknessComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}">
+            <Label 
+                Content="Thickness:" 
+                Style="{StaticResource LabelStyle}"
+				 Visibility="{Binding IsThicknessComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox 
+                x:Name="arrowThicknessComboBox"
+                SelectionChanged="ArrowThicknessComboBox_SelectionChanged" 
+                Style="{StaticResource CustomComboBoxStyle}"
+				 Visibility="{Binding IsThicknessComboBoxSelected, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBoxItem Content="1"/>
                 <ComboBoxItem Content="2"/>
                 <ComboBoxItem Content="3"/>
@@ -101,24 +141,52 @@
                 <ComboBoxItem Content="9"/>
                 <ComboBoxItem Content="10"/>
             </ComboBox>
-            <Label Content="Font Family:" Style="{StaticResource LabelStyle}"/>
-            <ComboBox x:Name="fontFamilyComboBox" SelectionChanged="FontFamilyComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}" >
+            <Label 
+                Content="Font Family:" 
+                Style="{StaticResource LabelStyle}"
+				Visibility="{Binding IsFontFamilySelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox 
+                x:Name="fontFamilyComboBox"
+                SelectionChanged="FontFamilyComboBox_SelectionChanged" 
+                Style="{StaticResource CustomComboBoxStyle}" 
+				Visibility="{Binding IsFontFamilySelected, Converter={StaticResource BooleanToVisibilityConverter}}" >
             </ComboBox>
-                      
-            <Label Content="Font Size:" Style="{StaticResource LabelStyle}"/>
-            <ComboBox x:Name="fontSizeComboBox" SelectionChanged="FontSizeComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}">
+
+            <Label 
+                Content="Font Size:" 
+                Style="{StaticResource LabelStyle}"
+				Visibility="{Binding IsFontSizeSelected, Converter={StaticResource BooleanToVisibilityConverter}}" />
+            <ComboBox 
+                x:Name="fontSizeComboBox"
+                SelectionChanged="FontSizeComboBox_SelectionChanged" 
+                Style="{StaticResource CustomComboBoxStyle}"
+				Visibility="{Binding IsFontSizeSelected, Converter={StaticResource BooleanToVisibilityConverter}}" >
             </ComboBox>
-            <Label Content="Transparency:" Style="{StaticResource LabelStyle}"/>
-            <ComboBox x:Name="transparencyComboBox" SelectionChanged="TransparencyComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}">
+            <Label 
+                Content="Transparency:" 
+                Style="{StaticResource LabelStyle}"
+				Visibility="{Binding IsTransparencySelected, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox 
+                x:Name="transparencyComboBox"
+                SelectionChanged="TransparencyComboBox_SelectionChanged" 
+                Style="{StaticResource CustomComboBoxStyle}"
+				Visibility="{Binding IsTransparencySelected, Converter={StaticResource BooleanToVisibilityConverter}}">
             </ComboBox>
         </StackPanel>
 
         <!-- ViewBox for DrawableCanvas -->
         <Border Grid.Column="1" Grid.Row="1" BorderBrush="Black" BorderThickness="1">
             <Viewbox Stretch="Uniform">
-                <local:DrawableCanvas x:Name="drawableCanvas" Focusable="True" MouseLeftButtonDown="Canvas_MouseLeftButtonDown" MouseLeftButtonUp="Canvas_MouseLeftButtonUp" MouseMove="Canvas_MouseMove">
+                <local:DrawableCanvas
+                    x:Name="drawableCanvas" 
+                    Focusable="True"
+                    MouseLeftButtonDown="Canvas_MouseLeftButtonDown"
+                    MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
+                    MouseMove="Canvas_MouseMove">
                     <local:DrawableCanvas.Background>
-                        <ImageBrush ImageSource="{Binding initialImage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ImageEditorWindow}}}" Stretch="Uniform"/>
+                        <ImageBrush 
+                            ImageSource="{Binding initialImage, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ImageEditorWindow}}}" 
+                            Stretch="Uniform"/>
                     </local:DrawableCanvas.Background>
                     <ItemsControl ItemsSource="{Binding Elements}">
                         <ItemsControl.ItemsPanel>
@@ -128,8 +196,12 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemContainerStyle>
                             <Style TargetType="{x:Type FrameworkElement}">
-                                <Setter Property="Canvas.Left" Value="{Binding Position.X}" />
-                                <Setter Property="Canvas.Top" Value="{Binding Position.Y}" />
+                                <Setter 
+                                    Property="Canvas.Left"
+                                    Value="{Binding Position.X}" />
+                                <Setter 
+                                    Property="Canvas.Top" 
+                                    Value="{Binding Position.Y}" />
                             </Style>
                         </ItemsControl.ItemContainerStyle>
                         <ItemsControl.ItemTemplate>
@@ -141,8 +213,16 @@
                 </local:DrawableCanvas>
             </Viewbox>
         </Border>
-        <StackPanel Grid.Column="1" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#2D2D30">
-            <Button Content="Save" Click="SaveButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
+        <StackPanel 
+            Grid.Column="1" 
+            Grid.Row="2"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Background="#2D2D30">
+            <Button 
+                Content="Save" 
+                Click="SaveButton_Click" 
+                Style="{StaticResource RoundedButtonStyle}"/>
         </StackPanel>
     </Grid>
 </Window>
