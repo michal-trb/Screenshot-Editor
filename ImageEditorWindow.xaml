@@ -132,33 +132,43 @@
 
         <!-- Horizontal StackPanel for ComboBoxes and Labels -->
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Background="#2D2D30">
-            <Label x:Name="colorLabel" Content="Color:" Style="{StaticResource LabelStyle}"
-                Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <ComboBox x:Name="colorComboBox" Style="{StaticResource CustomComboBoxStyle}"
-                Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                ItemsSource="{Binding Colors}"
-                DisplayMemberPath="Name"/>
-            <Label x:Name="thicknessLabel" Content="Thickness:" Style="{StaticResource LabelStyle}"
-                Visibility="{Binding IsThicknessVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <ComboBox x:Name="arrowThicknessComboBox" Style="{StaticResource CustomComboBoxStyle}"
-                Visibility="{Binding IsThicknessVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                ItemsSource="{Binding Thicknesses}"/>
-            <Label x:Name="fontFamilyLabel" Content="Font Family:" Style="{StaticResource LabelStyle}"
-                Visibility="{Binding IsFontFamilyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <ComboBox x:Name="fontFamilyComboBox" Style="{StaticResource CustomComboBoxStyle}"
-                Visibility="{Binding IsFontFamilyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                ItemsSource="{Binding FontFamilies}"/>
-            <Label x:Name="fontSizeLabel" Content="Font Size:" Style="{StaticResource LabelStyle}"
-                Visibility="{Binding IsFontSizeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <ComboBox x:Name="fontSizeComboBox" Style="{StaticResource CustomComboBoxStyle}"
-                Visibility="{Binding IsFontSizeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                ItemsSource="{Binding FontSizes}"/>   
-            <Label x:Name="transparencyLabel" Content="Transparency:" Style="{StaticResource LabelStyle}"
-                Visibility="{Binding IsTransparencyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-            <ComboBox x:Name="transparencyComboBox" Style="{StaticResource CustomComboBoxStyle}"
-                Visibility="{Binding IsTransparencyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                ItemsSource="{Binding TransparencySizes}"/>
+            <Label Content="Color:" Style="{StaticResource LabelStyle}"
+           Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+              Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+              ItemsSource="{Binding Colors}"
+              DisplayMemberPath="Name"
+              SelectedItem="{Binding SelectedColor, Mode=TwoWay}"/>
+
+            <Label Content="Thickness:" Style="{StaticResource LabelStyle}"
+           Visibility="{Binding IsThicknessVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+              Visibility="{Binding IsThicknessVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+              ItemsSource="{Binding Thicknesses}"
+              SelectedItem="{Binding SelectedThickness, Mode=TwoWay}"/>
+
+            <Label Content="Font Family:" Style="{StaticResource LabelStyle}"
+           Visibility="{Binding IsFontFamilyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+              Visibility="{Binding IsFontFamilyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+              ItemsSource="{Binding FontFamilies}"
+              SelectedItem="{Binding SelectedFontFamily, Mode=TwoWay}"/>
+
+            <Label Content="Font Size:" Style="{StaticResource LabelStyle}"
+           Visibility="{Binding IsFontSizeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+              Visibility="{Binding IsFontSizeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+              ItemsSource="{Binding FontSizes}"
+              SelectedItem="{Binding SelectedFontSize, Mode=TwoWay}"/>
+
+            <Label Content="Transparency:" Style="{StaticResource LabelStyle}"
+           Visibility="{Binding IsTransparencyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox Style="{StaticResource CustomComboBoxStyle}"
+              Visibility="{Binding IsTransparencyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+              ItemsSource="{Binding TransparencySizes}"
+              SelectedItem="{Binding SelectedTransparency, Mode=TwoWay}"/>
         </StackPanel>
+
 
         <!-- ViewBox for DrawableCanvas -->
         <Border Grid.Row="2" Grid.Column="1" BorderBrush="#FF3E3E42" BorderThickness="1">

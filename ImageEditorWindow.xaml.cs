@@ -175,43 +175,7 @@ namespace screenerWpf
         {
             inputHandler.CommandBinding_DeleteExecuted(sender, e);
         }
-
-
-        public void ColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (colorComboBox.SelectedItem is ComboBoxItem selectedColorItem
-                && selectedColorItem.Background is SolidColorBrush colorBrush)
-            {
-                // Update the current color in the canvas
-                inputHandler.ColorComboBox_SelectionChanged(colorBrush.Color);
-            }
-        }
-
-        private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (fontFamilyComboBox.SelectedItem is ComboBoxItem selectedFontFamilyItem)
-            {
-                var fontFamily = new FontFamily(selectedFontFamilyItem.Content.ToString());
-                inputHandler.FontFamilyComboBox_SelectionChanged(fontFamily);
-            }
-        }
-
-        private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (fontSizeComboBox.SelectedItem is ComboBoxItem selectedFontSizeItem
-                && double.TryParse(selectedFontSizeItem.Content.ToString(), out double fontSize))
-            {
-                inputHandler.FontSizeComboBox_SelectionChanged(fontSize);
-            }
-        }
-
-        private void TransparencyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (transparencyComboBox.SelectedItem is ComboBoxItem selectedTransparencyItem
-                && double.TryParse(selectedTransparencyItem.Content.ToString(), out double transparency))
-            {
-                inputHandler.TransparencyComboBox_SelectionChanged(transparency);
-            }
-        }
     }
+
+
 }

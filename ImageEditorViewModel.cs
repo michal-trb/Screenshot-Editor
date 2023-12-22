@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -25,7 +27,7 @@ namespace screenerWpf
         public ObservableCollection<int> TransparencySizes { get; private set; }
         public ImageEditorViewModel(CanvasInputHandler inputHandler)
         {
-            this.inputHandler = inputHandler; // Poprawka tutaj
+            this.inputHandler = inputHandler; 
 
             InitializeCommands();
             InitializeColors();
@@ -33,6 +35,16 @@ namespace screenerWpf
             InitializeFontFamilies();
             InitializeFontSizes();
             InitializeTransparencySizes();
+            InitializeStartValues();
+        }
+
+        private void InitializeStartValues()
+        {
+            SelectedFontFamily = "Arial";
+            SelectedFontSize = 12;
+            SelectedThickness = 2;
+            SelectedTransparency = 100;
+            SelectedColor = Colors.FirstOrDefault(c => c.ColorBrush.Color == System.Windows.Media.Colors.Black);
         }
 
         private void InitializeTransparencySizes()
@@ -194,6 +206,80 @@ namespace screenerWpf
             {
                 isTransparencyVisible = value;
                 OnPropertyChanged(nameof(IsTransparencyVisible));
+            }
+        }
+        private int selectedThickness;
+        public int SelectedThickness
+        {
+            get => selectedThickness;
+            set
+            {
+                if (selectedThickness != value)
+                {
+                    selectedThickness = value;
+                    OnPropertyChanged(nameof(SelectedThickness));
+                    inputHandler.ChangeArrowThickness(value);
+                }
+            }
+        }
+
+        private ColorInfo selectedColor;
+        public ColorInfo SelectedColor
+        {
+            get => selectedColor;
+            set
+            {
+                if (selectedColor != value)
+                {
+                    selectedColor = value;
+                    OnPropertyChanged(nameof(SelectedColor));
+                    inputHandler.ChangeColor(value?.ColorBrush.Color ?? System.Windows.Media.Colors.Transparent);
+                }
+            }
+        }
+
+        private string selectedFontFamily;
+        public string SelectedFontFamily
+        {
+            get => selectedFontFamily;
+            set
+            {
+                if (selectedFontFamily != value)
+                {
+                    selectedFontFamily = value;
+                    OnPropertyChanged(nameof(SelectedFontFamily));
+                    inputHandler.ChangeFontFamily(new FontFamily(value));
+                }
+            }
+        }
+
+        private int selectedFontSize;
+        public int SelectedFontSize
+        {
+            get => selectedFontSize;
+            set
+            {
+                if (selectedFontSize != value)
+                {
+                    selectedFontSize = value;
+                    OnPropertyChanged(nameof(SelectedFontSize));
+                    inputHandler.ChangeFontSize(value);
+                }
+            }
+        }
+
+        private int selectedTransparency;
+        public int SelectedTransparency
+        {
+            get => selectedTransparency;
+            set
+            {
+                if (selectedTransparency != value)
+                {
+                    selectedTransparency = value;
+                    OnPropertyChanged(nameof(SelectedTransparency));
+                    inputHandler.ChangeTransparency(value);
+                }
             }
         }
 

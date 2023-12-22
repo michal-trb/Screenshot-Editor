@@ -132,27 +132,27 @@ namespace screenerWpf
             selectionHandler.DeleteSelectedElement();
         }
 
-        public void FontFamilyComboBox_SelectionChanged(FontFamily selectedFontFamily)
+        public void ChangeFontFamily(FontFamily selectedFontFamily)
         {
             SelectedFontFamily = selectedFontFamily;
         }
 
-        public void FontSizeComboBox_SelectionChanged(double fontSize)
+        public void ChangeFontSize(double fontSize)
         {
             SelectedFontSize = fontSize;
         }
 
-        public void ColorComboBox_SelectionChanged(Color comboBox)
+        public void ChangeColor(Color comboBox)
         {
             SelectedColor = comboBox;
         }
 
-        public void ArrowThicknessComboBox_SelectionChanged(double comboBoxArrowThickness)
+        public void ChangeArrowThickness(double comboBoxArrowThickness)
         {
             ArrowThickness = comboBoxArrowThickness;
         }
 
-        internal void TransparencyComboBox_SelectionChanged(double transparency)
+        internal void ChangeTransparency(double transparency)
         {
             Transparency = transparency;
         }
