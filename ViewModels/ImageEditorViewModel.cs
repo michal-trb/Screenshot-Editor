@@ -35,6 +35,7 @@ namespace screenerWpf.ViewModels
         public event Action MinimizeRequest;
         public event Action MaximizeRestoreRequest;
         public event Action CloseRequest;
+
         public ImageEditorViewModel(ICanvasInputHandler inputHandler)
         {
             this.inputHandler = inputHandler ?? throw new ArgumentNullException(nameof(inputHandler));

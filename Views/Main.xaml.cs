@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.IO;
@@ -10,12 +9,16 @@ using System.Windows.Input;
 using screenerWpf.Interfaces;
 using screenerWpf.Sevices;
 using screenerWpf.Factories;
+using screenerWpf.Models;
+using System.Windows.Controls;
 
 namespace screenerWpf
 {
 
     public partial class Main : Window
     {
+        private readonly MainViewModel viewModel;
+
         public Main()
         {
             InitializeComponent();
@@ -24,7 +27,7 @@ namespace screenerWpf
             IImageEditorWindowFactory editorWindowFactory = new ImageEditorWindowFactory();
             IWindowService windowService = new WindowService(editorWindowFactory);
 
-            var viewModel = new MainViewModel(screenCaptureService, windowService);
+            viewModel = new MainViewModel(screenCaptureService, windowService);
 
             DataContext = viewModel;
 
@@ -53,6 +56,14 @@ namespace screenerWpf
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 this.DragMove();
+            }
+        }
+
+        private void Screenshot_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is Image image && image.DataContext is LastScreenshot screenshot)
+            {
+                viewModel.OpenScreenshot(screenshot.FilePath);
             }
         }
 

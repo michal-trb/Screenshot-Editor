@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:screenerWpf"
         mc:Ignorable="d"
         Background="#1E1E1E"
-        Title="Main" Height="150" Width="350"
+        Title="Main" Height="450" Width="350"
         WindowStyle="None" AllowsTransparency="True">
 
 
@@ -44,18 +44,25 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid>
-
+    <Grid Grid.Row="1" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Pasek tytułu -->
+            <RowDefinition Height="*"/>
+            <!-- Główna treść -->
+            <RowDefinition Height="Auto"/>
+            <!-- Last Screenshots -->
+        </Grid.RowDefinitions>
         <!-- Niestandardowy pasek tytułu -->
-        <Border Background="#2D2D30" Height="30" VerticalAlignment="Top" MouseDown="TitleBar_MouseDown">
+        <Border Grid.Row="0" Background="#2D2D30" Height="30" VerticalAlignment="Top" MouseDown="TitleBar_MouseDown">
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                 <Button Content="_" Command="{Binding MinimizeCommand}" Width="30" Background="#FF303030" Foreground="White"/>
                 <Button Content="[]" Command="{Binding MaximizeRestoreCommand}" Width="30" Background="#FF303030" Foreground="White"/>
                 <Button Content="X" Command="{Binding CloseCommand}" Width="30" Background="#FF303030" Foreground="White"/>
             </StackPanel>
         </Border>
-        
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
+
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
             <!-- Przycisk przechwycenia pełnego ekranu -->
             <Button Content="Full Screen" Width="150" Margin="10" 
                     Command="{Binding CaptureFullCommand}" 
@@ -66,6 +73,34 @@
                     Command="{Binding CaptureAreaCommand}" 
                     Style="{StaticResource RoundedButtonStyle}"/>
         </StackPanel>
+
+
+        <Grid Grid.Row="2" Width="350" Height="200" Margin="10">
+            <!-- TextBlock dla tytułu "Last Screenshots" -->
+            <TextBlock Text="Last Screenshots" FontSize="16" FontWeight="Bold" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0"/>
+
+            <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
+            <ItemsControl ItemsSource="{Binding LastScreenshots}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5,30,0,0">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3" Rows="2"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray" BorderThickness="1" Margin="5" Padding="5">
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                <Image Source="{Binding Thumbnail}" Height="50" MouseDown="Screenshot_MouseDown"/>
+                                <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+
     </Grid>
+
 </Window>
     

@@ -8,6 +8,9 @@ using screenerWpf.Sevices;
 using System.IO;
 using screenerWpf.Controls;
 using System.Windows.Controls;
+using screenerWpf.Models;
+using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace screenerWpf
 {
@@ -15,6 +18,7 @@ namespace screenerWpf
     {
         private readonly IScreenCaptureService screenCaptureService;
         private readonly IWindowService windowService;
+        public ObservableCollection<LastScreenshot> LastScreenshots { get; private set; }
 
 
         public ICommand MinimizeCommand { get; private set; }
@@ -36,6 +40,8 @@ namespace screenerWpf
             MinimizeCommand = new RelayCommand(o => MinimizeRequest?.Invoke());
             MaximizeRestoreCommand = new RelayCommand(o => MaximizeRestoreRequest?.Invoke());
             CloseCommand = new RelayCommand(o => CloseRequest?.Invoke());
+            LastScreenshots = new ObservableCollection<LastScreenshot>();
+            LoadLastScreenshots();
         }
         private void ExecuteCaptureFull(object parameter)
         {
@@ -73,5 +79,30 @@ namespace screenerWpf
                 return bitmapImage;
             }
         }
+
+        private void LoadLastScreenshots()
+        {
+            string screenshotsDirectory = "C:\\Users\\xmich\\Pictures\\Screenpresso"; // Ścieżka do folderu ze screenshotami
+            var screenshotFiles = Directory.GetFiles(screenshotsDirectory, "*.png"); // Zakładając, że screenshoty są w formacie PNG
+
+            foreach (var file in screenshotFiles)
+            {
+                LastScreenshots.Add(new LastScreenshot(file));
+            }
+        }
+
+        public void OpenScreenshot(string filePath)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start("explorer", filePath);
+            }
+            catch (Exception ex)
+            {
+                // Obsługa błędów, np. wyświetlenie komunikatu
+                MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd");
+            }
+        }
+
     }
 }
