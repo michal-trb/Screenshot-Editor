@@ -7,34 +7,41 @@ using System.IO;
 using System.Management;
 using System.Reflection;
 using System.Windows.Input;
+using screenerWpf.Interfaces;
+using screenerWpf.Sevices;
 
 namespace screenerWpf
 {
+
     public partial class Main : Window
     {
         public Main()
         {
             InitializeComponent();
+
+            IScreenCaptureService screenCaptureService = new ScreenCaptureService();
+            IWindowService windowService = new WindowService();
+
+            var viewModel = new MainViewModel(screenCaptureService, windowService);
+
+            DataContext = viewModel;
+
+            viewModel.MinimizeRequest += MinimizeWindow;
+            viewModel.MaximizeRestoreRequest += MaximizeRestoreWindow;
+            viewModel.CloseRequest += CloseWindow;
         }
 
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        private void MinimizeWindow()
         {
             this.WindowState = WindowState.Minimized;
         }
 
-        private void MaximizeRestoreButton_Click(object sender, RoutedEventArgs e)
+        private void MaximizeRestoreWindow()
         {
-            if (this.WindowState == WindowState.Maximized)
-            {
-                this.WindowState = WindowState.Normal;
-            }
-            else
-            {
-                this.WindowState = WindowState.Maximized;
-            }
+            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
 
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        private void CloseWindow()
         {
             this.Close();
         }
@@ -47,96 +54,16 @@ namespace screenerWpf
             }
         }
 
-        private void BtnCaptureFull_Click(object sender, RoutedEventArgs e)
+        protected override void OnClosed(EventArgs e)
         {
-            using (Bitmap bitmap = CaptureScreen())
+            base.OnClosed(e);
+
+            if (DataContext is MainViewModel viewModel)
             {
-                SaveScreenshot(bitmap);
+                viewModel.MinimizeRequest -= MinimizeWindow;
+                viewModel.MaximizeRestoreRequest -= MaximizeRestoreWindow;
+                viewModel.CloseRequest -= CloseWindow;
             }
-        }
-
-        private void SaveScreenshot(Bitmap bitmap)
-        {
-            ImageEditorWindow editor = new ImageEditorWindow(ConvertBitmapToBitmapSource(bitmap));
-            editor.ShowDialog();
-        }
-
-        private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
-        {
-            using (MemoryStream memory = new MemoryStream())
-            {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
-                memory.Position = 0;
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-                return bitmapImage;
-            }
-        }
-
-        private void BtnCaptureArea_Click(object sender, RoutedEventArgs e)
-        {
-            AreaSelector selector = new AreaSelector();
-            bool? result = selector.ShowDialog();
-            if (result == true)
-            {
-                // Pobranie skalowania DPI
-                var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
-                var dpiYProperty = typeof(SystemParameters).GetProperty("Dpi", BindingFlags.NonPublic | BindingFlags.Static);
-                var dpiX = (int)dpiXProperty.GetValue(null, null);
-                var dpiY = (int)dpiYProperty.GetValue(null, null);
-
-                // Przeliczenie na rzeczywiste piksele
-                var area = new System.Drawing.Rectangle(
-                    (int)(selector.SelectedRectangle.X / (96d / dpiX)),
-                    (int)(selector.SelectedRectangle.Y / (96d / dpiY)),
-                    (int)(selector.SelectedRectangle.Width / (96d / dpiX)),
-                    (int)(selector.SelectedRectangle.Height / (96d / dpiY)));
-
-                using (Bitmap bitmap = CaptureSelectedArea(area))
-                {
-                    SaveScreenshot(bitmap);
-                }
-            }
-            selector.Close();
-        }
-
-        public Bitmap CaptureScreen()
-        {
-            ManagementScope scope = new ManagementScope("\\\\.\\ROOT\\cimv2");
-            ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_VideoController");
-
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    string currentResolution = obj["CurrentHorizontalResolution"].ToString() + "x" + obj["CurrentVerticalResolution"].ToString();
-
-                    // Przetwarzanie uzyskanej rozdzielczości
-                    int screenWidth = Convert.ToInt32(obj["CurrentHorizontalResolution"]);
-                    int screenHeight = Convert.ToInt32(obj["CurrentVerticalResolution"]);
-
-                    Bitmap bitmap = new Bitmap(screenWidth, screenHeight);
-                    using (Graphics g = Graphics.FromImage(bitmap))
-                    {
-                        g.CopyFromScreen(0, 0, 0, 0, new System.Drawing.Size(screenWidth, screenHeight));
-                    }
-                    return bitmap;
-                }
-            }
-
-            return null; // Jeśli nie uda się uzyskać informacji o rozdzielczości
-        }
-        private Bitmap CaptureSelectedArea(System.Drawing.Rectangle area)
-        {
-            Bitmap bitmap = new Bitmap(area.Width, area.Height);
-            using (Graphics g = Graphics.FromImage(bitmap))
-            {
-                g.CopyFromScreen(area.Location, System.Drawing.Point.Empty, area.Size);
-            }
-            return bitmap;
         }
     }
 }

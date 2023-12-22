@@ -33,8 +33,13 @@ namespace screenerWpf
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
             drawableCanvas.PreviewKeyDown += inputHandler.Canvas_PreviewKeyDown;
-            this.DataContext = new ImageEditorViewModel(inputHandler);
+            var viewModel = new ImageEditorViewModel(inputHandler);
+            DataContext = viewModel;
 
+            // Podłączenie zdarzeń ViewModel do metod obsługi okna
+            viewModel.MinimizeRequest += MinimizeWindow;
+            viewModel.MaximizeRestoreRequest += MaximizeRestoreWindow;
+            viewModel.CloseRequest += CloseWindow;
         }
 
         private void CreateCanvasBitmap()
@@ -66,27 +71,19 @@ namespace screenerWpf
             return bitmap;
         }
 
-
-        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        private void MinimizeWindow()
         {
-            this.WindowState = WindowState.Minimized;
+            WindowState = WindowState.Minimized;
         }
 
-        private void MaximizeRestoreButton_Click(object sender, RoutedEventArgs e)
+        private void MaximizeRestoreWindow()
         {
-            if (this.WindowState == WindowState.Maximized)
-            {
-                this.WindowState = WindowState.Normal;
-            }
-            else
-            {
-                this.WindowState = WindowState.Maximized;
-            }
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
 
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        private void CloseWindow()
         {
-            this.Close();
+            Close();
         }
 
         private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)

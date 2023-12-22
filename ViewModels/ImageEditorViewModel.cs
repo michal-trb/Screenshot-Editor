@@ -15,6 +15,9 @@ namespace screenerWpf.ViewModels
         private CanvasInputHandler inputHandler;
 
         public event PropertyChangedEventHandler? PropertyChanged;
+        public ICommand MinimizeCommand { get; private set; }
+        public ICommand MaximizeRestoreCommand { get; private set; }
+        public ICommand CloseCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
         public ICommand DrawArrowCommand { get; private set; }
         public ICommand AddTextCommand { get; private set; }
@@ -28,6 +31,9 @@ namespace screenerWpf.ViewModels
         public ObservableCollection<string> FontFamilies { get; private set; }
         public ObservableCollection<int> FontSizes { get; private set; }
         public ObservableCollection<int> TransparencySizes { get; private set; }
+        public event Action MinimizeRequest;
+        public event Action MaximizeRestoreRequest;
+        public event Action CloseRequest;
         public ImageEditorViewModel(CanvasInputHandler inputHandler)
         {
             this.inputHandler = inputHandler;
@@ -39,6 +45,10 @@ namespace screenerWpf.ViewModels
             InitializeFontSizes();
             InitializeTransparencySizes();
             InitializeStartValues();
+
+            MinimizeCommand = new RelayCommand(_ => OnMinimize());
+            MaximizeRestoreCommand = new RelayCommand(_ => OnMaximizeRestore());
+            CloseCommand = new RelayCommand(_ => OnClose());
         }
 
         private void InitializeStartValues()
@@ -94,6 +104,20 @@ namespace screenerWpf.ViewModels
             BlurCommand = new RelayCommand(ExecuteBlur);
             BrushCommand = new RelayCommand(ExecuteBrush);
             RecognizeTextCommand = new RelayCommand(ExecuteRecognizeText);
+        }
+        private void OnMinimize()
+        {
+            MinimizeRequest?.Invoke();
+        }
+
+        private void OnMaximizeRestore()
+        {
+            MaximizeRestoreRequest?.Invoke();
+        }
+
+        private void OnClose()
+        {
+            CloseRequest?.Invoke();
         }
 
         private void ExecuteDrawArrow(object obj)
