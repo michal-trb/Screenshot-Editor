@@ -120,43 +120,44 @@
  -->
 
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center">
-            <Button Content="Save" Click="SaveButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Content="Draw Arrow" Click="DrawArrowButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Content="Add Text" Click="AddTextButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Content="Draw Rect" Click="DrawRectButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Content="Blur" Click="BlurButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Content="Speech Bubble" Click="SpeechBubbleButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Content="Brush" Click="BrushButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Content="Recognize Text" Click="RecognizeTextButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Save" Command="{Binding SaveCommand}" Style="{DynamicResource RoundedButtonStyle}" />
+            <Button Content="Draw Arrow" Command="{Binding DrawArrowCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Add Text" Command="{Binding AddTextCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Draw Rect" Command="{Binding DrawRectCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Blur" Command="{Binding BlurCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Speech Bubble" Command="{Binding SpeechBubbleCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Brush" Command="{Binding BrushCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Recognize Text" Command="{Binding RecognizeTextCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
         </StackPanel>
+
         <!-- Horizontal StackPanel for ComboBoxes and Labels -->
         <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Background="#2D2D30">
-            <Label x:Name="colorLabel" Content="Color:" Style="{StaticResource LabelStyle}" Visibility="Collapsed"/>
-            <ComboBox x:Name="colorComboBox" SelectionChanged="ColorComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}" Visibility="Collapsed">
-                <ComboBoxItem Content="Czarny" Background="Black"/>
-                <ComboBoxItem Content="Czerwony" Background="Red"/>
-                <ComboBoxItem Content="Zielony" Background="Green"/>
-                <ComboBoxItem Content="Niebieski" Background="Blue"/>
-            </ComboBox>
-            <Label x:Name="thicknessLabel" Content="Thickness:" Style="{StaticResource LabelStyle}" Visibility="Collapsed"/>
-            <ComboBox x:Name="arrowThicknessComboBox" SelectionChanged="ArrowThicknessComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}" Visibility="Collapsed">
-                <ComboBoxItem Content="1"/>
-                <ComboBoxItem Content="2"/>
-                <ComboBoxItem Content="3"/>
-                <ComboBoxItem Content="4"/>
-                <ComboBoxItem Content="5"/>
-                <ComboBoxItem Content="6"/>
-                <ComboBoxItem Content="7"/>
-                <ComboBoxItem Content="8"/>
-                <ComboBoxItem Content="9"/>
-                <ComboBoxItem Content="10"/>
-            </ComboBox>
-            <Label x:Name="fontFamilyLabel" Content="Font Family:" Style="{StaticResource LabelStyle}" Visibility="Collapsed"/>
-            <ComboBox x:Name="fontFamilyComboBox" SelectionChanged="FontFamilyComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}" Visibility="Collapsed"/>
-            <Label x:Name="fontSizeLabel" Content="Font Size:" Style="{StaticResource LabelStyle}" Visibility="Collapsed"/>
-            <ComboBox x:Name="fontSizeComboBox" SelectionChanged="FontSizeComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}" Visibility="Collapsed"/>
-            <Label x:Name="transparencyLabel" Content="Transparency:" Style="{StaticResource LabelStyle}" Visibility="Collapsed"/>
-            <ComboBox x:Name="transparencyComboBox" SelectionChanged="TransparencyComboBox_SelectionChanged" Style="{StaticResource CustomComboBoxStyle}" Visibility="Collapsed"/>
+            <Label x:Name="colorLabel" Content="Color:" Style="{StaticResource LabelStyle}"
+                Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox x:Name="colorComboBox" Style="{StaticResource CustomComboBoxStyle}"
+                Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                ItemsSource="{Binding Colors}"
+                DisplayMemberPath="Name"/>
+            <Label x:Name="thicknessLabel" Content="Thickness:" Style="{StaticResource LabelStyle}"
+                Visibility="{Binding IsThicknessVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox x:Name="arrowThicknessComboBox" Style="{StaticResource CustomComboBoxStyle}"
+                Visibility="{Binding IsThicknessVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                ItemsSource="{Binding Thicknesses}"/>
+            <Label x:Name="fontFamilyLabel" Content="Font Family:" Style="{StaticResource LabelStyle}"
+                Visibility="{Binding IsFontFamilyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox x:Name="fontFamilyComboBox" Style="{StaticResource CustomComboBoxStyle}"
+                Visibility="{Binding IsFontFamilyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                ItemsSource="{Binding FontFamilies}"/>
+            <Label x:Name="fontSizeLabel" Content="Font Size:" Style="{StaticResource LabelStyle}"
+                Visibility="{Binding IsFontSizeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox x:Name="fontSizeComboBox" Style="{StaticResource CustomComboBoxStyle}"
+                Visibility="{Binding IsFontSizeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                ItemsSource="{Binding FontSizes}"/>   
+            <Label x:Name="transparencyLabel" Content="Transparency:" Style="{StaticResource LabelStyle}"
+                Visibility="{Binding IsTransparencyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <ComboBox x:Name="transparencyComboBox" Style="{StaticResource CustomComboBoxStyle}"
+                Visibility="{Binding IsTransparencyVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                ItemsSource="{Binding TransparencySizes}"/>
         </StackPanel>
 
         <!-- ViewBox for DrawableCanvas -->
@@ -198,11 +199,5 @@
                 </local:DrawableCanvas>
             </Viewbox>
         </Border>
-        <StackPanel Grid.Row="3" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#2D2D30">
-            <Button 
-                Content="Save" 
-                Click="SaveButton_Click" 
-                Style="{StaticResource RoundedButtonStyle}"/>
-        </StackPanel>
     </Grid>
 </Window>

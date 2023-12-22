@@ -65,24 +65,24 @@ namespace screenerWpf
         }
 
         // Metody obsługi przycisków i innych akcji
-        public void DrawArrowButton_Click(object sender, RoutedEventArgs e)
+        public void DrawArrow()
         {
             actionHandler.SetCurrentAction(EditAction.DrawArrow);
             UpdateDrawingColorAndThickness();
         }
 
-        internal void DrawRectButton_Click(object sender, RoutedEventArgs e)
+        internal void DrawRect()
         {
             actionHandler.SetCurrentAction(EditAction.DrawRectangle);
             UpdateDrawingColorAndThickness();
         }
 
-        public void AddTextButton_Click(object sender, RoutedEventArgs e)
+        public void AddText()
         {
             actionHandler.SetCurrentAction(EditAction.AddText);
         }
 
-        public void SaveButton_Click(object sender, RoutedEventArgs e)
+        public void Save()
         {
             savingHandler.SaveCanvasToFile();
         }
@@ -93,27 +93,27 @@ namespace screenerWpf
             // Analogicznie do poprzedniej implementacji
         }
 
-        public void SpeechBubbleButton_Click(object sender, RoutedEventArgs e)
+        public void SpeechBubble()
         {
             actionHandler.SetCurrentAction(EditAction.AddBubble);
         }
 
-        public void BlurButton_Click(object sender, RoutedEventArgs e)
+        public void Blur()
         {
             actionHandler.SetCurrentAction(EditAction.DrawBlur);
         }
 
-        public void BrushButton_Click(object sender, RoutedEventArgs e)
+        public void Brush()
         {
             actionHandler.SetCurrentAction(EditAction.BrushPainting);
         }
 
-        public void RecognizeTextButton_Click(object sender, RoutedEventArgs e)
+        public void RecognizeText()
         {
             var textRecognitionHandler = new TextRecognitionHandler(drawableCanvas);
             textRecognitionHandler.StartRecognizeFromImage();
         }
-        public void EditTextButton_Click(object sender, RoutedEventArgs e)
+        public void EditText()
         {
             if (selectionHandler.HasSelectedElement())
             {
