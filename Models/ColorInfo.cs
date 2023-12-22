@@ -9,8 +9,8 @@ namespace screenerWpf.Models
 {
     public class ColorInfo
     {
-        public string Name { get; set; }
-        public SolidColorBrush ColorBrush { get; set; }
+        public required string Name { get; set; }
+        public required SolidColorBrush ColorBrush { get; set; }
     }
 
 }

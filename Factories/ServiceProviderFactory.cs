@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using screenerWpf;
+using screenerWpf.Controls;
 using screenerWpf.Factories;
 using screenerWpf.Interfaces;
 using screenerWpf.Sevices;
@@ -14,6 +15,11 @@ public static class ServiceProviderFactory
         services.AddSingleton<Main>();
         services.AddSingleton<IImageEditorWindowFactory, ImageEditorWindowFactory>();
         services.AddSingleton<IWindowService, WindowService>();
+        services.AddSingleton<ICanvasActionHandler, CanvasActionHandler>();
+        services.AddSingleton<ICanvasSelectionHandler, CanvasSelectionHandler>();
+        services.AddSingleton<ICanvasEditingHandler, CanvasEditingHandler>();
+        services.AddSingleton<ICanvasSavingHandler, CanvasSavingHandler>();
+        services.AddSingleton<ICanvasInputHandler, CanvasInputHandler>();
 
         return services.BuildServiceProvider();
     }
