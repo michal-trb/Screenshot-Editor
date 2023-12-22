@@ -6,6 +6,8 @@ using System;
 using screenerWpf.Interfaces;
 using screenerWpf.Sevices;
 using System.IO;
+using screenerWpf.Controls;
+using System.Windows.Controls;
 
 namespace screenerWpf
 {
@@ -13,6 +15,7 @@ namespace screenerWpf
     {
         private readonly IScreenCaptureService screenCaptureService;
         private readonly IWindowService windowService;
+
 
         public ICommand MinimizeCommand { get; private set; }
         public ICommand MaximizeRestoreCommand { get; private set; }
@@ -53,7 +56,7 @@ namespace screenerWpf
         private void ShowEditorWindow(Bitmap bitmap)
         {
             BitmapSource bitmapSource = ConvertBitmapToBitmapSource(bitmap);
-            windowService.ShowImageEditorWindow(bitmapSource);
+            this.windowService.ShowImageEditorWindow(bitmapSource);
         }
 
         private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)

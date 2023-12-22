@@ -8,7 +8,7 @@ using screenerWpf.Models.DrawableElements;
 
 namespace screenerWpf.Controls
 {
-    public class CanvasSelectionHandler
+    public class CanvasSelectionHandler : ICanvasSelectionHandler
     {
         private DrawableCanvas drawableCanvas;
         private IDrawable selectedElement;

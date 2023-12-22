@@ -7,7 +7,7 @@ using screenerWpf.Models.DrawableElements;
 
 namespace screenerWpf.Controls
 {
-    public class CanvasEditingHandler
+    public class CanvasEditingHandler : ICanvasEditingHandler
     {
         private DrawableCanvas drawableCanvas;
         private TextBox editableTextBox;
@@ -30,7 +30,6 @@ namespace screenerWpf.Controls
                 CreateEditableTextBoxInSpeechBubble(speechBubble, location);
                 editableElement = element;
             }
-            // Możliwe inne przypadki edycji dla różnych typów elementów
         }
 
         private void CreateEditableTextBox(DrawableText drawableText, Point location)
@@ -85,7 +84,7 @@ namespace screenerWpf.Controls
             }
         }
 
-        private void FinishEditing(TextBox textBox)
+        public void FinishEditing(TextBox textBox)
         {
             if (textBox == null) return;
 
@@ -105,7 +104,5 @@ namespace screenerWpf.Controls
             editableTextBox = null;
             editableElement = null;
         }
-
-        // Dodatkowe metody...
     }
 }

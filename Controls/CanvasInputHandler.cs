@@ -1,4 +1,5 @@
-﻿using screenerWpf.Sevices;
+﻿using screenerWpf.Interfaces;
+using screenerWpf.Sevices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -6,13 +7,13 @@ using System.Windows.Media;
 
 namespace screenerWpf.Controls
 {
-    public class CanvasInputHandler
+    public class CanvasInputHandler : ICanvasInputHandler
     {
-        private DrawableCanvas drawableCanvas;
-        private CanvasActionHandler actionHandler;
-        private CanvasSelectionHandler selectionHandler;
-        private CanvasEditingHandler editingHandler;
-        private CanvasSavingHandler savingHandler;
+        private readonly DrawableCanvas drawableCanvas;
+        private readonly ICanvasActionHandler actionHandler;
+        private readonly ICanvasSelectionHandler selectionHandler;
+        private readonly ICanvasEditingHandler editingHandler;
+        private readonly ICanvasSavingHandler savingHandler;
 
         public static FontFamily SelectedFontFamily { get; private set; } = new FontFamily("Arial");
         public static double SelectedFontSize { get; private set; } = 12.0;
@@ -25,8 +26,7 @@ namespace screenerWpf.Controls
         {
             drawableCanvas = canvas;
 
-            actionHandler = new CanvasActionHandler(
-                canvas);
+            actionHandler = new CanvasActionHandler(drawableCanvas);
             selectionHandler = new CanvasSelectionHandler(drawableCanvas);
             editingHandler = new CanvasEditingHandler(drawableCanvas);
             savingHandler = new CanvasSavingHandler(drawableCanvas);
@@ -72,7 +72,7 @@ namespace screenerWpf.Controls
             UpdateDrawingColorAndThickness();
         }
 
-        internal void DrawRect()
+        public void DrawRect()
         {
             actionHandler.SetCurrentAction(EditAction.DrawRectangle);
             UpdateDrawingColorAndThickness();
@@ -153,10 +153,11 @@ namespace screenerWpf.Controls
             ArrowThickness = comboBoxArrowThickness;
         }
 
-        internal void ChangeTransparency(double transparency)
+        public void ChangeTransparency(double transparency)
         {
             Transparency = transparency;
         }
+
         public static Color GetCurrentColor()
         {
             return SelectedColor;

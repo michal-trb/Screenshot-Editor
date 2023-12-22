@@ -3,10 +3,11 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using System.Windows;
 using System.Windows.Media;
+using screenerWpf.Interfaces;
 
 namespace screenerWpf.Controls
 {
-    public class CanvasSavingHandler
+    public class CanvasSavingHandler : ICanvasSavingHandler
     {
         private DrawableCanvas drawableCanvas;
 

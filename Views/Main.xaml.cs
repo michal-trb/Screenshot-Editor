@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Windows.Input;
 using screenerWpf.Interfaces;
 using screenerWpf.Sevices;
+using screenerWpf.Factories;
 
 namespace screenerWpf
 {
@@ -20,7 +21,8 @@ namespace screenerWpf
             InitializeComponent();
 
             IScreenCaptureService screenCaptureService = new ScreenCaptureService();
-            IWindowService windowService = new WindowService();
+            IImageEditorWindowFactory editorWindowFactory = new ImageEditorWindowFactory();
+            IWindowService windowService = new WindowService(editorWindowFactory);
 
             var viewModel = new MainViewModel(screenCaptureService, windowService);
 

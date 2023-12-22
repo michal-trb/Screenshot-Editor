@@ -6,13 +6,14 @@ using System.Windows.Input;
 using System.Windows.Media;
 using screenerWpf.Commands;
 using screenerWpf.Controls;
+using screenerWpf.Interfaces;
 using screenerWpf.Models;
 
 namespace screenerWpf.ViewModels
 {
     internal class ImageEditorViewModel : INotifyPropertyChanged
     {
-        private CanvasInputHandler inputHandler;
+        private readonly ICanvasInputHandler inputHandler;
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public ICommand MinimizeCommand { get; private set; }
@@ -34,9 +35,9 @@ namespace screenerWpf.ViewModels
         public event Action MinimizeRequest;
         public event Action MaximizeRestoreRequest;
         public event Action CloseRequest;
-        public ImageEditorViewModel(CanvasInputHandler inputHandler)
+        public ImageEditorViewModel(ICanvasInputHandler inputHandler)
         {
-            this.inputHandler = inputHandler;
+            this.inputHandler = inputHandler ?? throw new ArgumentNullException(nameof(inputHandler));
 
             InitializeCommands();
             InitializeColors();

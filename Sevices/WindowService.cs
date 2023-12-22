@@ -1,4 +1,5 @@
-﻿using screenerWpf.Interfaces;
+﻿using screenerWpf.Controls;
+using screenerWpf.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,6 +12,19 @@ namespace screenerWpf.Sevices
 {
     public class WindowService : IWindowService
     {
+        private readonly IImageEditorWindowFactory imageEditorWindowFactory;
+
+        public WindowService(IImageEditorWindowFactory imageEditorWindowFactory)
+        {
+            this.imageEditorWindowFactory = imageEditorWindowFactory;
+        }
+
+        public void ShowImageEditorWindow(BitmapSource image)
+        {
+            var editor = imageEditorWindowFactory.Create(image);
+            editor.ShowDialog();
+        }
+
         public Rectangle SelectArea()
         {
             AreaSelector selector = new AreaSelector();
@@ -24,13 +38,6 @@ namespace screenerWpf.Sevices
                     (int)selector.SelectedRectangle.Height);
             }
             return Rectangle.Empty;
-        }
-
-        public void ShowImageEditorWindow(BitmapSource image)
-        {
-            // Tworzenie nowego okna ImageEditorWindow z przekazanym obrazem
-            ImageEditorWindow editor = new ImageEditorWindow(image);
-            editor.ShowDialog(); // Wyświetlenie okna jako dialogu
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using screenerWpf.Controls;
+using screenerWpf.Interfaces;
 using screenerWpf.ViewModels;
 
 namespace screenerWpf
@@ -16,14 +17,13 @@ namespace screenerWpf
     {
         private WriteableBitmap canvasBitmap;
         private BitmapSource initialImage;
-        private CanvasInputHandler inputHandler;
+        private readonly ICanvasInputHandler inputHandler;
 
         public ImageEditorWindow(BitmapSource initialBitmap)
         {
             InitializeComponent();
             this.initialImage = initialBitmap;
-            this.inputHandler = new CanvasInputHandler(
-                drawableCanvas);
+            this.inputHandler = new CanvasInputHandler(drawableCanvas);
 
             drawableCanvas.Width = initialBitmap.PixelWidth;
             drawableCanvas.Height = initialBitmap.PixelHeight;
@@ -32,8 +32,8 @@ namespace screenerWpf
             CreateCanvasBitmap();
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
-            drawableCanvas.PreviewKeyDown += inputHandler.Canvas_PreviewKeyDown;
-            var viewModel = new ImageEditorViewModel(inputHandler);
+            drawableCanvas.PreviewKeyDown += this.inputHandler.Canvas_PreviewKeyDown;
+            var viewModel = new ImageEditorViewModel(this.inputHandler);
             DataContext = viewModel;
 
             // Podłączenie zdarzeń ViewModel do metod obsługi okna
@@ -93,7 +93,6 @@ namespace screenerWpf
                 this.DragMove();
             }
         }
-
 
         private void UpdateCanvasBackground()
         {

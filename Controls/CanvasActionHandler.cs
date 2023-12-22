@@ -17,7 +17,7 @@ namespace screenerWpf.Controls
         RecognizeText
     }
 
-    public class CanvasActionHandler
+    public class CanvasActionHandler : ICanvasActionHandler
     {
         private DrawableCanvas drawableCanvas;
         private IDrawable currentDrawable;
