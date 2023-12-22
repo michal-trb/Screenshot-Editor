@@ -3,7 +3,6 @@ using System;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Media.Imaging;
-using System.Windows.Interop; // Added for Imaging.CreateBitmapSourceFromHBitmap
 using System.IO;
 using System.Management;
 using System.Reflection;
