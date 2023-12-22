@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using screenerWpf.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Linq;
 
 namespace screenerWpf
 {
@@ -82,12 +83,13 @@ namespace screenerWpf
 
         private void LoadLastScreenshots()
         {
-            string screenshotsDirectory = "C:\\Users\\xmich\\Pictures\\Screenpresso"; // Ścieżka do folderu ze screenshotami
-            var screenshotFiles = Directory.GetFiles(screenshotsDirectory, "*.png"); // Zakładając, że screenshoty są w formacie PNG
+            string screenshotsDirectory = "C:\\Users\\xmich\\Pictures\\Screenpresso";
+            DirectoryInfo di = new DirectoryInfo(screenshotsDirectory);
+            var screenshotFiles = di.GetFiles("*.png").OrderByDescending(f => f.LastWriteTime).Take(6);
 
             foreach (var file in screenshotFiles)
             {
-                LastScreenshots.Add(new LastScreenshot(file));
+                LastScreenshots.Add(new LastScreenshot(file.FullName));
             }
         }
 
@@ -95,14 +97,15 @@ namespace screenerWpf
         {
             try
             {
-                System.Diagnostics.Process.Start("explorer", filePath);
+                var bitmapImage = new BitmapImage(new Uri(filePath));
+                this.windowService.ShowImageEditorWindow(bitmapImage);
             }
             catch (Exception ex)
             {
-                // Obsługa błędów, np. wyświetlenie komunikatu
                 MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd");
             }
         }
+
 
     }
 }

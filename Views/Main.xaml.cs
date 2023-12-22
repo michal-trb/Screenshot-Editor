@@ -63,7 +63,7 @@ namespace screenerWpf
         {
             if (sender is Image image && image.DataContext is LastScreenshot screenshot)
             {
-                viewModel.OpenScreenshot(screenshot.FilePath);
+                (DataContext as MainViewModel)?.OpenScreenshot(screenshot.FilePath);
             }
         }
 
