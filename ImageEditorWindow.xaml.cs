@@ -86,6 +86,15 @@ namespace screenerWpf
             this.Close();
         }
 
+        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
+        }
+
+
         private void UpdateCanvasBackground()
         {
             ImageBrush brush = new ImageBrush(canvasBitmap)

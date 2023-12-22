@@ -7,6 +7,7 @@ using System.Windows.Interop; // Added for Imaging.CreateBitmapSourceFromHBitmap
 using System.IO;
 using System.Management;
 using System.Reflection;
+using System.Windows.Input;
 
 namespace screenerWpf
 {
@@ -37,6 +38,14 @@ namespace screenerWpf
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
 
         private void BtnCaptureFull_Click(object sender, RoutedEventArgs e)

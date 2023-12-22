@@ -47,11 +47,11 @@
     <Grid>
 
         <!-- Niestandardowy pasek tytułu -->
-        <Border Background="#2D2D30" Height="30" VerticalAlignment="Top">
+        <Border Background="#2D2D30" Height="30" VerticalAlignment="Top" MouseDown="TitleBar_MouseDown">
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Content="_" Click="MinimizeButton_Click" Width="20" Background="#FF303030" Foreground="White"/>
-                <Button Content="[]" Click="MaximizeRestoreButton_Click" Width="20" Background="#FF303030" Foreground="White"/>
-                <Button Content="X" Click="CloseButton_Click" Width="20" Background="#FF303030" Foreground="White"/>
+                <Button Content="_" Click="MinimizeButton_Click" Width="30" Background="#FF303030" Foreground="White"/>
+                <Button Content="[]" Click="MaximizeRestoreButton_Click" Width="30" Background="#FF303030" Foreground="White"/>
+                <Button Content="X" Click="CloseButton_Click" Width="30" Background="#FF303030" Foreground="White"/>
             </StackPanel>
         </Border>
 
