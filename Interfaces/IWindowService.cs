@@ -7,5 +7,7 @@ namespace screenerWpf.Interfaces
     {
         Rectangle SelectArea();
         void ShowImageEditorWindow(BitmapSource image);
+        void ShowVideoPlayerWindow(string videoPath);
+
     }
 }

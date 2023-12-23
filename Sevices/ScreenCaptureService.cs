@@ -5,17 +5,28 @@ using System;
 using Size = System.Drawing.Size;
 using Point = System.Drawing.Point;
 using System.IO;
+using System.Windows;
 
 namespace screenerWpf.Sevices
 {
     public class ScreenCaptureService : IScreenCaptureService
     {
         private ScreenRecorder screenRecorder;
+        private IWindowService windowService; // Zakładam, że IWindowService może otwierać VideoPlayerWindow
 
-        public ScreenCaptureService()
+        public ScreenCaptureService(IWindowService windowService)
         {
-            // Możesz dostosować ścieżkę pliku według swoich potrzeb
+            this.windowService = windowService;
             screenRecorder = new ScreenRecorder();
+            screenRecorder.RecordingCompleted += OnRecordingCompleted;
+        }
+
+        private void OnRecordingCompleted(string filePath)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                windowService.ShowVideoPlayerWindow(filePath); // Otwarcie okna odtwarzacza wideo
+            });
         }
 
         public Bitmap CaptureScreen()
@@ -67,7 +78,6 @@ namespace screenerWpf.Sevices
         public void StopRecording()
         {
             screenRecorder.StopRecording();
-            // Tutaj możesz dodać logikę, która zajmie się pokazaniem okna dialogowego zapisu pliku
         }
 
         public void StartAreaRecording(Rectangle area)

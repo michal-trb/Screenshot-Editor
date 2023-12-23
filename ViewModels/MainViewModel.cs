@@ -106,13 +106,6 @@ namespace screenerWpf
             // Rozpoczęcie nagrywania
             screenCaptureService.StartRecording();
             ShowStopRecordingButton();
-
-            // Zatrzymanie nagrywania po 10 sekundach
-            Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith(_ =>
-            {
-                screenCaptureService.StopRecording();
-                // Logika wyświetlania okna dialogowego zapisu
-            });
         }
 
         private void ExecuteAreaRecordVideo(object parameter)
@@ -122,13 +115,6 @@ namespace screenerWpf
             {
                 screenCaptureService.StartAreaRecording(area);
                 ShowStopRecordingButton();
-
-                // Zatrzymanie nagrywania po 10 sekundach
-                Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith(_ =>
-                {
-                    screenCaptureService.StopRecording();
-                    // Logika wyświetlania okna dialogowego zapisu
-                });
             }
         }
 

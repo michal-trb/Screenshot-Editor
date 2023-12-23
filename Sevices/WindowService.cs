@@ -1,4 +1,5 @@
 ﻿using screenerWpf.Interfaces;
+using screenerWpf.Views;
 using System.Drawing;
 using System.Windows.Media.Imaging;
 
@@ -32,6 +33,12 @@ namespace screenerWpf.Sevices
                     (int)selector.SelectedRectangle.Height);
             }
             return Rectangle.Empty;
+        }
+
+        public void ShowVideoPlayerWindow(string videoPath)
+        {
+            VideoPlayerWindow playerWindow = new VideoPlayerWindow(videoPath);
+            playerWindow.Show();
         }
     }
 }
