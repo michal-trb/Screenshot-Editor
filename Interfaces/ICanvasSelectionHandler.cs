@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using screenerWpf.Models.DrawableElements;
+﻿using System.Windows.Input;
 
 namespace screenerWpf.Interfaces
 {

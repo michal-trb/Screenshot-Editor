@@ -19,19 +19,13 @@ namespace screenerWpf
 
     public partial class Main : Window
     {
-        private readonly MainViewModel viewModel;
+        private readonly IOptionsWindowFactory optionsWindowFactory;
 
-        public Main()
+        public Main(MainViewModel viewModel, IOptionsWindowFactory optionsWindowFactory)
         {
             InitializeComponent();
 
-            IScreenCaptureService screenCaptureService = new ScreenCaptureService();
-            IImageEditorWindowFactory editorWindowFactory = new ImageEditorWindowFactory();
-            IWindowService windowService = new WindowService(editorWindowFactory);
-
-            viewModel = new MainViewModel(
-                screenCaptureService,
-                windowService);
+            this.optionsWindowFactory = optionsWindowFactory;
 
             DataContext = viewModel;
 
@@ -39,8 +33,8 @@ namespace screenerWpf
 
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            OptionsWindow optionsWindow = new OptionsWindow();
-            optionsWindow.ShowDialog(); // Pokaż okno jako okno dialogowe
+            var optionsWindow = optionsWindowFactory.Create();
+            optionsWindow.ShowDialog();
         }
 
 

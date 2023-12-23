@@ -22,6 +22,7 @@ public static class ServiceProviderFactory
         services.AddSingleton<ICanvasEditingHandler, CanvasEditingHandler>();
         services.AddSingleton<ICanvasSavingHandler, CanvasSavingHandler>();
         services.AddSingleton<ICanvasInputHandler, CanvasInputHandler>();
+        services.AddSingleton<IOptionsWindowFactory, OptionsWindowFactory>();
 
         return services.BuildServiceProvider();
     }

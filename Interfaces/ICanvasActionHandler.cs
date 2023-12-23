@@ -1,6 +1,5 @@
 ﻿using screenerWpf.Controls;
 using System.Windows.Input;
-using System.Windows.Media.Imaging;
 
 namespace screenerWpf.Interfaces
 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using screenerWpf.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,20 +20,16 @@ namespace screenerWpf.Views
     /// </summary>
     public partial class OptionsWindow : Window
     {
-        public OptionsWindow()
+        public OptionsWindow(OptionsViewModel optionsViewModel)
         {
             InitializeComponent();
-            screenshotsSavePath.Text = Properties.Settings.Default.ScreenshotsSavePath;
-            screenshotsLibraryPath.Text = Properties.Settings.Default.ScreenshorsLibrary;
-            recordsSavePath.Text = Properties.Settings.Default.RecordsSavePath;
+            DataContext = optionsViewModel;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.ScreenshotsSavePath = screenshotsSavePath.Text;
-            Properties.Settings.Default.ScreenshorsLibrary = screenshotsLibraryPath.Text;
-            Properties.Settings.Default.RecordsSavePath = recordsSavePath.Text;
-            Properties.Settings.Default.Save();
+            var viewModel = DataContext as OptionsViewModel;
+            viewModel?.SaveSettings();
             this.Close();
         }
     }
