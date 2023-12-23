@@ -29,7 +29,7 @@ namespace screenerWpf.Views
         private void StopRecordingButton_Click(object sender, RoutedEventArgs e)
         {
             // Wywołaj zatrzymanie nagrywania
-            ((App)Application.Current).MainViewModel.StopRecording();
+            ((App)Application.Current).MainViewModelService.StopRecording();
             Close();
         }
     }

@@ -5,18 +5,16 @@ using System.Drawing;
 class ScreenRecorder
 {
     private Recorder recorder;
-    private string videoPath;
 
-    public ScreenRecorder(string videoPath)
+    public ScreenRecorder()
     {
-        this.videoPath = videoPath;
         recorder = Recorder.CreateRecorder();
         recorder.OnRecordingComplete += OnRecordingComplete;
         recorder.OnRecordingFailed += OnRecordingFailed;
         recorder.OnStatusChanged += OnStatusChanged;
     }
 
-    public void StartRecording()
+    public void StartRecording(string videoPath)
     {
         recorder.Record(videoPath);
     }
@@ -26,7 +24,7 @@ class ScreenRecorder
         recorder.Stop();
     }
 
-    public void StartRecordingArea(Rectangle area)
+    public void StartRecordingArea(string videoPath, Rectangle area)
     {
         RecorderOptions options = new RecorderOptions
         {

@@ -12,6 +12,7 @@ using screenerWpf.Factories;
 using screenerWpf.Models;
 using System.Windows.Controls;
 using System.Windows.Media;
+using screenerWpf.Views;
 
 namespace screenerWpf
 {
@@ -19,7 +20,6 @@ namespace screenerWpf
     public partial class Main : Window
     {
         private readonly MainViewModel viewModel;
-        private Button stopRecordingButton;
 
         public Main()
         {
@@ -29,28 +29,34 @@ namespace screenerWpf
             IImageEditorWindowFactory editorWindowFactory = new ImageEditorWindowFactory();
             IWindowService windowService = new WindowService(editorWindowFactory);
 
-            viewModel = new MainViewModel(screenCaptureService, windowService);
+            viewModel = new MainViewModel(
+                screenCaptureService,
+                windowService);
 
             DataContext = viewModel;
 
-            viewModel.MinimizeRequest += MinimizeWindow;
-            viewModel.MaximizeRestoreRequest += MaximizeRestoreWindow;
-            viewModel.CloseRequest += CloseWindow;
         }
 
-        private void MinimizeWindow()
+        private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            this.WindowState = WindowState.Minimized;
+            OptionsWindow optionsWindow = new OptionsWindow();
+            optionsWindow.ShowDialog(); // Pokaż okno jako okno dialogowe
         }
 
-        private void MaximizeRestoreWindow()
+
+        private void MinimizeWindow(object sender, RoutedEventArgs e)
         {
-            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            WindowState = WindowState.Minimized;
         }
 
-        private void CloseWindow()
+        private void MaximizeRestoreWindow(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        private void CloseWindow(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
@@ -66,18 +72,6 @@ namespace screenerWpf
             if (sender is Image image && image.DataContext is LastScreenshot screenshot)
             {
                 (DataContext as MainViewModel)?.OpenScreenshot(screenshot.FilePath);
-            }
-        }
-
-        protected override void OnClosed(EventArgs e)
-        {
-            base.OnClosed(e);
-
-            if (DataContext is MainViewModel viewModel)
-            {
-                viewModel.MinimizeRequest -= MinimizeWindow;
-                viewModel.MaximizeRestoreRequest -= MaximizeRestoreWindow;
-                viewModel.CloseRequest -= CloseWindow;
             }
         }
     }

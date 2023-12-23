@@ -10,12 +10,12 @@ namespace screenerWpf
     public partial class App : Application
     {
         private readonly IServiceProvider serviceProvider;
-        public MainViewModel MainViewModel { get; private set; }
+        public MainViewModel MainViewModelService { get; private set; }
 
         public App()
         {
             serviceProvider = ServiceProviderFactory.CreateServiceProvider();
-            MainViewModel = serviceProvider.GetRequiredService<MainViewModel>();
+            MainViewModelService = serviceProvider.GetRequiredService<MainViewModel>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -24,7 +24,7 @@ namespace screenerWpf
 
             var mainWindow = serviceProvider.GetRequiredService<Main>();
             // Ustaw DataContext głównego okna
-            mainWindow.DataContext = MainViewModel;
+            mainWindow.DataContext = MainViewModelService;
             mainWindow.Show();
         }
 

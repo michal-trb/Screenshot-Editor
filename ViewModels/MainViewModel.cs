@@ -14,6 +14,7 @@ using System.Windows;
 using System.Linq;
 using System.Threading.Tasks;
 using screenerWpf.Views;
+using screenerWpf.Properties;
 
 namespace screenerWpf
 {
@@ -23,19 +24,12 @@ namespace screenerWpf
         private readonly IWindowService windowService;
         public ObservableCollection<LastScreenshot> LastScreenshots { get; private set; }
 
-
-        public ICommand MinimizeCommand { get; private set; }
-        public ICommand MaximizeRestoreCommand { get; private set; }
-        public ICommand CloseCommand { get; private set; }
         public ICommand CaptureFullCommand { get; private set; }
         public ICommand CaptureAreaCommand { get; private set; }
         public ICommand RecordVideoCommand { get; private set; }
         public ICommand RecordAreaVideoCommand { get; private set; }
         public StopRecordingWindow stopRecordingWindow { get; private set; }
 
-        public event Action MinimizeRequest;
-        public event Action MaximizeRestoreRequest;
-        public event Action CloseRequest;
 
         public MainViewModel(IScreenCaptureService screenCaptureService, IWindowService windowService)
         {
@@ -45,9 +39,6 @@ namespace screenerWpf
             CaptureAreaCommand = new RelayCommand(ExecuteCaptureArea);
             RecordVideoCommand = new RelayCommand(ExecuteRecordVideo);
             RecordAreaVideoCommand = new RelayCommand(ExecuteAreaRecordVideo);
-            MinimizeCommand = new RelayCommand(o => MinimizeRequest?.Invoke());
-            MaximizeRestoreCommand = new RelayCommand(o => MaximizeRestoreRequest?.Invoke());
-            CloseCommand = new RelayCommand(o => CloseRequest?.Invoke());
             LastScreenshots = new ObservableCollection<LastScreenshot>();
             LoadLastScreenshots();
         }
@@ -90,7 +81,7 @@ namespace screenerWpf
 
         private void LoadLastScreenshots()
         {
-            string screenshotsDirectory = "C:\\Users\\xmich\\Pictures\\Screenpresso";
+            string screenshotsDirectory = Settings.Default.ScreenshorsLibrary;
             DirectoryInfo di = new DirectoryInfo(screenshotsDirectory);
             var screenshotFiles = di.GetFiles("*.png").OrderByDescending(f => f.LastWriteTime).Take(6);
 

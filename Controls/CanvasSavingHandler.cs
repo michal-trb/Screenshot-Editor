@@ -4,6 +4,8 @@ using System.Windows.Media.Imaging;
 using System.Windows;
 using System.Windows.Media;
 using screenerWpf.Interfaces;
+using screenerWpf.Properties;
+using System;
 
 namespace screenerWpf.Controls
 {
@@ -18,11 +20,14 @@ namespace screenerWpf.Controls
 
         public void SaveCanvasToFile()
         {
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string fileName = $"Image_{timestamp}";
             var saveFileDialog = new SaveFileDialog
             {
-                FileName = "Image", // Domyślna nazwa pliku
+                FileName = fileName, // Domyślna nazwa pliku
                 DefaultExt = ".png", // Domyślne rozszerzenie pliku
-                Filter = "PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|BMP Files (*.bmp)|*.bmp" // Filtr plików
+                Filter = "PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|BMP Files (*.bmp)|*.bmp", // Filtr plików,
+                InitialDirectory = Settings.Default.ScreenshotsSavePath
             };
 
             if (saveFileDialog.ShowDialog() == true)

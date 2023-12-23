@@ -17,8 +17,7 @@ namespace screenerWpf.Sevices
         public ScreenCaptureService()
         {
             // Możesz dostosować ścieżkę pliku według swoich potrzeb
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "Recording.mp4");
-            screenRecorder = new ScreenRecorder(filePath);
+            screenRecorder = new ScreenRecorder();
         }
 
         public Bitmap CaptureScreen()
@@ -57,8 +56,15 @@ namespace screenerWpf.Sevices
 
         public void StartRecording()
         {
-            screenRecorder.StartRecording();
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
+            string fileName = $"Recording_{timestamp}.mp4";
+
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), fileName);
+
+            screenRecorder.StartRecording(filePath);
         }
+
 
         public void StopRecording()
         {
@@ -68,7 +74,13 @@ namespace screenerWpf.Sevices
 
         public void StartAreaRecording(Rectangle area)
         {
-            screenRecorder.StartRecordingArea(area);
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+
+            string fileName = $"Recording_{timestamp}.mp4";
+
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), fileName);
+
+            screenRecorder.StartRecordingArea(filePath, area);
         }
     }
 }
