@@ -87,7 +87,8 @@
             </Setter>
         </Style>
     </Window.Resources>
-    <Grid Grid.Row="1" Margin="10">
+    <Grid x:Name="MainGrid"
+        Grid.Row="1" Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Pasek tytułu -->
@@ -116,21 +117,32 @@
             </Grid>
         </Border>
 
-        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="560">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <!-- Przycisk przechwycenia pełnego ekranu -->
-            <Button Grid.Column="0" Content="Full Screen" Width="150"  
-            Command="{Binding CaptureFullCommand}" 
-            Style="{StaticResource RoundedButtonStyle}"/>
+            <Button Grid.Column="0" Content="Full Screen"  
+                Command="{Binding CaptureFullCommand}" 
+                Style="{StaticResource RoundedButtonStyle}"/>
 
             <!-- Przycisk przechwycenia wybranego obszaru -->
-            <Button Grid.Column="1" Content="Select Area" Width="150" 
-            Command="{Binding CaptureAreaCommand}" 
-            Style="{StaticResource RoundedButtonStyle}"/>
+            <Button Grid.Column="1" Content="Select Area"
+                Command="{Binding CaptureAreaCommand}" 
+                Style="{StaticResource RoundedButtonStyle}"/>
+
+            <Button Grid.Column="2" Content="Record Video" 
+                Command="{Binding RecordVideoCommand}" 
+                Style="{StaticResource RoundedButtonStyle}"/>
+            
+            <Button Grid.Column="3" Content="Record Area Video" 
+                Command="{Binding RecordAreaVideoCommand}" 
+                Style="{StaticResource RoundedButtonStyle}"/>
+
         </Grid>
 
         <Grid Grid.Row="2">

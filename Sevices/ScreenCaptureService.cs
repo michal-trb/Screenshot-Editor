@@ -5,11 +5,22 @@ using System.Management;
 using System;
 using Size = System.Drawing.Size;
 using Point = System.Drawing.Point;
+using Microsoft.Win32;
+using System.IO;
 
 namespace screenerWpf.Sevices
 {
     public class ScreenCaptureService : IScreenCaptureService
     {
+        private ScreenRecorder screenRecorder;
+
+        public ScreenCaptureService()
+        {
+            // Możesz dostosować ścieżkę pliku według swoich potrzeb
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "Recording.mp4");
+            screenRecorder = new ScreenRecorder(filePath);
+        }
+
         public Bitmap CaptureScreen()
         {
             ManagementScope scope = new ManagementScope("\\\\.\\ROOT\\cimv2");
@@ -42,6 +53,22 @@ namespace screenerWpf.Sevices
                 g.CopyFromScreen(area.Location, Point.Empty, area.Size);
             }
             return bitmap;
+        }
+
+        public void StartRecording()
+        {
+            screenRecorder.StartRecording();
+        }
+
+        public void StopRecording()
+        {
+            screenRecorder.StopRecording();
+            // Tutaj możesz dodać logikę, która zajmie się pokazaniem okna dialogowego zapisu pliku
+        }
+
+        public void StartAreaRecording(Rectangle area)
+        {
+            screenRecorder.StartRecordingArea(area);
         }
     }
 }

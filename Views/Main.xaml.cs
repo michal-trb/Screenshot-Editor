@@ -11,6 +11,7 @@ using screenerWpf.Sevices;
 using screenerWpf.Factories;
 using screenerWpf.Models;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace screenerWpf
 {
@@ -18,6 +19,7 @@ namespace screenerWpf
     public partial class Main : Window
     {
         private readonly MainViewModel viewModel;
+        private Button stopRecordingButton;
 
         public Main()
         {

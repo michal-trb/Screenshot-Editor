@@ -12,6 +12,8 @@ using screenerWpf.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Linq;
+using System.Threading.Tasks;
+using screenerWpf.Views;
 
 namespace screenerWpf
 {
@@ -27,6 +29,9 @@ namespace screenerWpf
         public ICommand CloseCommand { get; private set; }
         public ICommand CaptureFullCommand { get; private set; }
         public ICommand CaptureAreaCommand { get; private set; }
+        public ICommand RecordVideoCommand { get; private set; }
+        public ICommand RecordAreaVideoCommand { get; private set; }
+        public StopRecordingWindow stopRecordingWindow { get; private set; }
 
         public event Action MinimizeRequest;
         public event Action MaximizeRestoreRequest;
@@ -38,6 +43,8 @@ namespace screenerWpf
             this.windowService = windowService;
             CaptureFullCommand = new RelayCommand(ExecuteCaptureFull);
             CaptureAreaCommand = new RelayCommand(ExecuteCaptureArea);
+            RecordVideoCommand = new RelayCommand(ExecuteRecordVideo);
+            RecordAreaVideoCommand = new RelayCommand(ExecuteAreaRecordVideo);
             MinimizeCommand = new RelayCommand(o => MinimizeRequest?.Invoke());
             MaximizeRestoreCommand = new RelayCommand(o => MaximizeRestoreRequest?.Invoke());
             CloseCommand = new RelayCommand(o => CloseRequest?.Invoke());
@@ -106,6 +113,56 @@ namespace screenerWpf
             }
         }
 
+        private void ExecuteRecordVideo(object parameter)
+        {
+            // Rozpoczęcie nagrywania
+            screenCaptureService.StartRecording();
+            ShowStopRecordingButton();
 
+            // Zatrzymanie nagrywania po 10 sekundach
+            Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith(_ =>
+            {
+                screenCaptureService.StopRecording();
+                // Logika wyświetlania okna dialogowego zapisu
+            });
+        }
+
+        private void ExecuteAreaRecordVideo(object parameter)
+        {
+            var area = windowService.SelectArea();
+            if (!area.IsEmpty)
+            {
+                screenCaptureService.StartAreaRecording(area);
+                ShowStopRecordingButton();
+
+                // Zatrzymanie nagrywania po 10 sekundach
+                Task.Delay(TimeSpan.FromSeconds(10)).ContinueWith(_ =>
+                {
+                    screenCaptureService.StopRecording();
+                    // Logika wyświetlania okna dialogowego zapisu
+                });
+            }
+        }
+
+        public void StopRecording()
+        {
+            screenCaptureService.StopRecording();
+            HideStopRecordingButton();
+        }
+
+        private void ShowStopRecordingButton()
+        {
+            stopRecordingWindow = new StopRecordingWindow();
+            stopRecordingWindow.Show();
+        }
+
+        private void HideStopRecordingButton()
+        {
+            if (stopRecordingWindow != null)
+            {
+                stopRecordingWindow.Close();
+                stopRecordingWindow = null;
+            }
+        }
     }
 }

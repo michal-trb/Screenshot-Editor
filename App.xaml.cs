@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace screenerWpf
@@ -14,19 +9,24 @@ namespace screenerWpf
     /// </summary>
     public partial class App : Application
     {
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IServiceProvider serviceProvider;
+        public MainViewModel MainViewModel { get; private set; }
 
         public App()
         {
-            _serviceProvider = ServiceProviderFactory.CreateServiceProvider();
+            serviceProvider = ServiceProviderFactory.CreateServiceProvider();
+            MainViewModel = serviceProvider.GetRequiredService<MainViewModel>();
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
-            var mainWindow = _serviceProvider.GetRequiredService<Main>();
+            var mainWindow = serviceProvider.GetRequiredService<Main>();
+            // Ustaw DataContext głównego okna
+            mainWindow.DataContext = MainViewModel;
             mainWindow.Show();
         }
+
     }
 }
