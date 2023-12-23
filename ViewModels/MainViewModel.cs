@@ -4,10 +4,7 @@ using System.Windows.Media.Imaging; // dla BitmapSource
 using screenerWpf.Commands;
 using System;
 using screenerWpf.Interfaces;
-using screenerWpf.Sevices;
 using System.IO;
-using screenerWpf.Controls;
-using System.Windows.Controls;
 using screenerWpf.Models;
 using System.Collections.ObjectModel;
 using System.Windows;

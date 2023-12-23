@@ -1,11 +1,9 @@
 ﻿using System.Drawing;
-using System.Windows;
 using screenerWpf.Interfaces;
 using System.Management;
 using System;
 using Size = System.Drawing.Size;
 using Point = System.Drawing.Point;
-using Microsoft.Win32;
 using System.IO;
 
 namespace screenerWpf.Sevices

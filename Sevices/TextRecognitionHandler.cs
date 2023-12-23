@@ -1,9 +1,7 @@
 ﻿using Tesseract;
 using System.Drawing; // Może wymagać dodatkowego pakietu System.Drawing.Common
 using System.Windows.Media.Imaging;
-using System;
 using System.Windows;
-using System.Windows.Controls;
 using screenerWpf.Helpers;
 using screenerWpf.Controls;
 

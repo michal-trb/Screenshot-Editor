@@ -1,7 +1,6 @@
 ﻿using screenerWpf.Interfaces;
 using screenerWpf.Sevices;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 

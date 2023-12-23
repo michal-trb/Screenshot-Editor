@@ -1,18 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Windows;
-using System.Windows.Media.Imaging;
-using System.IO;
-using System.Management;
-using System.Reflection;
+﻿using System.Windows;
 using System.Windows.Input;
-using screenerWpf.Interfaces;
-using screenerWpf.Sevices;
 using screenerWpf.Factories;
 using screenerWpf.Models;
 using System.Windows.Controls;
-using System.Windows.Media;
-using screenerWpf.Views;
 
 namespace screenerWpf
 {

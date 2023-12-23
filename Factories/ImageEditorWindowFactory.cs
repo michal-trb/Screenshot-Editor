@@ -1,10 +1,4 @@
-﻿using screenerWpf.Controls;
-using screenerWpf.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using screenerWpf.Interfaces;
 using System.Windows.Media.Imaging;
 
 namespace screenerWpf.Factories

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using screenerWpf.Commands;
-using screenerWpf.Controls;
 using screenerWpf.Interfaces;
 using screenerWpf.Models;
 
