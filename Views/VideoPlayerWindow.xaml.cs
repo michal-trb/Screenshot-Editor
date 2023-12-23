@@ -1,5 +1,7 @@
-﻿using System;
+﻿using screenerWpf.Factories;
+using System;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 
 namespace screenerWpf.Views
@@ -17,9 +19,32 @@ namespace screenerWpf.Views
             mediaPlayer.Source = new Uri(videoFilePath);
             // Inicjalizacja timera
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromMilliseconds(100);
             timer.Tick += DispatcherTimer_Tick;
             timer.Start();
+        }
+
+        private void MinimizeWindow(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState.Minimized;
+        }
+
+        private void MaximizeRestoreWindow(object sender, RoutedEventArgs e)
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        private void CloseWindow(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
