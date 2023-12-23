@@ -70,15 +70,11 @@ namespace screenerWpf.Views
             }
         }
 
-        private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
-        {
-            timelineSlider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
-        }
-
         private void MediaPlayer_MediaEnded(object sender, RoutedEventArgs e)
         {
             mediaPlayer.Stop();
             timelineSlider.Value = 0;
+            UpdateTimeText();
         }
 
         private void DispatcherTimer_Tick(object sender, EventArgs e)
@@ -86,7 +82,22 @@ namespace screenerWpf.Views
             if (!timelineSlider.IsMouseCaptureWithin)
             {
                 timelineSlider.Value = mediaPlayer.Position.TotalSeconds;
+                UpdateTimeText();
             }
         }
+
+        private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
+        {
+            timelineSlider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+            UpdateTimeText();
+        }
+
+        private void UpdateTimeText()
+        {
+            var currentTime = mediaPlayer.Position;
+            var totalTime = mediaPlayer.NaturalDuration.HasTimeSpan ? mediaPlayer.NaturalDuration.TimeSpan : TimeSpan.Zero;
+            timeText.Text = $"{currentTime.ToString(@"mm\:ss")} : {totalTime.ToString(@"mm\:ss")}";
+        }
+
     }
 }

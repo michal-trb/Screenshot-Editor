@@ -25,7 +25,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="120"/>
+            <Setter Property="Width" Value="50"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -104,11 +104,11 @@
         </Border>
         <MediaElement Grid.Row="1" x:Name="mediaPlayer" Margin="5
                       " LoadedBehavior="Manual" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="MediaPlayer_MediaEnded" />
-
         <DockPanel Grid.Row="2" LastChildFill="True">
             <Button Content="Play" DockPanel.Dock="Left" Click="PlayButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
             <Button Content="Pause" DockPanel.Dock="Left" Click="PauseButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
             <Button Content="Stop" DockPanel.Dock="Left" Click="StopButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
+            <TextBlock x:Name="timeText" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="5,0" Foreground="White"/>
             <Slider x:Name="timelineSlider" DockPanel.Dock="Right" ValueChanged="TimelineSlider_ValueChanged" VerticalAlignment="Center"/>
         </DockPanel>
     </Grid>
