@@ -11,7 +11,7 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using screenerWpf.Properties;
-using static OverlayWindow;
+using screenerWpf.Views;
 
 namespace screenerWpf.Sevices
 {
