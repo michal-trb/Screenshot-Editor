@@ -100,6 +100,8 @@ namespace screenerWpf.Sevices
             IntPtr windowHandle = SelectWindowWithMouse();
             if (windowHandle == IntPtr.Zero)
                 return;
+            var overlay = new OverlayWindow(windowHandle);
+            overlay.Show();
 
             List<Bitmap> screenshots = new List<Bitmap>();
 
@@ -128,6 +130,7 @@ namespace screenerWpf.Sevices
             {
                 bmp.Dispose();
             }
+            overlay.Close();
         }
 
         private Bitmap CombineScreenshots(List<Bitmap> screenshots)
