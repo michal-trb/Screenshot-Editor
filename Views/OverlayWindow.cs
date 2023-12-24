@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Interop;
 using System.Windows.Media;
 
 public class OverlayWindow : Window
 {
+    public event EventHandler StopRequested;
+
     public OverlayWindow(IntPtr targetWindowHandle)
     {
         this.WindowStyle = WindowStyle.None;
@@ -14,9 +18,37 @@ public class OverlayWindow : Window
         this.Topmost = true;
         this.ShowInTaskbar = false;
 
-        // Ustaw rozmiar i położenie okna nakładki
         SetWindowPosAndSize(targetWindowHandle);
+        InitializeStopButton();
     }
+
+    private void InitializeStopButton()
+    {
+        var stopButton = new Button
+        {
+            Content = "Stop",
+            Width = 100,
+            Height = 30,
+            VerticalAlignment = VerticalAlignment.Bottom
+        };
+        stopButton.Click += (s, e) => StopRequested?.Invoke(this, EventArgs.Empty);
+
+        var grid = new Grid();
+        grid.Children.Add(stopButton);
+        Content = grid;
+    }
+
+    private void SetWindowPosAndSize(IntPtr targetWindowHandle)
+    {
+        GetWindowRect(targetWindowHandle, out RECT rect);
+        int buttonHeight = 30; // Wysokość przycisku "Stop"
+
+        this.Left = rect.Left;
+        this.Top = rect.Top;
+        this.Width = rect.Right - rect.Left;
+        this.Height = rect.Bottom - rect.Top + buttonHeight; // Dodaj wysokość przycisku do wysokości okna
+    }
+
 
     protected override void OnSourceInitialized(EventArgs e)
     {
@@ -27,21 +59,22 @@ public class OverlayWindow : Window
         SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) | WS_EX_TRANSPARENT | WS_EX_LAYERED);
     }
 
-    private void SetWindowPosAndSize(IntPtr targetWindowHandle)
-    {
-        GetWindowRect(targetWindowHandle, out RECT rect);
-        this.Left = rect.Left;
-        this.Top = rect.Top;
-        this.Width = rect.Right - rect.Left;
-        this.Height = rect.Bottom - rect.Top;
-    }
-
     protected override void OnRender(DrawingContext drawingContext)
     {
         base.OnRender(drawingContext);
 
-        // Rysuj czerwoną obwódkę
-        drawingContext.DrawRectangle(Brushes.Transparent, new Pen(Brushes.Red, 5), new Rect(0, 0, this.Width, this.Height));
+        int borderWidth = 2; // Szerokość obwódki
+        int buttonHeight = 30; // Wysokość przycisku "Stop"
+
+        // Rysuj czerwoną obwódkę wokół okna, ale z dodatkowym obszarem na przycisk
+        drawingContext.DrawRectangle(
+            Brushes.Transparent,
+            new Pen(Brushes.Red, borderWidth),
+            new Rect(
+                borderWidth / 2.0,
+                borderWidth / 2.0,
+                this.Width - borderWidth,
+                this.Height - borderWidth-buttonHeight)); // Obwódka obejmuje całą wysokość okna, włącznie z dodatkowym obszarem
     }
 
     // P/Invoke deklaracje

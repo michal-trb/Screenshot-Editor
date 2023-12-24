@@ -10,6 +10,8 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using screenerWpf.Properties;
+using static OverlayWindow;
 
 namespace screenerWpf.Sevices
 {
@@ -73,7 +75,7 @@ namespace screenerWpf.Sevices
 
             string fileName = $"Recording_{timestamp}.mp4";
 
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), fileName);
+            string filePath = Path.Combine(Settings.Default.RecordsSavePath, fileName);
 
             screenRecorder.StartRecording(filePath);
         }
@@ -90,7 +92,7 @@ namespace screenerWpf.Sevices
 
             string fileName = $"Recording_{timestamp}.mp4";
 
-            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), fileName);
+            string filePath = Path.Combine(Settings.Default.RecordsSavePath, fileName);
 
             screenRecorder.StartRecordingArea(filePath, area);
         }
@@ -100,38 +102,47 @@ namespace screenerWpf.Sevices
             IntPtr windowHandle = SelectWindowWithMouse();
             if (windowHandle == IntPtr.Zero)
                 return;
+
             var overlay = new OverlayWindow(windowHandle);
+            bool stopRequested = false;
+            overlay.StopRequested += (s, e) => stopRequested = true;
             overlay.Show();
 
             List<Bitmap> screenshots = new List<Bitmap>();
-
             while (true)
             {
                 Bitmap screenshot = CaptureWindow(windowHandle);
                 if (screenshots.Count > 0 && CompareBitmaps(screenshots.Last(), screenshot))
                 {
                     screenshot.Dispose();
-                    break;
+                    break; // Zakończ, gdy strona jest na końcu
+                }
+
+                if (stopRequested)
+                {
+                    break; // Zakończ, gdy użytkownik naciśnie przycisk "Stop"
                 }
 
                 screenshots.Add(screenshot);
                 ScrollDown(windowHandle);
-                Thread.Sleep(1000);
+                Thread.Sleep(1000); // Opóźnienie, aby dać czas na przewinięcie
             }
 
-            // Teraz połącz wszystkie zrzuty ekranu
             Bitmap finalImage = CombineScreenshots(screenshots);
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "final_screenshot.png");
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string fileName = $"screenshot_{timestamp}.png";
+            string path = Path.Combine(Settings.Default.ScreenshotsSavePath, fileName);
             finalImage.Save(path);
             finalImage.Dispose();
 
-            // Wyczyść listę zrzutów ekranu
             foreach (var bmp in screenshots)
             {
                 bmp.Dispose();
             }
+
             overlay.Close();
         }
+
 
         private Bitmap CombineScreenshots(List<Bitmap> screenshots)
         {
@@ -298,22 +309,32 @@ namespace screenerWpf.Sevices
 
 
         [DllImport("user32.dll")]
-        private static extern bool GetWindowRect(IntPtr hWnd, out Rectangle rect);
+        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
-        public static Bitmap CaptureWindow(IntPtr hWnd)
+        public struct RECT
+        {
+            public int Left, Top, Right, Bottom;
+        }
+
+        public static Rectangle RectToRectangle(RECT rect)
+        {
+            return new Rectangle(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
+        }
+
+        public Bitmap CaptureWindow(IntPtr hWnd)
         {
             // Pobierz wymiary okna
-            Rectangle windowRect;
-            GetWindowRect(hWnd, out windowRect);
-            int width = windowRect.Width - windowRect.X;
-            int height = windowRect.Height - windowRect.Y;
+            GetWindowRect(hWnd, out RECT windowRect);
+            Rectangle rect = RectToRectangle(windowRect);
+            int borderWidth = 5; // Załóżmy, że szerokość obwódki to 5 pikseli
+            int width = rect.Width - 2 * borderWidth;
+            int height = rect.Height - 2 * borderWidth;
 
-            // Stwórz bitmapę o tych wymiarach
+            // Stwórz bitmapę o zmniejszonych wymiarach, aby pominąć obwódkę
             Bitmap bmp = new Bitmap(width, height);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                // Zrób zrzut ekranu
-                g.CopyFromScreen(windowRect.X, windowRect.Y, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);
+                g.CopyFromScreen(rect.Left + borderWidth, rect.Top + borderWidth, 0, 0, new Size(width, height));
             }
             return bmp;
         }
