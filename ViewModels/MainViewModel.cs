@@ -20,6 +20,7 @@ namespace screenerWpf
         private readonly IScreenCaptureService screenCaptureService;
         private readonly IWindowService windowService;
         public ObservableCollection<LastScreenshot> LastScreenshots { get; private set; }
+        public ObservableCollection<LastVideo> LastVideos { get; private set; }
 
         public ICommand CaptureFullCommand { get; private set; }
         public ICommand CaptureAreaCommand { get; private set; }
@@ -39,7 +40,9 @@ namespace screenerWpf
             RecordVideoCommand = new RelayCommand(ExecuteRecordVideo);
             RecordAreaVideoCommand = new RelayCommand(ExecuteAreaRecordVideo);
             LastScreenshots = new ObservableCollection<LastScreenshot>();
+            LastVideos = new ObservableCollection<LastVideo>();
             LoadLastScreenshots();
+            LoadLastVideos();
         }
         private void ExecuteCaptureFull(object parameter)
         {
@@ -87,11 +90,22 @@ namespace screenerWpf
         {
             string screenshotsDirectory = Settings.Default.ScreenshorsLibrary;
             DirectoryInfo di = new DirectoryInfo(screenshotsDirectory);
-            var screenshotFiles = di.GetFiles("*.png").OrderByDescending(f => f.LastWriteTime).Take(6);
+            var screenshotFiles = di.GetFiles("*.png").OrderByDescending(f => f.LastWriteTime).Take(5);
 
             foreach (var file in screenshotFiles)
             {
                 LastScreenshots.Add(new LastScreenshot(file.FullName));
+            }
+        }
+        private void LoadLastVideos()
+        {
+            string recordsDirectory = Settings.Default.RecordsSavePath;
+            DirectoryInfo di = new DirectoryInfo(recordsDirectory);
+            var screenshotFiles = di.GetFiles("*.mp4").OrderByDescending(f => f.LastWriteTime).Take(5);
+
+            foreach (var file in screenshotFiles)
+            {
+                LastVideos.Add(new LastVideo(file.FullName));
             }
         }
 
@@ -107,7 +121,17 @@ namespace screenerWpf
                 MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd");
             }
         }
-
+        public void OpenVideo(string filePath)
+        {
+            try
+            {
+                this.windowService.ShowVideoPlayerWindow(filePath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd");
+            }
+        }
         private void ExecuteRecordVideo(object parameter)
         {
             // Rozpoczęcie nagrywania

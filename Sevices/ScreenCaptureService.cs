@@ -172,9 +172,12 @@ namespace screenerWpf.Sevices
                 return false;
             }
 
-            for (int y = 0; y < bmp1.Height; y++)
+            // Określ odstępy próbkowania (np. co 10 pikseli)
+            int sampleStep = 10;
+
+            for (int y = 0; y < bmp1.Height; y += sampleStep)
             {
-                for (int x = 0; x < bmp1.Width; x++)
+                for (int x = 0; x < bmp1.Width; x += sampleStep)
                 {
                     if (bmp1.GetPixel(x, y) != bmp2.GetPixel(x, y))
                     {
@@ -185,6 +188,7 @@ namespace screenerWpf.Sevices
 
             return true;
         }
+
 
 
         [DllImport("user32.dll")]

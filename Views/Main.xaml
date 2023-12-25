@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:screenerWpf"
         mc:Ignorable="d"
         Background="#1E1E1E"
-        Title="Main" Height="400" Width="600"
+        Title="Main" Height="450" Width="600"
         WindowStyle='None'>
 
 
@@ -151,29 +151,60 @@
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <!-- Wiersz dla tytułu -->
+                <!-- Wiersz dla tytułu "Last Screenshots" -->
                 <RowDefinition Height="*"/>
-                <!-- Wiersz dla ItemsControl -->
+                <!-- Wiersz dla ItemsControl Screenshots -->
+                <RowDefinition Height="Auto"/>
+                <!-- Wiersz dla tytułu "Last Videos" -->
+                <RowDefinition Height="*"/>
+                <!-- Wiersz dla ItemsControl Videos -->
             </Grid.RowDefinitions>
             <!-- TextBlock dla tytułu "Last Screenshots" -->
             <TextBlock Grid.Row="0" Text="Last Screenshots" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0" Foreground="White"/>
 
             <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
             <Viewbox Grid.Row="1" Stretch="Uniform">
-
-                <ItemsControl ItemsSource="{Binding LastScreenshots}" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0">
+                <ItemsControl ItemsSource="{Binding LastScreenshots}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <UniformGrid Columns="3" Rows="2"/>
+                            <UniformGrid Columns="5" Rows="1"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Style="{StaticResource ThumbnailBorderStyle}">
-                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                                    <Image Source="{Binding Thumbnail}" Height="90" MouseDown="Screenshot_MouseDown"/>
-                                    <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center" Foreground="White"/>
-                                </StackPanel>
+                                <Grid Width="150" Height="150">
+                                    <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Image Source="{Binding Thumbnail}" Height="90" MouseDown="Screenshot_MouseDown"/>
+                                        <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center" Foreground="White"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Viewbox>
+            <TextBlock Grid.Row="2" Text="Last Videos" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0" Foreground="White"/>
+
+            <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
+            <Viewbox Grid.Row="3" Stretch="Uniform">
+                <ItemsControl ItemsSource="{Binding LastVideos}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="5" Rows="1"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Style="{StaticResource ThumbnailBorderStyle}">
+                                <Grid Width="150" Height="150">
+                                    <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
+                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Image Source="{Binding Thumbnail}" Height="90" MouseDown="Video_MouseDown"/>
+                                        <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center" Foreground="White"/>
+                                    </StackPanel>
+                                </Grid>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
