@@ -1,24 +1,33 @@
 ﻿using screenerWpf.Properties;
+using screenerWpf.Views;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using Size = System.Drawing.Size;
 using Point = System.Drawing.Point;
-using screenerWpf.Views;
-using System.IO;
+using Size = System.Drawing.Size;
 
 namespace screenerWpf.Sevices.CaptureServices
 {
     public class WindowScreenshot
     {
+        private bool IsSelectionMade = false;
+        private TaskCompletionSource<bool> selectionCompleted = new TaskCompletionSource<bool>();
+        private System.Timers.Timer cursorUpdateTimer;
+
         public async Task CaptureWithScrollAsync()
         {
-            IntPtr windowHandle = SelectWindowWithMouse();
+            // Uruchom wyróżnianie okna pod kursorem
+
+            // Wybierz okno
+            IntPtr windowHandle = HighlightAndSelectWindow();
+
+            selectionCompleted.SetResult(true); // Zaznacz, że wybór został dokonany
+
             if (windowHandle == IntPtr.Zero)
                 return;
 
@@ -112,22 +121,42 @@ namespace screenerWpf.Sevices.CaptureServices
             }
         }
 
-        private IntPtr SelectWindowWithMouse()
-        {    
-            // Czekaj na kliknięcie lewym przyciskiem myszy
+        private IntPtr HighlightAndSelectWindow()
+        {
+            var overlay = new OverlayWindow();
+            overlay.Show();
+
+            IntPtr lastWindowUnderCursor = IntPtr.Zero;
+            IntPtr selectedWindow = IntPtr.Zero;
+
+            // Kontynuuj pętlę, dopóki nie zostanie wykonane kliknięcie
             while (true)
             {
-                // Sprawdź, czy lewy przycisk myszy jest naciśnięty
+                POINT cursorPoint;
+                GetCursorPos(out cursorPoint);
+                IntPtr currentWindowUnderCursor = WindowFromPoint(cursorPoint);
+
+                // Aktualizuj OverlayWindow, jeśli wykryto nowe okno pod kursorem
+                if (currentWindowUnderCursor != lastWindowUnderCursor)
+                {
+                    overlay.UpdatePositionAndSize(currentWindowUnderCursor);
+                    lastWindowUnderCursor = currentWindowUnderCursor;
+                }
+
+                // Sprawdź, czy nastąpiło kliknięcie lewym przyciskiem myszy
                 if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0)
                 {
-                    POINT cursorPoint;
-                    GetCursorPos(out cursorPoint);
-                    return WindowFromPoint(cursorPoint);
+                    selectedWindow = currentWindowUnderCursor;
+                    break; // Zakończ pętlę po kliknięciu
                 }
 
                 Thread.Sleep(10); // Krótkie opóźnienie, aby zmniejszyć obciążenie procesora
             }
+
+            overlay.Close();
+            return selectedWindow;
         }
+
 
         private Bitmap CombineScreenshots(List<Bitmap> screenshots)
         {

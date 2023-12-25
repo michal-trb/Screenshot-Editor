@@ -11,6 +11,15 @@ namespace screenerWpf.Views
         public event EventHandler StopRequested;
         private ControlWindow controlWindow;
 
+        public OverlayWindow()
+        {
+            InitializeComponent();
+            this.AllowsTransparency = true;
+            this.WindowStyle = WindowStyle.None;
+            this.Topmost = true;
+            this.Background = Brushes.Transparent;
+        }
+
         public OverlayWindow(IntPtr targetWindowHandle)
         {
             InitializeComponent();
@@ -37,12 +46,23 @@ namespace screenerWpf.Views
             SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) | WS_EX_LAYERED);
         }
 
+        public void UpdatePositionAndSize(IntPtr targetWindowHandle)
+        {
+            GetWindowRect(targetWindowHandle, out RECT rect);
+
+            this.Left = rect.Left;
+            this.Top = rect.Top;
+            this.Width = rect.Right - rect.Left;
+            this.Height = rect.Bottom - rect.Top;
+            this.InvalidateVisual(); // Odświeża okno
+        }
+
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-
             int borderWidth = 2;
 
+            // Rysuj ramkę
             drawingContext.DrawRectangle(
                 Brushes.Transparent,
                 new Pen(Brushes.Red, borderWidth),
