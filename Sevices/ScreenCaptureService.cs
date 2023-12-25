@@ -63,8 +63,14 @@ namespace screenerWpf.Sevices
 
         public Task CaptureWithScrollAsync()
         {
+            var windowScrollScreenshot = new WindowScrollScreenshot();
+            return windowScrollScreenshot.CaptureWithScrollAsync();
+        }
+
+        public void CaptureWindow()
+        {
             var windowsScreenshot = new WindowScreenshot();
-            return windowsScreenshot.CaptureWithScrollAsync();
+            windowsScreenshot.CaptureSingleWindow();
         }
     }
 }

@@ -24,6 +24,7 @@ namespace screenerWpf
 
         public ICommand CaptureFullCommand { get; private set; }
         public ICommand CaptureAreaCommand { get; private set; }
+        public ICommand CaptureWindowScrollCommand { get; private set; }
         public ICommand CaptureWindowCommand { get; private set; }
         public ICommand RecordVideoCommand { get; private set; }
         public ICommand RecordAreaVideoCommand { get; private set; }
@@ -36,6 +37,7 @@ namespace screenerWpf
             this.windowService = windowService;
             CaptureFullCommand = new RelayCommand(ExecuteCaptureFull);
             CaptureAreaCommand = new RelayCommand(ExecuteCaptureArea);
+            CaptureWindowScrollCommand = new RelayCommand(ExecuteCaptureWindowScroll);
             CaptureWindowCommand = new RelayCommand(ExecuteCaptureWindow);
             RecordVideoCommand = new RelayCommand(ExecuteRecordVideo);
             RecordAreaVideoCommand = new RelayCommand(ExecuteAreaRecordVideo);
@@ -50,9 +52,14 @@ namespace screenerWpf
             ShowEditorWindow(bitmap);
         }
 
-        private void ExecuteCaptureWindow(object parameter)
+        private void ExecuteCaptureWindowScroll(object parameter)
         {
             screenCaptureService.CaptureWithScrollAsync();
+        }
+
+        private void ExecuteCaptureWindow(object parameter)
+        {
+            screenCaptureService.CaptureWindow();
         }
 
         private void ExecuteCaptureArea(object parameter)

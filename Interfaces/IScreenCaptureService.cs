@@ -11,5 +11,6 @@ namespace screenerWpf.Interfaces
         void StopRecording();
         void StartAreaRecording(Rectangle area);
         Task CaptureWithScrollAsync();
+        void CaptureWindow();
     }
 }

@@ -33,7 +33,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="90"/>
+            <Setter Property="Width" Value="150"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -116,37 +116,46 @@
                 </StackPanel>
             </Grid>
         </Border>
-
         <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="560">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Przycisk przechwycenia pełnego ekranu -->
-            <Button Grid.Column="0" Content="Full Screen"  
-                Command="{Binding CaptureFullCommand}" 
-                Style="{StaticResource RoundedButtonStyle}"/>
+            <Button Grid.Column="1" Grid.Row="0" Content="Full Screen"  
+            Command="{Binding CaptureFullCommand}" 
+            Style="{StaticResource RoundedButtonStyle}"/>
 
             <!-- Przycisk przechwycenia wybranego obszaru -->
-            <Button Grid.Column="1" Content="Select Area"
-                Command="{Binding CaptureAreaCommand}" 
-                Style="{StaticResource RoundedButtonStyle}"/>
+            <Button Grid.Column="2" Grid.Row="0" Content="Select Area"
+            Command="{Binding CaptureAreaCommand}" 
+            Style="{StaticResource RoundedButtonStyle}"/>
 
-            <Button Grid.Column="2" Content="Record Video" 
-                Command="{Binding RecordVideoCommand}" 
-                Style="{StaticResource RoundedButtonStyle}"/>
-            
-            <Button Grid.Column="3" Content="Record Area Video" 
-                Command="{Binding RecordAreaVideoCommand}" 
-                Style="{StaticResource RoundedButtonStyle}"/>
-            <Button Grid.Column="4" Content="Capture Window Scroll"
-                Command="{Binding CaptureWindowCommand}" 
-                Style="{StaticResource RoundedButtonStyle}"/>
+            <Button Grid.Column="3" Grid.Row="0" Content="Record Video" 
+            Command="{Binding RecordVideoCommand}" 
+            Style="{StaticResource RoundedButtonStyle}"/>
+
+            <Button Grid.Column="1" Grid.Row="1" Content="Record Area Video" 
+            Command="{Binding RecordAreaVideoCommand}" 
+            Style="{StaticResource RoundedButtonStyle}"/>
+
+            <Button Grid.Column="2" Grid.Row="1" Content="Capture Window Scroll"
+            Command="{Binding CaptureWindowScrollCommand}" 
+            Style="{StaticResource RoundedButtonStyle}"/>
+
+            <Button Grid.Column="3" Grid.Row="1" Content="Capture Window"
+            Command="{Binding CaptureWindowCommand}" 
+            Style="{StaticResource RoundedButtonStyle}"/>
         </Grid>
+
 
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
