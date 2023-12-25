@@ -1,5 +1,5 @@
-﻿using screenerWpf.Factories;
-using System;
+﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -15,13 +15,13 @@ namespace screenerWpf.Views
         {
             InitializeComponent();
             videoFilePath = filePath;
-
             mediaPlayer.Source = new Uri(videoFilePath);
             // Inicjalizacja timera
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromMilliseconds(100);
+            timer.Interval = TimeSpan.FromMilliseconds(10);
             timer.Tick += DispatcherTimer_Tick;
             timer.Start();
+            mediaPlayer.Play();
         }
 
         private void MinimizeWindow(object sender, RoutedEventArgs e)
@@ -96,8 +96,7 @@ namespace screenerWpf.Views
         {
             var currentTime = mediaPlayer.Position;
             var totalTime = mediaPlayer.NaturalDuration.HasTimeSpan ? mediaPlayer.NaturalDuration.TimeSpan : TimeSpan.Zero;
-            timeText.Text = $"{currentTime.ToString(@"mm\:ss")} : {totalTime.ToString(@"mm\:ss")}";
+            timeText.Text = $"{currentTime.ToString(@"mm\:ss")} : {totalTime.ToString(@"mm\:ss")}"; 
         }
-
     }
 }

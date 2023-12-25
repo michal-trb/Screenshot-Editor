@@ -58,6 +58,7 @@ namespace screenerWpf
                 (DataContext as MainViewModel)?.OpenScreenshot(screenshot.FilePath);
             }
         }
+
         private void Video_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (sender is Image image && image.DataContext is LastVideo video)
