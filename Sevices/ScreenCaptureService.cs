@@ -37,26 +37,31 @@ namespace screenerWpf.Sevices
 
         public Bitmap CaptureScreen()
         {
-            ManagementScope scope = new ManagementScope("\\\\.\\ROOT\\cimv2");
-            ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_VideoController");
+            // Uzyskanie współczynnika DPI
+            var presentationSource = PresentationSource.FromVisual(Application.Current.MainWindow);
+            double dpiX = 96; // Domyślne DPI
+            double dpiY = 96; // Domyślne DPI
 
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query))
+            if (presentationSource != null)
             {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    int screenWidth = Convert.ToInt32(obj["CurrentHorizontalResolution"]);
-                    int screenHeight = Convert.ToInt32(obj["CurrentVerticalResolution"]);
-
-                    Bitmap bitmap = new Bitmap(screenWidth, screenHeight);
-                    using (Graphics g = Graphics.FromImage(bitmap))
-                    {
-                        g.CopyFromScreen(0, 0, 0, 0, new Size(screenWidth, screenHeight));
-                    }
-                    return bitmap;
-                }
+                dpiX = presentationSource.CompositionTarget.TransformToDevice.M11 * 96;
+                dpiY = presentationSource.CompositionTarget.TransformToDevice.M22 * 96;
             }
 
-            return null; // Jeśli nie uda się uzyskać informacji o rozdzielczości
+            // Uzyskanie rozmiarów ekranu głównego z uwzględnieniem DPI
+            int screenWidth = (int)(SystemParameters.PrimaryScreenWidth * dpiX / 96);
+            int screenHeight = (int)(SystemParameters.PrimaryScreenHeight * dpiY / 96);
+
+            // Tworzenie bitmapy o tych rozmiarach
+            Bitmap bitmap = new Bitmap(screenWidth, screenHeight);
+
+            // Rysowanie zrzutu ekranu na bitmapie
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.CopyFromScreen(0, 0, 0, 0, new Size(screenWidth, screenHeight));
+            }
+
+            return bitmap;
         }
 
         public Bitmap CaptureArea(Rectangle area)

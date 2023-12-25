@@ -6,7 +6,8 @@ class ScreenRecorder
 {
     private Recorder recorder;
     public event Action<string> RecordingCompleted;
-    string videoPath;
+    private string videoPath;
+
     public ScreenRecorder()
     {
         recorder = Recorder.CreateRecorder();
@@ -47,7 +48,6 @@ class ScreenRecorder
 
     private void OnRecordingComplete(object sender, RecordingCompleteEventArgs e)
     {
-        Console.WriteLine($"Recording complete. File saved to: {e.FilePath}");
     }
 
     private void OnRecordingFailed(object sender, RecordingFailedEventArgs e)

@@ -88,7 +88,10 @@ namespace screenerWpf.Views
 
         private void MediaPlayer_MediaOpened(object sender, RoutedEventArgs e)
         {
-            timelineSlider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+            if (mediaPlayer.NaturalDuration.HasTimeSpan)
+            {
+                timelineSlider.Maximum = mediaPlayer.NaturalDuration.TimeSpan.TotalSeconds;
+            }
             UpdateTimeText();
         }
 
@@ -96,7 +99,7 @@ namespace screenerWpf.Views
         {
             var currentTime = mediaPlayer.Position;
             var totalTime = mediaPlayer.NaturalDuration.HasTimeSpan ? mediaPlayer.NaturalDuration.TimeSpan : TimeSpan.Zero;
-            timeText.Text = $"{currentTime.ToString(@"mm\:ss")} : {totalTime.ToString(@"mm\:ss")}"; 
+            timeText.Text = $"{currentTime.ToString(@"mm\:ss")} : {totalTime.ToString(@"mm\:ss")}";
         }
     }
 }
