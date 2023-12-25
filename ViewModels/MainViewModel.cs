@@ -52,7 +52,7 @@ namespace screenerWpf
 
         private void ExecuteCaptureWindow(object parameter)
         {
-            screenCaptureService.CaptureWithScroll();
+            screenCaptureService.CaptureWithScrollAsync();
         }
 
         private void ExecuteCaptureArea(object parameter)
