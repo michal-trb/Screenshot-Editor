@@ -9,12 +9,14 @@ namespace screenerWpf.Views
     public partial class OverlayWindow : Window
     {
         public event EventHandler StopRequested;
+        private ControlWindow controlWindow;
 
         public OverlayWindow(IntPtr targetWindowHandle)
         {
             InitializeComponent();
             SetWindowPosAndSize(targetWindowHandle);
             OpenControlWindow();
+            this.Closed += OverlayWindow_Closed; // Dodanie obsługi zdarzenia zamknięcia
         }
 
         private void SetWindowPosAndSize(IntPtr targetWindowHandle)
@@ -39,9 +41,8 @@ namespace screenerWpf.Views
         {
             base.OnRender(drawingContext);
 
-            int borderWidth = 2; // Szerokość obwódki
+            int borderWidth = 2;
 
-            // Rysuj czerwoną obwódkę wokół okna
             drawingContext.DrawRectangle(
                 Brushes.Transparent,
                 new Pen(Brushes.Red, borderWidth),
@@ -54,19 +55,17 @@ namespace screenerWpf.Views
 
         private void OpenControlWindow()
         {
-            var controlWindow = new ControlWindow();
+            controlWindow = new ControlWindow();
             controlWindow.StopRequested += ControlWindow_StopRequested;
             controlWindow.Show();
 
-            // Ustaw pozycję controlWindow względem OverlayWindow
-            controlWindow.Left = this.Left; // Możesz dostosować te wartości
-            controlWindow.Top = this.Top + this.Height; // Umieść pod OverlayWindow
+            controlWindow.Left = this.Left;
+            controlWindow.Top = this.Top + this.Height;
         }
 
         private void ControlWindow_StopRequested(object sender, EventArgs e)
         {
             StopRequested?.Invoke(this, EventArgs.Empty);
-            // Tutaj umieść dodatkową logikę potrzebną po zatrzymaniu
         }
 
         // P/Invoke deklaracje
@@ -87,5 +86,14 @@ namespace screenerWpf.Views
 
         private const int GWL_EXSTYLE = -20;
         private const int WS_EX_LAYERED = 0x80000;
+
+        private void OverlayWindow_Closed(object sender, EventArgs e)
+        {
+            // Zamknij ControlWindow jeśli jest otwarte
+            if (controlWindow != null)
+            {
+                controlWindow.Close();
+            }
+        }
     }
 }

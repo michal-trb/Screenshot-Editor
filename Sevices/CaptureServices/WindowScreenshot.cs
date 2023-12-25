@@ -70,10 +70,12 @@ namespace screenerWpf.Sevices.CaptureServices
 
         public static Bitmap CaptureWindow(IntPtr hWnd)
         {
-            // Pobierz wymiary okna
+            // Uzyskaj prawidłowe wymiary okna z uwzględnieniem DPI
             GetWindowRect(hWnd, out RECT windowRect);
             Rectangle rect = RectToRectangle(windowRect);
             int borderWidth = 5;
+
+            // Możesz potrzebować dodatkowych wywołań API, aby prawidłowo obsłużyć DPI
             int width = rect.Width - 2 * borderWidth;
             int height = rect.Height - 2 * borderWidth;
 
@@ -111,13 +113,20 @@ namespace screenerWpf.Sevices.CaptureServices
         }
 
         private IntPtr SelectWindowWithMouse()
-        {
-            MessageBox.Show("Po zamknięciu tego okna kliknij na okno, które chcesz przewinąć.", "Wybierz okno", MessageBoxButton.OK, MessageBoxImage.Information);
-            Thread.Sleep(1000); // Czekaj chwilę, aby użytkownik miał czas na kliknięcie
-            System.Windows.Input.Mouse.Capture(Application.Current.MainWindow);
-            var cursorPoint = System.Windows.Input.Mouse.GetPosition(Application.Current.MainWindow);
-            System.Windows.Input.Mouse.Capture(null);
-            return WindowFromPoint(new System.Drawing.Point((int)cursorPoint.X, (int)cursorPoint.Y));
+        {    
+            // Czekaj na kliknięcie lewym przyciskiem myszy
+            while (true)
+            {
+                // Sprawdź, czy lewy przycisk myszy jest naciśnięty
+                if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0)
+                {
+                    POINT cursorPoint;
+                    GetCursorPos(out cursorPoint);
+                    return WindowFromPoint(cursorPoint);
+                }
+
+                Thread.Sleep(10); // Krótkie opóźnienie, aby zmniejszyć obciążenie procesora
+            }
         }
 
         private Bitmap CombineScreenshots(List<Bitmap> screenshots)
@@ -226,5 +235,24 @@ namespace screenerWpf.Sevices.CaptureServices
             public ushort wParamL;
             public ushort wParamH;
         }
+
+        // P/Invoke deklaracje
+        [DllImport("user32.dll")]
+        private static extern bool GetCursorPos(out POINT lpPoint);
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr WindowFromPoint(POINT Point);
+
+        [DllImport("user32.dll")]
+        private static extern short GetAsyncKeyState(int vKey);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+        }
+
+        private const int VK_LBUTTON = 0x01; // Kod klawisza dla lewego przycisku myszy
     }
 }
