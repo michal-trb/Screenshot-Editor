@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Windows;
-using System.Windows.Media;
 using Size = System.Drawing.Size;
 
 namespace screenerWpf.Sevices.CaptureServices

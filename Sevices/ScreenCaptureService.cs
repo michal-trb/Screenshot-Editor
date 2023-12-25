@@ -1,15 +1,9 @@
 ﻿using System.Drawing;
 using screenerWpf.Interfaces;
 using System;
-using Point = System.Drawing.Point;
 using System.IO;
 using System.Windows;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Collections.Generic;
-using System.Linq;
 using screenerWpf.Properties;
-using screenerWpf.Views;
 
 using screenerWpf.Sevices.CaptureServices;
 using System.Threading.Tasks;

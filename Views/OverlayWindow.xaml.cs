@@ -1,30 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using System.Runtime.InteropServices;
+using System.Windows.Interop;
 
 namespace screenerWpf.Views
 {
-    /// <summary>
-    /// Logika interakcji dla klasy OverlayWindow.xaml
-    /// </summary>
-    using System;
-    using System.Linq;
-    using System.Runtime.InteropServices;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Interop;
-    using System.Windows.Media;
-
     public partial class OverlayWindow : Window
     {
         public event EventHandler StopRequested;
@@ -33,31 +14,25 @@ namespace screenerWpf.Views
         {
             InitializeComponent();
             SetWindowPosAndSize(targetWindowHandle);
-        }
-
-        private void StopButton_Click(object sender, RoutedEventArgs e)
-        {
-            StopRequested?.Invoke(this, EventArgs.Empty);
+            OpenControlWindow();
         }
 
         private void SetWindowPosAndSize(IntPtr targetWindowHandle)
         {
             GetWindowRect(targetWindowHandle, out RECT rect);
-            int buttonHeight = 30; // Wysokość przycisku "Stop"
 
             this.Left = rect.Left;
             this.Top = rect.Top;
             this.Width = rect.Right - rect.Left;
-            this.Height = rect.Bottom - rect.Top + buttonHeight; // Dodaj wysokość przycisku do wysokości okna
+            this.Height = rect.Bottom - rect.Top;
         }
-
 
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
 
             var hwnd = new WindowInteropHelper(this).Handle;
-            SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) | WS_EX_TRANSPARENT | WS_EX_LAYERED);
+            SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) | WS_EX_LAYERED);
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -65,9 +40,8 @@ namespace screenerWpf.Views
             base.OnRender(drawingContext);
 
             int borderWidth = 2; // Szerokość obwódki
-            int buttonHeight = 30; // Wysokość przycisku "Stop"
 
-            // Rysuj czerwoną obwódkę wokół okna, ale z dodatkowym obszarem na przycisk
+            // Rysuj czerwoną obwódkę wokół okna
             drawingContext.DrawRectangle(
                 Brushes.Transparent,
                 new Pen(Brushes.Red, borderWidth),
@@ -75,7 +49,24 @@ namespace screenerWpf.Views
                     borderWidth / 2.0,
                     borderWidth / 2.0,
                     this.Width - borderWidth,
-                    this.Height - borderWidth - buttonHeight)); // Obwódka obejmuje całą wysokość okna, włącznie z dodatkowym obszarem
+                    this.Height - borderWidth));
+        }
+
+        private void OpenControlWindow()
+        {
+            var controlWindow = new ControlWindow();
+            controlWindow.StopRequested += ControlWindow_StopRequested;
+            controlWindow.Show();
+
+            // Ustaw pozycję controlWindow względem OverlayWindow
+            controlWindow.Left = this.Left; // Możesz dostosować te wartości
+            controlWindow.Top = this.Top + this.Height; // Umieść pod OverlayWindow
+        }
+
+        private void ControlWindow_StopRequested(object sender, EventArgs e)
+        {
+            StopRequested?.Invoke(this, EventArgs.Empty);
+            // Tutaj umieść dodatkową logikę potrzebną po zatrzymaniu
         }
 
         // P/Invoke deklaracje
@@ -95,8 +86,6 @@ namespace screenerWpf.Views
         }
 
         private const int GWL_EXSTYLE = -20;
-        private const int WS_EX_TRANSPARENT = 0x20;
         private const int WS_EX_LAYERED = 0x80000;
     }
-
 }
