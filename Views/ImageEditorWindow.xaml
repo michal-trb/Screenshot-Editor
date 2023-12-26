@@ -169,6 +169,7 @@
             <Button Content="Speech Bubble" Command="{Binding SpeechBubbleCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
             <Button Content="Brush" Command="{Binding BrushCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
             <Button Content="Recognize Text" Command="{Binding RecognizeTextCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Upload on Google Drive" Command="{Binding UploadToGoogleDriveCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
         </StackPanel>
 
         <!-- Horizontal StackPanel for ComboBoxes and Labels -->

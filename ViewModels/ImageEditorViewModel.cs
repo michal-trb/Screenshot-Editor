@@ -26,6 +26,7 @@ namespace screenerWpf.ViewModels
         public ICommand BlurCommand { get; private set; }
         public ICommand BrushCommand { get; private set; }
         public ICommand RecognizeTextCommand { get; private set; }
+        public ICommand UploadToGoogleDriveCommand { get; private set; }
         public ObservableCollection<ColorInfo> Colors { get; private set; }
         public ObservableCollection<int> Thicknesses { get; private set; }
         public ObservableCollection<string> FontFamilies { get; private set; }
@@ -35,7 +36,7 @@ namespace screenerWpf.ViewModels
         public event Action MaximizeRestoreRequest;
         public event Action CloseRequest;
 
-        public ImageEditorViewModel(ICanvasInputHandler inputHandler)
+        public ImageEditorViewModel(ICanvasInputHandler inputHandler, ICloudStorageUploader googleDriveUploader)
         {
             this.inputHandler = inputHandler ?? throw new ArgumentNullException(nameof(inputHandler));
 
@@ -50,6 +51,9 @@ namespace screenerWpf.ViewModels
             MinimizeCommand = new RelayCommand(_ => OnMinimize());
             MaximizeRestoreCommand = new RelayCommand(_ => OnMaximizeRestore());
             CloseCommand = new RelayCommand(_ => OnClose());
+
+            UploadToGoogleDriveCommand = new RelayCommand(async _ => await googleDriveUploader.UploadFileAsync(ExecuteSaveFast()));
+
         }
 
         private void InitializeStartValues()
@@ -166,6 +170,11 @@ namespace screenerWpf.ViewModels
         private void ExecuteSave(object obj)
         {
             inputHandler.Save();
+        }
+
+        private string ExecuteSaveFast()
+        {
+            return inputHandler.SaveFast();
         }
 
         private void UpdateVisibility(

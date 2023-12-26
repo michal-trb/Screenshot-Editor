@@ -19,7 +19,7 @@ namespace screenerWpf
         private BitmapSource initialImage;
         private readonly ICanvasInputHandler inputHandler;
 
-        public ImageEditorWindow(BitmapSource initialBitmap)
+        public ImageEditorWindow(BitmapSource initialBitmap, ICloudStorageUploader googleDriveUploader)
         {
             InitializeComponent();
             this.initialImage = initialBitmap;
@@ -33,14 +33,16 @@ namespace screenerWpf
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
             drawableCanvas.PreviewKeyDown += this.inputHandler.Canvas_PreviewKeyDown;
-            var viewModel = new ImageEditorViewModel(this.inputHandler);
+
+            var viewModel = new ImageEditorViewModel(this.inputHandler, googleDriveUploader);
+
             DataContext = viewModel;
 
-            // Podłączenie zdarzeń ViewModel do metod obsługi okna
             viewModel.MinimizeRequest += MinimizeWindow;
             viewModel.MaximizeRestoreRequest += MaximizeRestoreWindow;
             viewModel.CloseRequest += CloseWindow;
         }
+
 
         private void CreateCanvasBitmap()
         {

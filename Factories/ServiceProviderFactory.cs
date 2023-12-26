@@ -23,6 +23,7 @@ public static class ServiceProviderFactory
         services.AddSingleton<ICanvasSavingHandler, CanvasSavingHandler>();
         services.AddSingleton<ICanvasInputHandler, CanvasInputHandler>();
         services.AddSingleton<IOptionsWindowFactory, OptionsWindowFactory>();
+        services.AddTransient<ICloudStorageUploader, DropboxUploader>();
 
         return services.BuildServiceProvider();
     }

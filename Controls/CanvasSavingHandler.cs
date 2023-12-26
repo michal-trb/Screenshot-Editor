@@ -1,10 +1,10 @@
 ﻿using Microsoft.Win32;
-using System.IO;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
 using screenerWpf.Interfaces;
 using screenerWpf.Properties;
 using System;
+using System.IO;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace screenerWpf.Controls
 {
@@ -34,6 +34,19 @@ namespace screenerWpf.Controls
                 WriteableBitmap editedImage = GetEditedImageBitmap();
                 SaveImageToFile(editedImage, saveFileDialog.FileName);
             }
+        }
+
+        public string SaveCanvasToFileFast()
+        {
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string fileName = $"Image_{timestamp}.png"; // Ustawienie nazwy pliku z rozszerzeniem
+            string defaultPath = Settings.Default.ScreenshotsSavePath; // Ścieżka domyślna
+            string fullPath = Path.Combine(defaultPath, fileName); // Pełna ścieżka do zapisu pliku
+
+            WriteableBitmap editedImage = GetEditedImageBitmap();
+            SaveImageToFile(editedImage, fullPath);
+
+            return fullPath;
         }
 
         private WriteableBitmap GetEditedImageBitmap()

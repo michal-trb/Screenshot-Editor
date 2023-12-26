@@ -75,7 +75,9 @@ namespace screenerWpf
         private void ShowEditorWindow(Bitmap bitmap)
         {
             BitmapSource bitmapSource = ConvertBitmapToBitmapSource(bitmap);
-            this.windowService.ShowImageEditorWindow(bitmapSource);
+            ICloudStorageUploader uploader = new DropboxUploader(); 
+
+            this.windowService.ShowImageEditorWindow(bitmapSource, uploader);
         }
 
         private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
@@ -121,7 +123,8 @@ namespace screenerWpf
             try
             {
                 var bitmapImage = new BitmapImage(new Uri(filePath));
-                this.windowService.ShowImageEditorWindow(bitmapImage);
+                ICloudStorageUploader uploader = new DropboxUploader(); // Przykład, zastąp odpowiednią implementacją
+                this.windowService.ShowImageEditorWindow(bitmapImage, uploader);
             }
             catch (Exception ex)
             {

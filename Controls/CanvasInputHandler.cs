@@ -87,6 +87,11 @@ namespace screenerWpf.Controls
             savingHandler.SaveCanvasToFile();
         }
 
+        public string SaveFast()
+        {
+            return savingHandler.SaveCanvasToFileFast();
+        }
+
         private void UpdateDrawingColorAndThickness()
         {
             // Aktualizacja koloru i grubości strzałki

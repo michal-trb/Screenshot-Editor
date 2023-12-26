@@ -42,30 +42,30 @@ namespace screenerWpf.Models.DrawableElements
 
         private List<Point> CreateSmoothCurvePoints(List<Point> originalPoints)
         {
+            var smoothPoints = new List<Point>();
             if (originalPoints.Count < 2)
                 return originalPoints;
 
-            var smoothPoints = new List<Point>();
+            // Dodanie pierwszego punktu
+            smoothPoints.Add(originalPoints[0]);
+
             for (int i = 0; i < originalPoints.Count - 1; i++)
             {
-                if (i == 0) // Początek ścieżki
-                {
-                    smoothPoints.Add(originalPoints[i]);
-                    smoothPoints.Add(MidPoint(originalPoints[i], originalPoints[i + 1]));
-                }
-                else
-                {
-                    var p0 = originalPoints[i];
-                    var p1 = originalPoints[i + 1];
+                var p0 = originalPoints[i];
+                var p1 = originalPoints[i + 1];
+                var p2 = (i + 2 < originalPoints.Count) ? originalPoints[i + 2] : p1;
 
-                    var midP0P1 = MidPoint(p0, p1);
-                    smoothPoints.Add(midP0P1);
-                    smoothPoints.Add(p1);
-                }
+                var controlPoint1 = new Point(p0.X + (p1.X - p0.X) / 3, p0.Y + (p1.Y - p0.Y) / 3);
+                var controlPoint2 = new Point(p1.X - (p2.X - p0.X) / 3, p1.Y - (p2.Y - p0.Y) / 3);
+
+                smoothPoints.Add(controlPoint1);
+                smoothPoints.Add(controlPoint2);
+                smoothPoints.Add(p1);
             }
 
             return smoothPoints;
         }
+
 
         private Point MidPoint(Point p0, Point p1)
         {

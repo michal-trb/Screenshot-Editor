@@ -4,5 +4,6 @@
     {
         // Metoda zapisująca zawartość płótna do pliku
         void SaveCanvasToFile();
+        string SaveCanvasToFileFast();
     }
 }

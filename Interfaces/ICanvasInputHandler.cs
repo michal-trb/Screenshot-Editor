@@ -26,5 +26,6 @@ namespace screenerWpf.Interfaces
         void ChangeColor(Color color);
         void ChangeArrowThickness(double thickness);
         void ChangeTransparency(double transparency);
+        string SaveFast();
     }
 }

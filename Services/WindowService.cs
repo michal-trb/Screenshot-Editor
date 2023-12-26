@@ -14,9 +14,9 @@ namespace screenerWpf.Sevices
             this.imageEditorWindowFactory = imageEditorWindowFactory;
         }
 
-        public void ShowImageEditorWindow(BitmapSource image)
+        public void ShowImageEditorWindow(BitmapSource image, ICloudStorageUploader uploader)
         {
-            var editor = imageEditorWindowFactory.Create(image);
+            var editor = imageEditorWindowFactory.Create(image, uploader);
             editor.ShowDialog();
         }
 

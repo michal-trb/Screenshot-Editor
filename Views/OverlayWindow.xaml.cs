@@ -31,7 +31,6 @@ namespace screenerWpf.Views
         private void SetWindowPosAndSize(IntPtr targetWindowHandle)
         {
             GetWindowRect(targetWindowHandle, out RECT rect);
-
             this.Left = rect.Left;
             this.Top = rect.Top;
             this.Width = rect.Right - rect.Left;
