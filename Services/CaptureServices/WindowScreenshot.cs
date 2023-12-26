@@ -10,18 +10,14 @@ namespace screenerWpf.Sevices.CaptureServices
 {
     public class WindowScreenshot
     {
-        public void CaptureSingleWindow()
+        public Bitmap CaptureSingleWindow()
         {
             IntPtr windowHandle = HighlightAndSelectWindow();
             if (windowHandle == IntPtr.Zero)
-                return;
+                return null;
 
             Bitmap screenshot = CaptureWindow(windowHandle);
-            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            string fileName = $"screenshot_{timestamp}.png";
-            string path = Path.Combine(Settings.Default.ScreenshotsSavePath, fileName);
-            screenshot.Save(path);
-            screenshot.Dispose();
+           return screenshot;
         }
 
         private IntPtr HighlightAndSelectWindow()

@@ -6,7 +6,7 @@ namespace screenerWpf.Interfaces
     public interface IWindowService
     {
         Rectangle SelectArea();
-        void ShowImageEditorWindow(BitmapSource image, ICloudStorageUploader uploader);
+        void ShowImageEditorWindow(BitmapSource image);
         void ShowVideoPlayerWindow(string videoPath);
 
     }

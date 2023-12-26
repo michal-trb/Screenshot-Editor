@@ -5,9 +5,9 @@ namespace screenerWpf.Factories
 {
     public class ImageEditorWindowFactory : IImageEditorWindowFactory
     {
-        public ImageEditorWindow Create(BitmapSource initialBitmap, ICloudStorageUploader googleDriveUploader)
+        public ImageEditorWindow Create(BitmapSource initialBitmap)
         { 
-            return new ImageEditorWindow(initialBitmap, googleDriveUploader);
+            return new ImageEditorWindow(initialBitmap);
         }
     }
 }

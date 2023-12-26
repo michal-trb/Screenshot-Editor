@@ -54,12 +54,20 @@ namespace screenerWpf
 
         private void ExecuteCaptureWindowScroll(object parameter)
         {
-            screenCaptureService.CaptureWithScrollAsync();
+            var bitmap = screenCaptureService.CaptureWithScrollAsync().Result;
+            if (bitmap != null) 
+            {
+                ShowEditorWindow(bitmap);
+            }
         }
 
         private void ExecuteCaptureWindow(object parameter)
         {
-            screenCaptureService.CaptureWindow();
+            var bitmap = screenCaptureService.CaptureWindow();
+            if (bitmap != null)
+            {
+                ShowEditorWindow(bitmap);
+            }
         }
 
         private void ExecuteCaptureArea(object parameter)
@@ -74,10 +82,14 @@ namespace screenerWpf
 
         private void ShowEditorWindow(Bitmap bitmap)
         {
-            BitmapSource bitmapSource = ConvertBitmapToBitmapSource(bitmap);
-            ICloudStorageUploader uploader = new DropboxUploader(); 
+            if (bitmap == null)
+            {
+                return;
+            }
 
-            this.windowService.ShowImageEditorWindow(bitmapSource, uploader);
+            BitmapSource bitmapSource = ConvertBitmapToBitmapSource(bitmap);
+
+            this.windowService.ShowImageEditorWindow(bitmapSource);
         }
 
         private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
@@ -106,6 +118,7 @@ namespace screenerWpf
                 LastScreenshots.Add(new LastScreenshot(file.FullName));
             }
         }
+        
         private void LoadLastVideos()
         {
             string recordsDirectory = Settings.Default.RecordsSavePath;
@@ -123,8 +136,7 @@ namespace screenerWpf
             try
             {
                 var bitmapImage = new BitmapImage(new Uri(filePath));
-                ICloudStorageUploader uploader = new DropboxUploader(); // Przykład, zastąp odpowiednią implementacją
-                this.windowService.ShowImageEditorWindow(bitmapImage, uploader);
+                this.windowService.ShowImageEditorWindow(bitmapImage);
             }
             catch (Exception ex)
             {

@@ -4,6 +4,6 @@ namespace screenerWpf.Interfaces
 {
     public interface IImageEditorWindowFactory
     {
-        ImageEditorWindow Create(BitmapSource initialBitmap, ICloudStorageUploader googleDriveUploader);
+        ImageEditorWindow Create(BitmapSource initialBitmap);
     }
 }

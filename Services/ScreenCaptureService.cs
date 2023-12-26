@@ -61,16 +61,16 @@ namespace screenerWpf.Sevices
             screenRecorder.StartRecordingArea(filePath, area);
         }
 
-        public Task CaptureWithScrollAsync()
+        public Task<Bitmap> CaptureWithScrollAsync()
         {
             var windowScrollScreenshot = new WindowScrollScreenshot();
             return windowScrollScreenshot.CaptureWithScrollAsync();
         }
 
-        public void CaptureWindow()
+        public Bitmap CaptureWindow()
         {
             var windowsScreenshot = new WindowScreenshot();
-            windowsScreenshot.CaptureSingleWindow();
+            return windowsScreenshot.CaptureSingleWindow();
         }
     }
 }

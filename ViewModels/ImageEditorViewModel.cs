@@ -36,7 +36,7 @@ namespace screenerWpf.ViewModels
         public event Action MaximizeRestoreRequest;
         public event Action CloseRequest;
 
-        public ImageEditorViewModel(ICanvasInputHandler inputHandler, ICloudStorageUploader googleDriveUploader)
+        public ImageEditorViewModel(ICanvasInputHandler inputHandler)
         {
             this.inputHandler = inputHandler ?? throw new ArgumentNullException(nameof(inputHandler));
 
@@ -52,7 +52,7 @@ namespace screenerWpf.ViewModels
             MaximizeRestoreCommand = new RelayCommand(_ => OnMaximizeRestore());
             CloseCommand = new RelayCommand(_ => OnClose());
 
-            UploadToGoogleDriveCommand = new RelayCommand(async _ => await googleDriveUploader.UploadFileAsync(ExecuteSaveFast()));
+            UploadToGoogleDriveCommand = new RelayCommand(async _ => await new DropboxUploader().UploadFileAsync(ExecuteSaveFast()));
 
         }
 

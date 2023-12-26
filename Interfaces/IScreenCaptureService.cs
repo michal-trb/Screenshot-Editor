@@ -10,7 +10,7 @@ namespace screenerWpf.Interfaces
         void StartRecording();
         void StopRecording();
         void StartAreaRecording(Rectangle area);
-        Task CaptureWithScrollAsync();
-        void CaptureWindow();
+        Task<Bitmap> CaptureWithScrollAsync();
+        Bitmap CaptureWindow();
     }
 }

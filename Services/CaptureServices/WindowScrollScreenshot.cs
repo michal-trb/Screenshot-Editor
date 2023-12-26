@@ -17,7 +17,7 @@ namespace screenerWpf.Sevices.CaptureServices
     {
         private TaskCompletionSource<bool> selectionCompleted = new TaskCompletionSource<bool>();
 
-        public async Task CaptureWithScrollAsync()
+        public async Task<Bitmap> CaptureWithScrollAsync()
         {
             // Uruchom wyróżnianie okna pod kursorem
 
@@ -27,7 +27,7 @@ namespace screenerWpf.Sevices.CaptureServices
             selectionCompleted.SetResult(true); // Zaznacz, że wybór został dokonany
 
             if (windowHandle == IntPtr.Zero)
-                return;
+                return null;
 
             var overlay = new OverlayWindow(windowHandle);
             var cts = new CancellationTokenSource();
@@ -66,13 +66,12 @@ namespace screenerWpf.Sevices.CaptureServices
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string fileName = $"screenshot_{timestamp}.png";
             string path = Path.Combine(Settings.Default.ScreenshotsSavePath, fileName);
-            finalImage.Save(path);
-            finalImage.Dispose();
 
             foreach (var bmp in screenshots)
             {
                 bmp.Dispose();
             }
+            return finalImage;
         }
 
         public static Bitmap CaptureWindow(IntPtr hWnd)
