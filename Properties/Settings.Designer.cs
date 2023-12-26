@@ -58,5 +58,29 @@ namespace screenerWpf.Properties {
                 this["ScreenshorsLibrary"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DropboxAppKey {
+            get {
+                return ((string)(this["DropboxAppKey"]));
+            }
+            set {
+                this["DropboxAppKey"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string DropboxAppSecret {
+            get {
+                return ((string)(this["DropboxAppSecret"]));
+            }
+            set {
+                this["DropboxAppSecret"] = value;
+            }
+        }
     }
 }

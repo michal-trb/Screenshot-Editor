@@ -2,6 +2,7 @@
 using Dropbox.Api.Common;
 using Dropbox.Api.Files;
 using screenerWpf.Interfaces;
+using screenerWpf.Properties;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -18,8 +19,10 @@ public class DropboxUploader : ICloudStorageUploader
 
     public DropboxUploader()
     {
-        
+        this.appKey = Settings.Default.DropboxAppKey;
+        this.appSecret = Settings.Default.DropboxAppSecret;
     }
+
 
     public async Task AuthorizeAsync()
     {

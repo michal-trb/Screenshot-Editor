@@ -20,5 +20,11 @@
 
         <!-- Save Button -->
         <Button Content="Save" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Height="25" Click="SaveButton_Click"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,81,0,0" TextWrapping="Wrap" Text="Dropbox App Key" VerticalAlignment="Top"/>
+        <TextBox x:Name="dropboxAppKey" Margin="179,79,510,0" VerticalAlignment="Top" 
+            Text="{Binding DropboxAppKey, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,104,0,0" TextWrapping="Wrap" Text="Dropbox App Secret" VerticalAlignment="Top"/>
+        <TextBox x:Name="dropboxAppSecret" Margin="179,102,510,0" VerticalAlignment="Top" 
+            Text="{Binding DropboxAppSecret, UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
 </Window>
