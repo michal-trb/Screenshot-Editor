@@ -27,5 +27,6 @@ namespace screenerWpf.Interfaces
         void ChangeArrowThickness(double thickness);
         void ChangeTransparency(double transparency);
         string SaveFast();
+        void SavePdf();
     }
 }

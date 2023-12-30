@@ -162,6 +162,7 @@
 
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical" HorizontalAlignment="Center">
             <Button Content="Save" Command="{Binding SaveCommand}" Style="{DynamicResource RoundedButtonStyle}" />
+            <Button Content="Save PDF" Command="{Binding SavePdfCommand}" Style="{DynamicResource RoundedButtonStyle}" />
             <Button Content="Draw Arrow" Command="{Binding DrawArrowCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
             <Button Content="Add Text" Command="{Binding AddTextCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
             <Button Content="Draw Rect" Command="{Binding DrawRectCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
@@ -169,7 +170,7 @@
             <Button Content="Speech Bubble" Command="{Binding SpeechBubbleCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
             <Button Content="Brush" Command="{Binding BrushCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
             <Button Content="Recognize Text" Command="{Binding RecognizeTextCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Content="Upload on Google Drive" Command="{Binding UploadToGoogleDriveCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Dropbox" Command="{Binding UploadToDropboxCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
         </StackPanel>
 
         <!-- Horizontal StackPanel for ComboBoxes and Labels -->

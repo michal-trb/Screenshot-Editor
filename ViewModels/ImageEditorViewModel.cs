@@ -19,6 +19,7 @@ namespace screenerWpf.ViewModels
         public ICommand MaximizeRestoreCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
+        public ICommand SavePdfCommand { get; private set; }
         public ICommand DrawArrowCommand { get; private set; }
         public ICommand AddTextCommand { get; private set; }
         public ICommand DrawRectCommand { get; private set; }
@@ -26,7 +27,7 @@ namespace screenerWpf.ViewModels
         public ICommand BlurCommand { get; private set; }
         public ICommand BrushCommand { get; private set; }
         public ICommand RecognizeTextCommand { get; private set; }
-        public ICommand UploadToGoogleDriveCommand { get; private set; }
+        public ICommand UploadToDropboxCommand { get; private set; }
         public ObservableCollection<ColorInfo> Colors { get; private set; }
         public ObservableCollection<int> Thicknesses { get; private set; }
         public ObservableCollection<string> FontFamilies { get; private set; }
@@ -52,7 +53,7 @@ namespace screenerWpf.ViewModels
             MaximizeRestoreCommand = new RelayCommand(_ => OnMaximizeRestore());
             CloseCommand = new RelayCommand(_ => OnClose());
 
-            UploadToGoogleDriveCommand = new RelayCommand(async _ => await new DropboxUploader().UploadFileAsync(ExecuteSaveFast()));
+            UploadToDropboxCommand = new RelayCommand(async _ => await new DropboxUploader().UploadFileAsync(ExecuteSaveFast()));
 
         }
 
@@ -102,6 +103,7 @@ namespace screenerWpf.ViewModels
         private void InitializeCommands()
         {
             SaveCommand = new RelayCommand(ExecuteSave);
+            SavePdfCommand = new RelayCommand(ExecuteSavePdf);
             DrawArrowCommand = new RelayCommand(ExecuteDrawArrow);
             AddTextCommand = new RelayCommand(ExecuteAddText);
             DrawRectCommand = new RelayCommand(ExecuteDrawRect);
@@ -170,6 +172,11 @@ namespace screenerWpf.ViewModels
         private void ExecuteSave(object obj)
         {
             inputHandler.Save();
+        }
+
+        private void ExecuteSavePdf(object obj)
+        {
+            inputHandler.SavePdf();
         }
 
         private string ExecuteSaveFast()

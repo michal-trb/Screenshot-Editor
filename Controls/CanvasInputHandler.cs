@@ -87,6 +87,11 @@ namespace screenerWpf.Controls
             savingHandler.SaveCanvasToFile();
         }
 
+        public void SavePdf()
+        {
+            savingHandler.SaveCanvasToPdfFile();
+        }
+
         public string SaveFast()
         {
             return savingHandler.SaveCanvasToFileFast();
