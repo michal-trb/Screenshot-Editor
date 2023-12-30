@@ -1,7 +1,9 @@
 ﻿using screenerWpf.Interfaces;
 using screenerWpf.Views;
 using System.Drawing;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using System.Xml.Schema;
 
 namespace screenerWpf.Sevices
 {
@@ -23,9 +25,12 @@ namespace screenerWpf.Sevices
         public Rectangle SelectArea()
         {
             AreaSelector selector = new AreaSelector();
+            selector.Cursor = Cursors.Cross; // Change cursor to crosshair
             bool? result = selector.ShowDialog();
+
             if (result == true)
             {
+                // The selected area is now highlighted with a semi-transparent overlay.
                 return new Rectangle(
                     (int)selector.SelectedRectangle.X,
                     (int)selector.SelectedRectangle.Y,
@@ -34,6 +39,7 @@ namespace screenerWpf.Sevices
             }
             return Rectangle.Empty;
         }
+
 
         public void ShowVideoPlayerWindow(string videoPath)
         {

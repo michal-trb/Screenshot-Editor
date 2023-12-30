@@ -8,6 +8,7 @@ namespace screenerWpf
     {
         public Rect SelectedRectangle { get; private set; }
         private Point startPoint;
+        private Point currentPoint; 
 
         public AreaSelector()
         {
@@ -26,7 +27,6 @@ namespace screenerWpf
             this.MouseUp += Grid_MouseUp;
             this.KeyDown += Grid_KeyDown;
         }
-
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
@@ -40,6 +40,9 @@ namespace screenerWpf
             };
 
             drawingContext.DrawGeometry(new SolidColorBrush(Colors.White) { Opacity = 0.1 }, null, combinedGeometry);
+
+            // Rysowanie czerwonego prostokąta
+            drawingContext.DrawRectangle(null, new Pen(Brushes.Red, 2), SelectedRectangle);
         }
 
         private void Grid_MouseUp(object sender, MouseButtonEventArgs e)
@@ -68,10 +71,14 @@ namespace screenerWpf
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var endPoint = e.GetPosition(this);
-                SelectedRectangle = new Rect(startPoint, endPoint);
+                currentPoint = e.GetPosition(this); // Aktualizacja bieżącej pozycji kursora
+                SelectedRectangle = new Rect(startPoint, currentPoint);
                 this.InvalidateVisual();
             }
+
+            // Wyświetlanie dymka z pozycją kursora
+            Point position = e.GetPosition(this);
+            this.Title = $"X: {position.X}, Y: {position.Y}";
         }
 
         private void Grid_KeyDown(object sender, KeyEventArgs e)
