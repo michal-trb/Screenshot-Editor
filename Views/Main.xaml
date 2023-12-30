@@ -6,15 +6,14 @@
         xmlns:local="clr-namespace:screenerWpf"
         mc:Ignorable="d"
         Background="#1E1E1E"
-        Title="Main" Height="450" Width="600"
-        WindowStyle='None'>
-
-
-    <!-- Upewnij się, że styl RoundedButtonStyle jest dostępny w zasobach aplikacji -->
+        Title="Main" Height="164" Width="520"
+        WindowStyle='None'    
+        LocationChanged="Window_LocationChanged">
+   
     <Window.Resources>
         <Style x:Key="ThumbnailBorderStyle" TargetType="Border">
             <Setter Property="Background" Value="#FF303030"/>
-            <Setter Property="BorderBrush" Value="#FF303030"/>
+            <Setter Property="BorderBrush" Value="#FF858594"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="CornerRadius" Value="5"/>
             <Setter Property="Margin" Value="5"/>
@@ -29,7 +28,7 @@
         <Style x:Key="RoundedButtonStyle" TargetType="Button">
             <Setter Property="Margin" Value="10"/>
             <Setter Property="Background" Value="#3E3E42"/>
-            <Setter Property="BorderBrush" Value="#3E3E42"/>
+            <Setter Property="BorderBrush" Value="#FF858594"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="Height" Value="30"/>
@@ -57,11 +56,13 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
         <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
             <Setter Property="Width" Value="30"/>
             <Setter Property="Height" Value="30"/>
             <Setter Property="Margin" Value="2"/>
             <Setter Property="Background" Value="#1E1E1E"/>
+            <Setter Property="BorderBrush" Value="#FF858594"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -81,22 +82,76 @@
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="border" Property="Background" Value="#70787C"/>
                             </Trigger>
-                        </ControlTemplate.Triggers> 
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <Style x:Key="DropdownButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+            <Setter Property="Width" Value="25"/>
+            <Setter Property="Background" Value="#2E2E32"/>
+            <Setter Property="BorderBrush" Value="#FF858594"/>
+        </Style>
+        <Style x:Key="PopupContentScreenshotStyle" TargetType="{x:Type ContentControl}">
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="20" Background="#3E3E42">
+                            <StackPanel>
+                                <Button Content="Full Screen" 
+                                    Command="{Binding Path=DataContext.CaptureFullCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    Style="{StaticResource RoundedButtonStyle}"/>
+                                <Button Content="Select Area" 
+                                    Command="{Binding Path=DataContext.CaptureAreaCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    Style="{StaticResource RoundedButtonStyle}"/>
+                                <Button Content="Capture Window" 
+                                    Command="{Binding Path=DataContext.CaptureWindowCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    Style="{StaticResource RoundedButtonStyle}"/>
+                                <Button Content="Capture Window Scroll" 
+                                    Command="{Binding Path=DataContext.CaptureWindowScrollCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    Style="{StaticResource RoundedButtonStyle}"/>
+                            </StackPanel>
+
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="PopupContentRecordStyle" TargetType="{x:Type ContentControl}">
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="20" Background="#3E3E42">
+                            <StackPanel>
+                                <Button Content="Record Video" 
+                                    Command="{Binding Path=DataContext.RecordVideoCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    Style="{StaticResource RoundedButtonStyle}"/>
+                                <Button Content="Record Area Video" 
+                                    Command="{Binding Path=DataContext.RecordAreaVideoCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    Style="{StaticResource RoundedButtonStyle}"/>
+                            </StackPanel>
+
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </Window.Resources>
     <Grid x:Name="MainGrid"
         Grid.Row="1" Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Pasek tytułu -->
-            <RowDefinition Height="1*"/>
-            <!-- Przyciski (1/3 przestrzeni) -->
-            <RowDefinition Height="3*"/>
-            <!-- Last Screenshots (2/3 przestrzeni) -->
+            <RowDefinition Height="Auto"/>
+            <!-- Przyciski -->
+            <RowDefinition Height="Auto"/>
+            <!-- Last Screenshots -->
+            <RowDefinition Height="Auto"/>
+            <!-- Last Videos -->
         </Grid.RowDefinitions>
+
         <!-- Niestandardowy pasek tytułu -->
         <Border Grid.Row="0" Background="#3E3E42" Height="35" VerticalAlignment="Top" MouseDown="TitleBar_MouseDown" CornerRadius="5">
             <Grid>
@@ -116,109 +171,88 @@
                 </StackPanel>
             </Grid>
         </Border>
-        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Width="560">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
+
+        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Przycisk przechwycenia pełnego ekranu -->
-            <Button Grid.Column="1" Grid.Row="0" Content="Full Screen"  
-            Command="{Binding CaptureFullCommand}" 
-            Style="{StaticResource RoundedButtonStyle}"/>
 
-            <!-- Przycisk przechwycenia wybranego obszaru -->
-            <Button Grid.Column="2" Grid.Row="0" Content="Select Area"
-            Command="{Binding CaptureAreaCommand}" 
-            Style="{StaticResource RoundedButtonStyle}"/>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button Content="Screenshot" Command="{Binding CaptureFullCommand}" Style="{StaticResource RoundedButtonStyle}" Margin="10,10,0,10" BorderBrush="#FF858594"/>
+                <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" Command="{Binding ToggleScreenshotPopupCommand}" Margin="-10,10,10,10"/>
+                <Popup x:Name="ScreenshotPopup" IsOpen="{Binding IsScreenshotPopupOpen}" AllowsTransparency="True">
+                    <ContentControl Style="{StaticResource PopupContentScreenshotStyle}"/>
+                </Popup>
+            </StackPanel>
 
-            <Button Grid.Column="3" Grid.Row="0" Content="Record Video" 
-            Command="{Binding RecordVideoCommand}" 
-            Style="{StaticResource RoundedButtonStyle}"/>
-
-            <Button Grid.Column="1" Grid.Row="1" Content="Record Area Video" 
-            Command="{Binding RecordAreaVideoCommand}" 
-            Style="{StaticResource RoundedButtonStyle}"/>
-
-            <Button Grid.Column="2" Grid.Row="1" Content="Capture Window Scroll"
-            Command="{Binding CaptureWindowScrollCommand}" 
-            Style="{StaticResource RoundedButtonStyle}"/>
-
-            <Button Grid.Column="3" Grid.Row="1" Content="Capture Window"
-            Command="{Binding CaptureWindowCommand}" 
-            Style="{StaticResource RoundedButtonStyle}"/>
+            <!-- Record Button with Dropdown Arrow -->
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <Button x:Name="RecordButton" Content="Record" Command="{Binding RecordVideoCommand}" Style="{StaticResource RoundedButtonStyle}" Margin="10,10,0,10" BorderBrush="#FF858594"/>
+                <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" 
+                    Command="{Binding ToggleRecordPopupCommand}" Margin="-10,10,10,10"/>
+                <Popup x:Name="RecordPopup" IsOpen="{Binding IsRecordPopupOpen}" AllowsTransparency="True">
+                    <ContentControl Style="{StaticResource PopupContentRecordStyle}"/>
+                </Popup>
+            </StackPanel>
         </Grid>
 
 
         <Grid Grid.Row="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <!-- Wiersz dla tytułu "Last Screenshots" -->
-                <RowDefinition Height="*"/>
-                <!-- Wiersz dla ItemsControl Screenshots -->
-                <RowDefinition Height="Auto"/>
-                <!-- Wiersz dla tytułu "Last Videos" -->
-                <RowDefinition Height="*"/>
-                <!-- Wiersz dla ItemsControl Videos -->
-            </Grid.RowDefinitions>
             <!-- TextBlock dla tytułu "Last Screenshots" -->
-            <TextBlock Grid.Row="0" Text="Last Screenshots" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0" Foreground="White"/>
+            <Expander x:Name="ExpanderScreenshots" Header="Last Screenshots" Foreground="White" IsExpanded="False" Expanded="Expander_Expanded_Screenshots" Collapsed="Expander_Collapsed_Screenshots" >
+                <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
+                <Viewbox Stretch="Uniform">
+                    <ItemsControl ItemsSource="{Binding LastScreenshots}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="5" Rows="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource ThumbnailBorderStyle}">
+                                    <Grid Width="150" Height="150">
+                                        <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Image Source="{Binding Thumbnail}" Height="90" MouseDown="Screenshot_MouseDown"/>
+                                            <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center" Foreground="White"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Viewbox>
+            </Expander>
+        </Grid>
+        <Grid Grid.Row="3">
 
-            <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
-            <Viewbox Grid.Row="1" Stretch="Uniform">
-                <ItemsControl ItemsSource="{Binding LastScreenshots}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="5" Rows="1"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Style="{StaticResource ThumbnailBorderStyle}">
-                                <Grid Width="150" Height="150">
-                                    <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
-                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Image Source="{Binding Thumbnail}" Height="90" MouseDown="Screenshot_MouseDown"/>
-                                        <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center" Foreground="White"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Viewbox>
-            <TextBlock Grid.Row="2" Text="Last Videos" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="5,5,0,0" Foreground="White"/>
-
-            <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
-            <Viewbox Grid.Row="3" Stretch="Uniform">
-                <ItemsControl ItemsSource="{Binding LastVideos}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <UniformGrid Columns="5" Rows="1"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border Style="{StaticResource ThumbnailBorderStyle}">
-                                <Grid Width="150" Height="150">
-                                    <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
-                                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Image Source="{Binding Thumbnail}" Height="90" MouseDown="Video_MouseDown"/>
-                                        <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center" Foreground="White"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Viewbox>
+            <Expander x:Name="ExpanderVideos" Header="Last Videos" Foreground="White" IsExpanded="False" Expanded="Expander_Expanded_Videos" Collapsed="Expander_Collapsed_Videos" >
+            <Viewbox Stretch="Uniform">
+                    <ItemsControl ItemsSource="{Binding LastVideos}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="5" Rows="1"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Style="{StaticResource ThumbnailBorderStyle}">
+                                    <Grid Width="150" Height="150">
+                                        <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
+                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Image Source="{Binding Thumbnail}" Height="90" MouseDown="Video_MouseDown"/>
+                                            <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center" Foreground="White"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Viewbox>
+            </Expander>
         </Grid>
     </Grid>
 </Window>

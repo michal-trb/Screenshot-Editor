@@ -12,16 +12,42 @@ using System.Linq;
 using System.Threading.Tasks;
 using screenerWpf.Views;
 using screenerWpf.Properties;
+using System.ComponentModel;
 
 namespace screenerWpf
 {
-    public class MainViewModel
+    public class MainViewModel : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
         private readonly IScreenCaptureService screenCaptureService;
         private readonly IWindowService windowService;
         public ObservableCollection<LastScreenshot> LastScreenshots { get; private set; }
         public ObservableCollection<LastVideo> LastVideos { get; private set; }
+        private bool _isScreenshotPopupOpen;
+        public bool IsScreenshotPopupOpen
+        {
+            get => _isScreenshotPopupOpen;
+            set
+            {
+                _isScreenshotPopupOpen = value;
+                OnPropertyChanged(nameof(IsScreenshotPopupOpen));
+            }
+        }
 
+        private bool _isRecordPopupOpen;
+
+        public bool IsRecordPopupOpen
+        {
+            get => _isRecordPopupOpen;
+            set
+            {
+                _isRecordPopupOpen = value;
+                OnPropertyChanged(nameof(IsRecordPopupOpen)); 
+            }
+        }
+
+        public ICommand ToggleScreenshotPopupCommand { get; }
+        public ICommand ToggleRecordPopupCommand { get; }
         public ICommand CaptureFullCommand { get; private set; }
         public ICommand CaptureAreaCommand { get; private set; }
         public ICommand CaptureWindowScrollCommand { get; private set; }
@@ -35,6 +61,8 @@ namespace screenerWpf
         {
             this.screenCaptureService = screenCaptureService;
             this.windowService = windowService;
+            ToggleScreenshotPopupCommand = new RelayCommand(param => ToggleScreenshotPopup());
+            ToggleRecordPopupCommand = new RelayCommand(param => ToggleRecordPopup());
             CaptureFullCommand = new RelayCommand(ExecuteCaptureFull);
             CaptureAreaCommand = new RelayCommand(ExecuteCaptureArea);
             CaptureWindowScrollCommand = new RelayCommand(ExecuteCaptureWindowScroll);
@@ -43,17 +71,45 @@ namespace screenerWpf
             RecordAreaVideoCommand = new RelayCommand(ExecuteAreaRecordVideo);
             LastScreenshots = new ObservableCollection<LastScreenshot>();
             LastVideos = new ObservableCollection<LastVideo>();
+
             LoadLastScreenshots();
             LoadLastVideos();
         }
+
+        private void ToggleScreenshotPopup()
+        {
+            IsScreenshotPopupOpen = !IsScreenshotPopupOpen;
+            if (IsScreenshotPopupOpen)
+            {
+                IsRecordPopupOpen = false;
+            }
+        }
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ToggleRecordPopup()
+        {
+            IsRecordPopupOpen = !IsRecordPopupOpen;
+            if (IsRecordPopupOpen)
+            {
+                IsScreenshotPopupOpen = false;
+            }
+        }
+
         private void ExecuteCaptureFull(object parameter)
         {
             Bitmap bitmap = screenCaptureService.CaptureScreen();
+            ClosePopups();
             ShowEditorWindow(bitmap);
         }
 
         private void ExecuteCaptureWindowScroll(object parameter)
         {
+            ClosePopups();
+
             var bitmap = screenCaptureService.CaptureWithScrollAsync().Result;
             if (bitmap != null) 
             {
@@ -63,6 +119,8 @@ namespace screenerWpf
 
         private void ExecuteCaptureWindow(object parameter)
         {
+            ClosePopups();
+
             var bitmap = screenCaptureService.CaptureWindow();
             if (bitmap != null)
             {
@@ -72,6 +130,8 @@ namespace screenerWpf
 
         private void ExecuteCaptureArea(object parameter)
         {
+            ClosePopups();
+
             Rectangle area = windowService.SelectArea();
             if (!area.IsEmpty)
             {
@@ -109,6 +169,8 @@ namespace screenerWpf
 
         private void LoadLastScreenshots()
         {
+            ClosePopups();
+
             string screenshotsDirectory = Settings.Default.ScreenshorsLibrary;
             DirectoryInfo di = new DirectoryInfo(screenshotsDirectory);
             var screenshotFiles = di.GetFiles("*.png").OrderByDescending(f => f.LastWriteTime).Take(5);
@@ -121,6 +183,8 @@ namespace screenerWpf
         
         private void LoadLastVideos()
         {
+            ClosePopups();
+
             string recordsDirectory = Settings.Default.RecordsSavePath;
             DirectoryInfo di = new DirectoryInfo(recordsDirectory);
             var screenshotFiles = di.GetFiles("*.mp4").OrderByDescending(f => f.LastWriteTime).Take(5);
@@ -156,6 +220,8 @@ namespace screenerWpf
         }
         private void ExecuteRecordVideo(object parameter)
         {
+            ClosePopups();
+
             // Rozpoczęcie nagrywania
             screenCaptureService.StartRecording();
             ShowStopRecordingButton();
@@ -163,6 +229,8 @@ namespace screenerWpf
 
         private void ExecuteAreaRecordVideo(object parameter)
         {
+            ClosePopups();
+
             var area = windowService.SelectArea();
             if (!area.IsEmpty)
             {
@@ -190,6 +258,11 @@ namespace screenerWpf
                 stopRecordingWindow.Close();
                 stopRecordingWindow = null;
             }
+        }
+        private void ClosePopups()
+        {
+            IsScreenshotPopupOpen = false;
+            IsRecordPopupOpen = false;
         }
     }
 }

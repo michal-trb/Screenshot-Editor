@@ -3,6 +3,8 @@ using System.Windows.Input;
 using screenerWpf.Factories;
 using screenerWpf.Models;
 using System.Windows.Controls;
+using System;
+using System.Windows.Controls.Primitives;
 
 namespace screenerWpf
 {
@@ -66,5 +68,49 @@ namespace screenerWpf
                 (DataContext as MainViewModel)?.OpenVideo(video.FilePath);
             }
         }
+
+        private void Expander_Expanded_Screenshots(object sender, RoutedEventArgs e)
+        {
+            // Zwiększ wysokość okna, gdy którykolwiek Expander jest rozwinięty
+            this.Height += 95; // Dodaj estymowaną wysokość rozwiniętego Expandera
+        }
+
+        private void Expander_Collapsed_Screenshots(object sender, RoutedEventArgs e)
+        {
+            // Zmniejsz wysokość okna, gdy Expander jest zwinięty
+            this.Height -= 95; // Odejmij estymowaną wysokość rozwiniętego Expandera
+
+            // Ustaw minimalną wysokość okna
+        }
+        private void Expander_Expanded_Videos(object sender, RoutedEventArgs e)
+        {
+            // Zwiększ wysokość okna, gdy którykolwiek Expander jest rozwinięty
+            this.Height += 95; // Dodaj estymowaną wysokość rozwiniętego Expandera
+        }
+
+        private void Expander_Collapsed_Videos(object sender, RoutedEventArgs e)
+        {
+            // Zmniejsz wysokość okna, gdy Expander jest zwinięty
+            this.Height -= 95; // Odejmij estymowaną wysokość rozwiniętego Expandera
+
+            // Ustaw minimalną wysokość okna
+        }
+        private void Window_LocationChanged(object sender, EventArgs e)
+        {
+            UpdatePopupPosition(ScreenshotPopup);
+            UpdatePopupPosition(RecordPopup);
+        }
+
+        private void UpdatePopupPosition(Popup popup)
+        {
+            if (popup.IsOpen)
+            {
+                // Force update of the Popup's position
+                var offset = popup.HorizontalOffset;
+                popup.HorizontalOffset = offset + 1;
+                popup.HorizontalOffset = offset;
+            }
+        }
+
     }
 }
