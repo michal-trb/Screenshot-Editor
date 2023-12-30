@@ -203,7 +203,7 @@
             <!-- TextBlock dla tytułu "Last Screenshots" -->
             <Expander x:Name="ExpanderScreenshots" Header="Last Screenshots" Foreground="White" IsExpanded="False" Expanded="Expander_Expanded_Screenshots" Collapsed="Expander_Collapsed_Screenshots" >
                 <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
-                <Viewbox Stretch="Uniform">
+                <Viewbox Stretch="Uniform" Margin="0,5,0,5">
                     <ItemsControl ItemsSource="{Binding LastScreenshots}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -226,11 +226,14 @@
                     </ItemsControl>
                 </Viewbox>
             </Expander>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" Click="OpenScreenshotsFolder" Background="Transparent" BorderThickness="0">
+                <Image Source="/Icons/folder-sc-16.png" Width="16" Height="16" ToolTip="Open Screenshots Folder" />
+            </Button>
         </Grid>
         <Grid Grid.Row="3">
 
             <Expander x:Name="ExpanderVideos" Header="Last Videos" Foreground="White" IsExpanded="False" Expanded="Expander_Expanded_Videos" Collapsed="Expander_Collapsed_Videos" >
-            <Viewbox Stretch="Uniform">
+            <Viewbox Stretch="Uniform" Margin="0,5,0,5">
                     <ItemsControl ItemsSource="{Binding LastVideos}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -253,6 +256,9 @@
                     </ItemsControl>
                 </Viewbox>
             </Expander>
+            <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"  Click="OpenVideosFolder" Background="Transparent" BorderThickness="0">
+                <Image Source="/Icons/folder-vi-16.png" Width="16" Height="16" ToolTip="Open Videos Folder" />
+            </Button>
         </Grid>
     </Grid>
 </Window>

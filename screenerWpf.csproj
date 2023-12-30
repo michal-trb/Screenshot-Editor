@@ -9,12 +9,27 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\folder-16.png" />
+    <None Remove="Icons\folder-sc-16.png" />
+    <None Remove="Icons\folder-vi-16.png" />
     <None Remove="Properties\Settings.settings" />
     <None Remove="tessdata\eng.traineddata" />
     <None Remove="tessdata\pol.traineddata" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Icons\folder-16.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Icons\folder-sc-16.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\folder-vi-16.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <EmbeddedResource Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -47,6 +62,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Nowy folder\" />
     <Folder Include="obj\" />
   </ItemGroup>
 

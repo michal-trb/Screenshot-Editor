@@ -5,6 +5,7 @@ using screenerWpf.Models;
 using System.Windows.Controls;
 using System;
 using System.Windows.Controls.Primitives;
+using System.IO;
 
 namespace screenerWpf
 {
@@ -72,26 +73,26 @@ namespace screenerWpf
         private void Expander_Expanded_Screenshots(object sender, RoutedEventArgs e)
         {
             // Zwiększ wysokość okna, gdy którykolwiek Expander jest rozwinięty
-            this.Height += 95; // Dodaj estymowaną wysokość rozwiniętego Expandera
+            this.Height += 105; // Dodaj estymowaną wysokość rozwiniętego Expandera
         }
 
         private void Expander_Collapsed_Screenshots(object sender, RoutedEventArgs e)
         {
             // Zmniejsz wysokość okna, gdy Expander jest zwinięty
-            this.Height -= 95; // Odejmij estymowaną wysokość rozwiniętego Expandera
+            this.Height -= 105; // Odejmij estymowaną wysokość rozwiniętego Expandera
 
             // Ustaw minimalną wysokość okna
         }
         private void Expander_Expanded_Videos(object sender, RoutedEventArgs e)
         {
             // Zwiększ wysokość okna, gdy którykolwiek Expander jest rozwinięty
-            this.Height += 95; // Dodaj estymowaną wysokość rozwiniętego Expandera
+            this.Height += 105; // Dodaj estymowaną wysokość rozwiniętego Expandera
         }
 
         private void Expander_Collapsed_Videos(object sender, RoutedEventArgs e)
         {
             // Zmniejsz wysokość okna, gdy Expander jest zwinięty
-            this.Height -= 95; // Odejmij estymowaną wysokość rozwiniętego Expandera
+            this.Height -= 105; // Odejmij estymowaną wysokość rozwiniętego Expandera
 
             // Ustaw minimalną wysokość okna
         }
@@ -109,6 +110,30 @@ namespace screenerWpf
                 var offset = popup.HorizontalOffset;
                 popup.HorizontalOffset = offset + 1;
                 popup.HorizontalOffset = offset;
+            }
+        }
+        private void OpenScreenshotsFolder(object sender, RoutedEventArgs e)
+        {
+            string folderPath = screenerWpf.Properties.Settings.Default.ScreenshorsLibrary;
+            if (!string.IsNullOrWhiteSpace(folderPath) && Directory.Exists(folderPath))
+            {
+                System.Diagnostics.Process.Start("explorer.exe", folderPath);
+            }
+            else
+            {
+                MessageBox.Show("Folder path is not set or does not exist.", "Error");
+            }
+        }
+        private void OpenVideosFolder(object sender, RoutedEventArgs e)
+        {
+            string folderPath = screenerWpf.Properties.Settings.Default.RecordsSavePath;
+            if (!string.IsNullOrWhiteSpace(folderPath) && Directory.Exists(folderPath))
+            {
+                System.Diagnostics.Process.Start("explorer.exe", folderPath);
+            }
+            else
+            {
+                MessageBox.Show("Folder path is not set or does not exist.", "Error");
             }
         }
 
