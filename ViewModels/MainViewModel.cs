@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using screenerWpf.Views;
 using screenerWpf.Properties;
 using System.ComponentModel;
+using screenerWpf.Helpers;
 
 namespace screenerWpf
 {
@@ -71,6 +72,7 @@ namespace screenerWpf
             RecordAreaVideoCommand = new RelayCommand(ExecuteAreaRecordVideo);
             LastScreenshots = new ObservableCollection<LastScreenshot>();
             LastVideos = new ObservableCollection<LastVideo>();
+            PopupManager.PopupsClosed += (s, e) => ClosePopups();
 
             LoadLastScreenshots();
             LoadLastVideos();
@@ -259,6 +261,7 @@ namespace screenerWpf
                 stopRecordingWindow = null;
             }
         }
+
         private void ClosePopups()
         {
             IsScreenshotPopupOpen = false;

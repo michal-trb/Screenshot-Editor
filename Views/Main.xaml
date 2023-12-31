@@ -9,7 +9,8 @@
         Title="{x:Static local:Resource.MainTitle}"
         Height="164" Width="520"
         WindowStyle='None'    
-        LocationChanged="Window_LocationChanged">
+        LocationChanged="Window_LocationChanged"
+        MouseLeftButtonDown="MainWindow_MouseLeftButtonDown">
    
     <Window.Resources>
         <Style x:Key="ThumbnailBorderStyle" TargetType="Border">
