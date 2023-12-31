@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:screenerWpf"
+        xmlns:local="clr-namespace:screenerWpf.Resources"
         mc:Ignorable="d"
         Background="#1E1E1E"
-        Title="Main" Height="164" Width="520"
+        Title="{x:Static local:Resource.MainTitle}"
+        Height="164" Width="520"
         WindowStyle='None'    
         LocationChanged="Window_LocationChanged">
    
@@ -97,18 +98,18 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="20" Background="#3E3E42">
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="20" Background="#FF2E2E32">
                             <StackPanel>
-                                <Button Content="Full Screen" 
+                                <Button Content="{x:Static local:Resource.FullScreen}" 
                                     Command="{Binding Path=DataContext.CaptureFullCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                                     Style="{StaticResource RoundedButtonStyle}"/>
-                                <Button Content="Select Area" 
+                                <Button Content="{x:Static local:Resource.SelectArea}" 
                                     Command="{Binding Path=DataContext.CaptureAreaCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                                     Style="{StaticResource RoundedButtonStyle}"/>
-                                <Button Content="Capture Window" 
+                                <Button Content="{x:Static local:Resource.CaptureWindow}" 
                                     Command="{Binding Path=DataContext.CaptureWindowCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                                     Style="{StaticResource RoundedButtonStyle}"/>
-                                <Button Content="Capture Window Scroll" 
+                                <Button Content="{x:Static local:Resource.CaptureWindowScroll}" 
                                     Command="{Binding Path=DataContext.CaptureWindowScrollCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                                     Style="{StaticResource RoundedButtonStyle}"/>
                             </StackPanel>
@@ -122,12 +123,12 @@
             <Setter Property="ContentTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="20" Background="#3E3E42">
+                        <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="20" Background="#FF2E2E32">
                             <StackPanel>
-                                <Button Content="Record Video" 
+                                <Button Content="{x:Static local:Resource.RecordVideo}" 
                                     Command="{Binding Path=DataContext.RecordVideoCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                                     Style="{StaticResource RoundedButtonStyle}"/>
-                                <Button Content="Record Area Video" 
+                                <Button Content="{x:Static local:Resource.RecordAreaVideo}" 
                                     Command="{Binding Path=DataContext.RecordAreaVideoCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                                     Style="{StaticResource RoundedButtonStyle}"/>
                             </StackPanel>
@@ -180,8 +181,8 @@
 
 
             <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <Button Content="Screenshot" Command="{Binding CaptureFullCommand}" Style="{StaticResource RoundedButtonStyle}" Margin="10,10,0,10" BorderBrush="#FF858594"/>
-                <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" Command="{Binding ToggleScreenshotPopupCommand}" Margin="-10,10,10,10"/>
+                <Button Content="{x:Static local:Resource.ScreenshotButton}" Command="{Binding CaptureFullCommand}" Style="{StaticResource RoundedButtonStyle}" Margin="10,10,0,10" BorderBrush="#FF858594"/>
+                <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" Command="{Binding ToggleScreenshotPopupCommand}" Margin="-10,10,10,10" />
                 <Popup x:Name="ScreenshotPopup" IsOpen="{Binding IsScreenshotPopupOpen}" AllowsTransparency="True">
                     <ContentControl Style="{StaticResource PopupContentScreenshotStyle}"/>
                 </Popup>
@@ -189,7 +190,7 @@
 
             <!-- Record Button with Dropdown Arrow -->
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Button x:Name="RecordButton" Content="Record" Command="{Binding RecordVideoCommand}" Style="{StaticResource RoundedButtonStyle}" Margin="10,10,0,10" BorderBrush="#FF858594"/>
+                <Button x:Name="RecordButton" Content="{x:Static local:Resource.RecordButton}" Command="{Binding RecordVideoCommand}" Style="{StaticResource RoundedButtonStyle}" Margin="10,10,0,10" BorderBrush="#FF858594"/>
                 <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" 
                     Command="{Binding ToggleRecordPopupCommand}" Margin="-10,10,10,10"/>
                 <Popup x:Name="RecordPopup" IsOpen="{Binding IsRecordPopupOpen}" AllowsTransparency="True">
@@ -201,7 +202,7 @@
 
         <Grid Grid.Row="2">
             <!-- TextBlock dla tytułu "Last Screenshots" -->
-            <Expander x:Name="ExpanderScreenshots" Header="Last Screenshots" Foreground="White" IsExpanded="False" Expanded="Expander_Expanded_Screenshots" Collapsed="Expander_Collapsed_Screenshots" >
+            <Expander x:Name="ExpanderScreenshots" Header="{x:Static local:Resource.LastScreenshots}" Foreground="White" IsExpanded="False" Expanded="Expander_Expanded_Screenshots" Collapsed="Expander_Collapsed_Screenshots" >
                 <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
                 <Viewbox Stretch="Uniform" Margin="0,5,0,5">
                     <ItemsControl ItemsSource="{Binding LastScreenshots}">
@@ -227,12 +228,12 @@
                 </Viewbox>
             </Expander>
             <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0" Click="OpenScreenshotsFolder" Background="Transparent" BorderThickness="0">
-                <Image Source="/Icons/folder-sc-16.png" Width="16" Height="16" ToolTip="Open Screenshots Folder" />
+                <Image Source="/Icons/folder-sc-16.png" Width="16" Height="16" ToolTip="{x:Static local:Resource.OpenScreenshots}" />
             </Button>
         </Grid>
         <Grid Grid.Row="3">
 
-            <Expander x:Name="ExpanderVideos" Header="Last Videos" Foreground="White" IsExpanded="False" Expanded="Expander_Expanded_Videos" Collapsed="Expander_Collapsed_Videos" >
+            <Expander x:Name="ExpanderVideos" Header="{x:Static local:Resource.LastVideos}" Foreground="White" IsExpanded="False" Expanded="Expander_Expanded_Videos" Collapsed="Expander_Collapsed_Videos" >
             <Viewbox Stretch="Uniform" Margin="0,5,0,5">
                     <ItemsControl ItemsSource="{Binding LastVideos}">
                         <ItemsControl.ItemsPanel>
@@ -257,7 +258,7 @@
                 </Viewbox>
             </Expander>
             <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"  Click="OpenVideosFolder" Background="Transparent" BorderThickness="0">
-                <Image Source="/Icons/folder-vi-16.png" Width="16" Height="16" ToolTip="Open Videos Folder" />
+                <Image Source="/Icons/folder-vi-16.png" Width="16" Height="16" ToolTip="{x:Static local:Resource.OpenVideos}" />
             </Button>
         </Grid>
     </Grid>
