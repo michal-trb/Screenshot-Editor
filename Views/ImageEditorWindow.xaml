@@ -7,120 +7,15 @@
         xmlns:local="clr-namespace:screenerWpf"
         mc:Ignorable="d"
         Title="Image Editor" Height="600" Width="920"
-        Background="#1E1E1E"
+        Style="{DynamicResource WindowStyle}"
         WindowStyle="None">
 
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <Style x:Key="LabelStyle" TargetType="Label">
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#2D2D30"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="5"/>
-        </Style>
-
-        <!-- Definicja stylu RoundedButtonStyle -->
-        <Style x:Key="RoundedButtonStyle" TargetType="Button">
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Background" Value="#3E3E42"/>
-            <Setter Property="BorderBrush" Value="#3E3E42"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="120"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-                             Background="{TemplateBinding Background}"
-                             BorderBrush="{TemplateBinding BorderBrush}"
-                             BorderThickness="{TemplateBinding BorderThickness}"
-                             CornerRadius="10">
-                            <ContentPresenter HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#505962"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#70787C"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Background" Value="#2D2D30"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type ComboBox}">
-                        <Grid>
-                            <ToggleButton Background="{TemplateBinding Background}"
-                                  BorderBrush="{TemplateBinding BorderBrush}"
-                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                      Margin="{TemplateBinding Padding}"
-                                      Content="{TemplateBinding SelectionBoxItem}"
-                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                      IsHitTestVisible="False"/>
-                            <Popup IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                               Placement="Bottom"
-                               AllowsTransparency="True"
-                               Focusable="False"
-                               PopupAnimation="Slide">
-                                <Border Background="#2D2D30" Padding="5">
-                                    <ScrollViewer>
-                                        <ItemsPresenter/>
-                                    </ScrollViewer>
-                                </Border>
-                            </Popup>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Background" Value="#1E1E1E"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="5">
-                            <!-- Ustawienie zaokrąglenia tutaj -->
-                            <ContentPresenter HorizontalAlignment="Center"
-                              VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#505962"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#70787C"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="LightStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
 
     <Grid  Margin="10">
@@ -139,8 +34,13 @@
             <!-- Dolny pasek -->
         </Grid.RowDefinitions>
         <!-- Niestandardowy pasek tytułu -->
-            <Border Grid.Row="0" Grid.ColumnSpan="2" Background="#3E3E42" Height="35" VerticalAlignment="Top" MouseDown="TitleBar_MouseDown" CornerRadius="5">
-                <Grid>
+        <Border Grid.Row="0" Grid.ColumnSpan="2" 
+            Background="{DynamicResource TitleBarBackgroundColor}" 
+            Height="35"
+            VerticalAlignment="Top" 
+            MouseDown="TitleBar_MouseDown" 
+            CornerRadius="5">
+            <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
@@ -172,11 +72,10 @@
             <Button Content="Recognize Text" Command="{Binding RecognizeTextCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
             <Button Content="Dropbox" Command="{Binding UploadToDropboxCommand}" Style="{DynamicResource RoundedButtonStyle}"/>
         </StackPanel>
-
-        <!-- Horizontal StackPanel for ComboBoxes and Labels -->
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Background="#2D2D30">
-            <Label Content="Color:" Style="{StaticResource LabelStyle}"
-           Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" 
+                HorizontalAlignment="Right" 
+                Background="{DynamicResource PanelBackgroundBrush}">
+            <Label Content="Color:" Style="{StaticResource LabelStyle}"/>
             <ComboBox Style="{StaticResource CustomComboBoxStyle}"
               Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
               ItemsSource="{Binding Colors}"
@@ -214,7 +113,7 @@
 
 
         <!-- ViewBox for DrawableCanvas -->
-        <Border Grid.Row="2" Grid.Column="1" BorderBrush="#FF3E3E42" BorderThickness="1" CornerRadius="10">
+        <Border Grid.Row="2" Grid.Column="1" BorderThickness="1" CornerRadius="10">
             <Viewbox Stretch="Uniform">
                 <controls:DrawableCanvas
                     x:Name="drawableCanvas" 

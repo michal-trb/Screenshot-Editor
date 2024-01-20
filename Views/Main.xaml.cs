@@ -14,6 +14,7 @@ namespace screenerWpf
     public partial class Main : Window
     {
         private readonly IOptionsWindowFactory optionsWindowFactory;
+        private bool isAnyExpanderExpanded = false;
 
         public Main(MainViewModel viewModel, IOptionsWindowFactory optionsWindowFactory)
         {
@@ -77,31 +78,33 @@ namespace screenerWpf
             }
         }
 
-        private void Expander_Expanded_Screenshots(object sender, RoutedEventArgs e)
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
-            // Zwiększ wysokość okna, gdy którykolwiek Expander jest rozwinięty
-            this.Height += 105; // Dodaj estymowaną wysokość rozwiniętego Expandera
+            this.Height += 105; // Zwiększ wysokość okna
+            UpdateWindowWidth();
         }
 
-        private void Expander_Collapsed_Screenshots(object sender, RoutedEventArgs e)
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
-            // Zmniejsz wysokość okna, gdy Expander jest zwinięty
-            this.Height -= 105; // Odejmij estymowaną wysokość rozwiniętego Expandera
-
-            // Ustaw minimalną wysokość okna
-        }
-        private void Expander_Expanded_Videos(object sender, RoutedEventArgs e)
-        {
-            // Zwiększ wysokość okna, gdy którykolwiek Expander jest rozwinięty
-            this.Height += 105; // Dodaj estymowaną wysokość rozwiniętego Expandera
+            this.Height -= 105; // Zmniejsz wysokość okna
+            UpdateWindowWidth();
         }
 
-        private void Expander_Collapsed_Videos(object sender, RoutedEventArgs e)
+        private void UpdateWindowWidth()
         {
-            // Zmniejsz wysokość okna, gdy Expander jest zwinięty
-            this.Height -= 105; // Odejmij estymowaną wysokość rozwiniętego Expandera
+            if (IsAnyExpanderExpanded())
+            {
+                this.Width = 520; // Zwiększ szerokość, jeśli którykolwiek Expander jest rozwinięty
+            }
+            else
+            {
+                this.Width = 300; // Zmniejsz szerokość, gdy wszystkie Expandery są zwinięte
+            }
+        }
 
-            // Ustaw minimalną wysokość okna
+        private bool IsAnyExpanderExpanded()
+        {
+            return ExpanderScreenshots.IsExpanded || ExpanderVideos.IsExpanded;
         }
 
         private void Window_LocationChanged(object sender, EventArgs e)

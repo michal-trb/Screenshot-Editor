@@ -14,6 +14,7 @@ using screenerWpf.Views;
 using screenerWpf.Properties;
 using System.ComponentModel;
 using screenerWpf.Helpers;
+using System.Windows.Navigation;
 
 namespace screenerWpf
 {
@@ -172,6 +173,10 @@ namespace screenerWpf
         private void LoadLastScreenshots()
         {
             ClosePopups();
+            if (string.IsNullOrEmpty(Settings.Default.ScreenshorsLibrary))
+            {
+                return;
+            }
 
             string screenshotsDirectory = Settings.Default.ScreenshorsLibrary;
             DirectoryInfo di = new DirectoryInfo(screenshotsDirectory);
@@ -186,6 +191,10 @@ namespace screenerWpf
         private void LoadLastVideos()
         {
             ClosePopups();
+            if (string.IsNullOrEmpty(Settings.Default.RecordsSavePath))
+            {
+                return;
+            }
 
             string recordsDirectory = Settings.Default.RecordsSavePath;
             DirectoryInfo di = new DirectoryInfo(recordsDirectory);

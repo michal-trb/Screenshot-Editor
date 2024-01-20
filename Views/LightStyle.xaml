@@ -1,0 +1,206 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:screenerWpf.Resources">
+
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+    <!-- Definicja kolorów -->
+    <Color x:Key="TitleBarColor">#E6E6E6</Color>
+    <Color x:Key="TitleBarColorMain">#F0F0F0</Color>
+    <Color x:Key="PanelBackgroundColor">#FFFFFF</Color>
+    <Color x:Key="ForegroundColor">Black</Color>
+    <!-- Definicja SolidColorBrush na podstawie kolorów -->
+    <SolidColorBrush x:Key="TitleBarBackgroundColor" Color="{StaticResource TitleBarColor}"/>
+    <SolidColorBrush x:Key="TitleBarBackgroundColorMain" Color="{StaticResource TitleBarColorMain}"/>
+    <SolidColorBrush x:Key="PanelBackgroundBrush" Color="{StaticResource PanelBackgroundColor}"/>
+    <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}"/>
+
+    <Style TargetType="Window" x:Key="WindowStyle">
+        <Setter Property="Background" Value="{StaticResource PanelBackgroundBrush}"/>
+    </Style>
+    <Style x:Key="TitleBarStyle" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource TitleBarBackgroundColor}"/>
+        <Setter Property="BorderBrush" Value="#D3D3D3"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Margin" Value="0"/>
+    </Style>
+    <Style x:Key="TitleBarStyleMain" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource TitleBarBackgroundColorMain}"/>
+        <Setter Property="BorderBrush" Value="#D3D3D3"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="0"/>
+    </Style>
+    <Style x:Key="ThumbnailBorderStyle" TargetType="Border">
+        <Setter Property="Background" Value="#F0F0F0"/>
+        <Setter Property="BorderBrush" Value="#D3D3D3"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="5"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#C0C0C0"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <Style x:Key="LabelStyle" TargetType="Label">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="#E6E6E6"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+
+    <Style x:Key="RoundedButtonStyle" TargetType="Button">
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Background" Value="#F0F0F0"/>
+        <Setter Property="BorderBrush" Value="#D3D3D3"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="Width" Value="120"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                         Background="{TemplateBinding Background}"
+                         BorderBrush="{TemplateBinding BorderBrush}"
+                         BorderThickness="{TemplateBinding BorderThickness}"
+                         CornerRadius="10">
+                        <ContentPresenter HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#D3D3D3"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#A9A9A9"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="#E6E6E6"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton Background="{TemplateBinding Background}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  Margin="{TemplateBinding Padding}"
+                                  Content="{TemplateBinding SelectionBoxItem}"
+                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                  IsHitTestVisible="False"/>
+                        <Popup IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                           Placement="Bottom"
+                           AllowsTransparency="True"
+                           Focusable="False"
+                           PopupAnimation="Slide">
+                            <Border Background="#E6E6E6" Padding="5">
+                                <ScrollViewer>
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+        <Setter Property="Width" Value="30"/>
+        <Setter Property="Height" Value="23"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="Background" Value="#F0F0F0"/>
+        <Setter Property="BorderBrush" Value="#D3D3D3"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                       Background="{TemplateBinding Background}"
+                       BorderBrush="{TemplateBinding BorderBrush}"
+                       BorderThickness="{TemplateBinding BorderThickness}"
+                       CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#D3D3D3"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="#A9A9A9"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="DropdownButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+        <Setter Property="Width" Value="25"/>
+        <Setter Property="Background" Value="#E6E6E6"/>
+        <Setter Property="BorderBrush" Value="#D3D3D3"/>
+    </Style>
+    <Style x:Key="PopupContentRecordStyle" TargetType="{x:Type ContentControl}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Border BorderBrush="#D3D3D3" BorderThickness="1" CornerRadius="20" Background="#E6E6E6">
+                        <StackPanel>
+                            <Button Content="{x:Static local:Resource.RecordVideo}" 
+                                    Command="{Binding Path=DataContext.RecordVideoCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    Style="{StaticResource RoundedButtonStyle}"/>
+                            <Button Content="{x:Static local:Resource.RecordAreaVideo}" 
+                                    Command="{Binding Path=DataContext.RecordAreaVideoCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                    Style="{StaticResource RoundedButtonStyle}"/>
+                        </StackPanel>
+
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="PopupContentScreenshotStyle" TargetType="{x:Type ContentControl}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Border BorderBrush="#D3D3D3" BorderThickness="1" CornerRadius="20" Background="#E6E6E6">
+                        <StackPanel>
+                            <Button Content="{x:Static local:Resource.FullScreen}" 
+                                Command="{Binding Path=DataContext.CaptureFullCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                Style="{StaticResource RoundedButtonStyle}"/>
+                            <Button Content="{x:Static local:Resource.SelectArea}" 
+                                Command="{Binding Path=DataContext.CaptureAreaCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                Style="{StaticResource RoundedButtonStyle}"/>
+                            <Button Content="{x:Static local:Resource.CaptureWindow}" 
+                                Command="{Binding Path=DataContext.CaptureWindowCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                Style="{StaticResource RoundedButtonStyle}"/>
+                            <Button Content="{x:Static local:Resource.CaptureWindowScroll}" 
+                                Command="{Binding Path=DataContext.CaptureWindowScrollCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                Style="{StaticResource RoundedButtonStyle}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style></ResourceDictionary>

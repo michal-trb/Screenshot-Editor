@@ -1,83 +1,14 @@
 ﻿<Window x:Class="screenerWpf.Views.VideoPlayerWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Video Player" Height="450" Width="800" Background="#1E1E1E" WindowStyle='None'
+        Title="Video Player" Height="450" Width="800" Style="{DynamicResource WindowStyle}" WindowStyle='None'
 >
     <Window.Resources>
-        <Style x:Key="ThumbnailBorderStyle" TargetType="Border">
-            <Setter Property="Background" Value="#FF303030"/>
-            <Setter Property="BorderBrush" Value="#FF303030"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="CornerRadius" Value="5"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="5"/>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#505962"/>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style x:Key="RoundedButtonStyle" TargetType="Button">
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="Background" Value="#3E3E42"/>
-            <Setter Property="BorderBrush" Value="#3E3E42"/>
-            <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-                             Background="{TemplateBinding Background}"
-                             BorderBrush="{TemplateBinding BorderBrush}"
-                             BorderThickness="{TemplateBinding BorderThickness}"
-                             CornerRadius="10">
-                            <ContentPresenter HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#505962"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#70787C"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
-            <Setter Property="Width" Value="30"/>
-            <Setter Property="Height" Value="30"/>
-            <Setter Property="Margin" Value="2"/>
-            <Setter Property="Background" Value="#1E1E1E"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="border"
-                       Background="{TemplateBinding Background}"
-                       BorderBrush="{TemplateBinding BorderBrush}"
-                       BorderThickness="{TemplateBinding BorderThickness}"
-                       CornerRadius="5">
-                            <!-- Ustawienie zaokrąglenia tutaj -->
-                            <ContentPresenter HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#505962"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="#70787C"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="LightStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -88,7 +19,7 @@
             <RowDefinition Height="Auto"/>
             <!-- Przestrzeń dla kontrolerów -->
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Background="#3E3E42" Height="35" VerticalAlignment="Top" MouseDown="TitleBar_MouseDown" CornerRadius="5">
+        <Border Grid.Row="0" Style="{DynamicResource TitleBarStyleMain}" MouseDown="TitleBar_MouseDown">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -102,13 +33,14 @@
                 </StackPanel>
             </Grid>
         </Border>
-        <MediaElement Grid.Row="1" x:Name="mediaPlayer" Margin="5
-                      " LoadedBehavior="Manual" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="MediaPlayer_MediaEnded" />
+        <MediaElement Grid.Row="1" x:Name="mediaPlayer" Margin="5"
+                      LoadedBehavior="Manual" MediaOpened="MediaPlayer_MediaOpened" MediaEnded="MediaPlayer_MediaEnded" />
+
         <DockPanel Grid.Row="2" LastChildFill="True">
-            <Button Content="Play" DockPanel.Dock="Left" Click="PlayButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
-            <Button Content="Pause" DockPanel.Dock="Left" Click="PauseButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
-            <Button Content="Stop" DockPanel.Dock="Left" Click="StopButton_Click" Style="{StaticResource RoundedButtonStyle}"/>
-            <TextBlock x:Name="timeText" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="5,0" Foreground="White"/>
+            <Button Content="Play" DockPanel.Dock="Left" Click="PlayButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Pause" DockPanel.Dock="Left" Click="PauseButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Content="Stop" DockPanel.Dock="Left" Click="StopButton_Click" Style="{DynamicResource RoundedButtonStyle}"/>
+            <TextBlock x:Name="timeText" DockPanel.Dock="Left" VerticalAlignment="Center" Margin="5,0" Foreground="{DynamicResource ForegroundBrush}"/>
             <Slider x:Name="timelineSlider" DockPanel.Dock="Right" ValueChanged="TimelineSlider_ValueChanged" VerticalAlignment="Center"/>
         </DockPanel>
     </Grid>
