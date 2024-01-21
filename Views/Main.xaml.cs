@@ -14,7 +14,6 @@ namespace screenerWpf
     public partial class Main : Window
     {
         private readonly IOptionsWindowFactory optionsWindowFactory;
-        private bool isAnyExpanderExpanded = false;
 
         public Main(MainViewModel viewModel, IOptionsWindowFactory optionsWindowFactory)
         {
@@ -98,7 +97,7 @@ namespace screenerWpf
             }
             else
             {
-                this.Width = 300; // Zmniejsz szerokość, gdy wszystkie Expandery są zwinięte
+                this.Width = 296; // Zmniejsz szerokość, gdy wszystkie Expandery są zwinięte
             }
         }
 

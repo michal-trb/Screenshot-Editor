@@ -9,9 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\arrow-left-64.png" />
+    <None Remove="Icons\blur-64.png" />
+    <None Remove="Icons\brush-64.png" />
+    <None Remove="Icons\bubble-64.png" />
+    <None Remove="Icons\file-64.png" />
     <None Remove="Icons\folder-16.png" />
     <None Remove="Icons\folder-sc-16.png" />
     <None Remove="Icons\folder-vi-16.png" />
+    <None Remove="Icons\pdf-file-64.png" />
+    <None Remove="Icons\rect-64.png" />
+    <None Remove="Icons\save-64.png" />
+    <None Remove="Icons\text-64.png" />
     <None Remove="Properties\Settings.settings" />
     <None Remove="tessdata\eng.traineddata" />
     <None Remove="tessdata\pol.traineddata" />
@@ -24,10 +33,37 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Icons\arrow-left-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\blur-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\brush-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\bubble-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\file-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\folder-sc-16.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\folder-vi-16.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\pdf-file-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\rect-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\save-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\text-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Properties\Settings.settings">

@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Style="{DynamicResource WindowStyle}"
         Title="{x:Static local:Resource.MainTitle}"
-        Height="127" Width="300"
+        Height="130" Width="296"
         WindowStyle="None"    
         LocationChanged="Window_LocationChanged"
         MouseLeftButtonDown="MainWindow_MouseLeftButtonDown">
@@ -15,7 +15,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="LightStyle.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/Views/LightStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -49,7 +49,7 @@
                         HorizontalAlignment="Left"
                         Grid.ColumnSpan="2"
                         Margin="2,2,0,2"
-                        Width="71" />
+                        Width="71"/>
 
                 <!-- StackPanel z przyciskami po prawej stronie -->
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
@@ -71,8 +71,7 @@
                 <Button Content="{x:Static local:Resource.ScreenshotButton}" 
                         Command="{Binding CaptureFullCommand}" 
                         Style="{StaticResource RoundedButtonStyle}"
-                        Margin="3,3,0,3" >
-                </Button>
+                        Margin="3,3,0,3" FontFamily="Segoe UI Semibold" />
                 <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" 
                         Command="{Binding ToggleScreenshotPopupCommand}"
                         Margin="-10,3,3,3" />
@@ -87,7 +86,7 @@
                         Content="{x:Static local:Resource.RecordButton}"
                         Command="{Binding RecordVideoCommand}"
                         Style="{StaticResource RoundedButtonStyle}"
-                        Margin="3,3,0,3" />
+                        Margin="3,3,0,3" FontFamily="Segoe UI Semibold" />
                 <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" 
                         Command="{Binding ToggleRecordPopupCommand}"
                         Margin="-10,3,3,3"/>
@@ -98,14 +97,16 @@
         </Grid>
 
 
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Margin="0,0,0,3">
             <!-- TextBlock dla tytułu "Last Screenshots" -->
             <Expander x:Name="ExpanderScreenshots" 
+                      FontSize="9"
                       Header="{x:Static local:Resource.LastScreenshots}" 
                       Foreground="{DynamicResource ForegroundBrush}" 
                       IsExpanded="False"  
                       Expanded="Expander_Expanded" 
-                      Collapsed="Expander_Collapsed" >
+                      Collapsed="Expander_Collapsed" 
+                      >
                 <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
                 <Viewbox Stretch="Uniform" Margin="0,5,0,5">
                     <ItemsControl ItemsSource="{Binding LastScreenshots}">
@@ -142,11 +143,12 @@
         <Grid Grid.Row="3">
 
             <Expander x:Name="ExpanderVideos" 
+                      FontSize="9"
                       Header="{x:Static local:Resource.LastVideos}" 
                       Foreground="{DynamicResource ForegroundBrush}" 
                       IsExpanded="False"  
                       Expanded="Expander_Expanded" 
-                      Collapsed="Expander_Collapsed" >
+                      Collapsed="Expander_Collapsed" FontFamily="Candara" >
                 <Viewbox Stretch="Uniform" Margin="0,5,0,5">
                     <ItemsControl ItemsSource="{Binding LastVideos}">
                         <ItemsControl.ItemsPanel>
