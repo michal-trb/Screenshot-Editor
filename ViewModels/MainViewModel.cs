@@ -93,6 +93,27 @@ namespace screenerWpf
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public void BringMainWindowToFront()
+        {
+            // Lokalizowanie głównego okna aplikacji
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow != null)
+            {
+                // Ustawienie okna jako aktywnego
+                mainWindow.Activate();
+
+                // Sprawdzenie, czy okno nie jest minimalizowane
+                if (mainWindow.WindowState == WindowState.Minimized)
+                {
+                    mainWindow.WindowState = WindowState.Normal;
+                }
+
+                // Przynoszenie okna na pierwszy plan
+                mainWindow.Topmost = true;  // Ustawienie okna jako najwyższego
+                mainWindow.Topmost = false; // Następnie odwołanie tej decyzji, aby uniknąć zachowania "zawsze na wierzchu"
+            }
+        }
+
         public void ToggleRecordPopup()
         {
             IsRecordPopupOpen = !IsRecordPopupOpen;

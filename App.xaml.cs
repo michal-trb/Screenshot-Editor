@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using screenerWpf.Interfaces;
+using screenerWpf.Sevices;
 using System;
 using System.Windows;
 
@@ -15,7 +17,17 @@ namespace screenerWpf
         public App()
         {
             serviceProvider = ServiceProviderFactory.CreateServiceProvider();
-            MainViewModelService = serviceProvider.GetRequiredService<MainViewModel>();
+
+            var windowService = serviceProvider.GetRequiredService<IWindowService>() as WindowService;
+            var mainViewModel = serviceProvider.GetRequiredService<MainViewModel>();
+
+            if (windowService != null)
+            {
+                windowService.MainViewModel = mainViewModel;
+            }
+
+            MainViewModelService = mainViewModel;
+
         }
 
         protected override void OnStartup(StartupEventArgs e)
