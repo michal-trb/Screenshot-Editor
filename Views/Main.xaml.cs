@@ -7,6 +7,7 @@ using System;
 using System.Windows.Controls.Primitives;
 using System.IO;
 using screenerWpf.Helpers;
+using screenerWpf.Sevices;
 
 namespace screenerWpf
 {
@@ -35,19 +36,16 @@ namespace screenerWpf
 
         private void MinimizeWindow(object sender, RoutedEventArgs e)
         {
-            PopupManager.CloseAllPopups();
             WindowState = WindowState.Minimized;
         }
 
         private void MaximizeRestoreWindow(object sender, RoutedEventArgs e)
         {
-            PopupManager.CloseAllPopups();
             WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
 
         private void CloseWindow(object sender, RoutedEventArgs e)
         {
-            PopupManager.CloseAllPopups();
             Close();
         }
 
@@ -61,7 +59,6 @@ namespace screenerWpf
 
         private void Screenshot_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            PopupManager.CloseAllPopups();
             if (sender is Image image && image.DataContext is LastScreenshot screenshot)
             {
                 (DataContext as MainViewModel)?.OpenScreenshot(screenshot.FilePath);
@@ -70,7 +67,6 @@ namespace screenerWpf
 
         private void Video_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            PopupManager.CloseAllPopups();
             if (sender is Image image && image.DataContext is LastVideo video)
             {
                 (DataContext as MainViewModel)?.OpenVideo(video.FilePath);
@@ -97,7 +93,35 @@ namespace screenerWpf
             }
             else
             {
-                this.Width = 296; // Zmniejsz szerokość, gdy wszystkie Expandery są zwinięte
+                this.Width = 300; // Zmniejsz szerokość, gdy wszystkie Expandery są zwinięte
+            }
+        }
+
+        private void Window_Deactivated(object sender, EventArgs e)
+        {
+            var viewModel = DataContext as MainViewModel;
+            if (viewModel != null)
+            {
+                viewModel.IsRecordPopupOpen = false;
+                viewModel.IsScreenshotPopupOpen = false;
+            }
+        }
+
+        private void RecordPopup_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var viewModel = DataContext as MainViewModel; 
+            if (viewModel != null)
+            {
+                viewModel.ToggleRecordPopup();
+            }
+        }
+
+        private void ScreenshotPopup_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var viewModel = DataContext as MainViewModel;
+            if (viewModel != null)
+            {
+                viewModel.ToggleScreenshotPopup();
             }
         }
 
@@ -156,5 +180,10 @@ namespace screenerWpf
             PopupManager.CloseAllPopups();
         }
 
+        private void ActivateMainWindow()
+        {
+            this.Topmost = true;
+            this.Topmost = false;
+        }
     }
 }

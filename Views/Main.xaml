@@ -7,10 +7,11 @@
         mc:Ignorable="d"
         Style="{DynamicResource WindowStyle}"
         Title="{x:Static local:Resource.MainTitle}"
-        Height="130" Width="296"
+        Height="130" Width="300"
         WindowStyle="None"    
         LocationChanged="Window_LocationChanged"
-        MouseLeftButtonDown="MainWindow_MouseLeftButtonDown">
+        MouseLeftButtonDown="MainWindow_MouseLeftButtonDown"
+        Deactivated="Window_Deactivated">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -21,7 +22,8 @@
     </Window.Resources>
 
     <Grid x:Name="MainGrid"
-        Grid.Row="1" Margin="3">
+        Margin="5"
+        Grid.Row="1">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <!-- Pasek tytułu -->
@@ -34,7 +36,9 @@
         </Grid.RowDefinitions>
 
         <!-- Niestandardowy pasek tytułu -->
-        <Border Grid.Row="0" Style="{DynamicResource TitleBarStyleMain}" MouseDown="TitleBar_MouseDown">
+        <Border Grid.Row="0"
+                Style="{DynamicResource TitleBarStyleMain}"
+                MouseDown="TitleBar_MouseDown">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -73,7 +77,7 @@
                         Style="{StaticResource RoundedButtonStyle}"
                         Margin="3,3,0,3" FontFamily="Segoe UI Semibold" />
                 <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" 
-                        Command="{Binding ToggleScreenshotPopupCommand}"
+                        MouseEnter="ScreenshotPopup_MouseEnter"
                         Margin="-10,3,3,3" />
                 <Popup x:Name="ScreenshotPopup" IsOpen="{Binding IsScreenshotPopupOpen}" AllowsTransparency="True">
                     <ContentControl Style="{StaticResource PopupContentScreenshotStyle}"/>
@@ -88,7 +92,7 @@
                         Style="{StaticResource RoundedButtonStyle}"
                         Margin="3,3,0,3" FontFamily="Segoe UI Semibold" />
                 <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" 
-                        Command="{Binding ToggleRecordPopupCommand}"
+                        MouseEnter="RecordPopup_MouseEnter"
                         Margin="-10,3,3,3"/>
                 <Popup x:Name="RecordPopup" IsOpen="{Binding IsRecordPopupOpen}" AllowsTransparency="True">
                     <ContentControl Style="{StaticResource PopupContentRecordStyle}"/>
@@ -120,9 +124,17 @@
                                 <Border Style="{StaticResource ThumbnailBorderStyle}">
                                     <Grid Width="150" Height="150">
                                         <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
-                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <Image Source="{Binding Thumbnail}" Height="90" MouseDown="Screenshot_MouseDown"/>
-                                            <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+                                        <StackPanel Orientation="Vertical" 
+                                                    HorizontalAlignment="Center" 
+                                                    VerticalAlignment="Center">
+                                            <Image Source="{Binding Thumbnail}"
+                                                   Height="90" 
+                                                   MouseDown="Screenshot_MouseDown"/>
+                                            <TextBlock Text="{Binding FileName}" 
+                                                       FontSize="13"
+                                                       TextWrapping="Wrap" 
+                                                       TextAlignment="Center"
+                                                       Foreground="{DynamicResource ForegroundBrush}"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -137,18 +149,20 @@
                     Click="OpenScreenshotsFolder"
                     Background="Transparent" 
                     BorderThickness="0">
-                <Image Source="/Icons/folder-sc-16.png" Width="16" Height="16" ToolTip="{x:Static local:Resource.OpenScreenshots}" />
+                <Image Source="/Icons/folder-sc-16.png" 
+                       Width="16"
+                       Height="16"
+                       ToolTip="{x:Static local:Resource.OpenScreenshots}" />
             </Button>
         </Grid>
         <Grid Grid.Row="3">
-
             <Expander x:Name="ExpanderVideos" 
                       FontSize="9"
                       Header="{x:Static local:Resource.LastVideos}" 
                       Foreground="{DynamicResource ForegroundBrush}" 
                       IsExpanded="False"  
                       Expanded="Expander_Expanded" 
-                      Collapsed="Expander_Collapsed" FontFamily="Candara" >
+                      Collapsed="Expander_Collapsed">
                 <Viewbox Stretch="Uniform" Margin="0,5,0,5">
                     <ItemsControl ItemsSource="{Binding LastVideos}">
                         <ItemsControl.ItemsPanel>
@@ -161,9 +175,17 @@
                                 <Border Style="{StaticResource ThumbnailBorderStyle}">
                                     <Grid Width="150" Height="150">
                                         <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
-                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <Image Source="{Binding Thumbnail}" Height="90" MouseDown="Video_MouseDown"/>
-                                            <TextBlock Text="{Binding FileName}" TextWrapping="Wrap" TextAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+                                        <StackPanel Orientation="Vertical" 
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center">
+                                            <Image Source="{Binding Thumbnail}"
+                                                   Height="90" 
+                                                   MouseDown="Video_MouseDown"/>
+                                            <TextBlock Text="{Binding FileName}"
+                                                       FontSize="13"
+                                                       TextWrapping="Wrap"
+                                                       TextAlignment="Center" 
+                                                       Foreground="{DynamicResource ForegroundBrush}"/>
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -172,8 +194,16 @@
                     </ItemsControl>
                 </Viewbox>
             </Expander>
-            <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,5,0"  Click="OpenVideosFolder" Background="Transparent" BorderThickness="0">
-                <Image Source="/Icons/folder-vi-16.png" Width="16" Height="16" ToolTip="{x:Static local:Resource.OpenVideos}" />
+            <Button HorizontalAlignment="Right"
+                    VerticalAlignment="Top" 
+                    Margin="0,0,5,0"  
+                    Click="OpenVideosFolder"
+                    Background="Transparent" 
+                    BorderThickness="0">
+                <Image Source="/Icons/folder-vi-16.png"
+                       Width="16" 
+                       Height="16"
+                       ToolTip="{x:Static local:Resource.OpenVideos}" />
             </Button>
         </Grid>
     </Grid>

@@ -18,6 +18,9 @@ namespace screenerWpf
         private WriteableBitmap canvasBitmap;
         private BitmapSource initialImage;
         private readonly ICanvasInputHandler inputHandler;
+        public delegate void ClosedEventHandler();
+        public event ClosedEventHandler EditorClosed;
+        public event Action ImageEditorClosed;
 
         public ImageEditorWindow(BitmapSource initialBitmap)
         {
@@ -41,8 +44,14 @@ namespace screenerWpf
             viewModel.MinimizeRequest += MinimizeWindow;
             viewModel.MaximizeRestoreRequest += MaximizeRestoreWindow;
             viewModel.CloseRequest += CloseWindow;
+            this.Closing += ImageEditorWindow_Closing;
+            this.Topmost = true;
         }
 
+        private void ImageEditorWindow_Closing(object sender, CancelEventArgs e)
+        {
+            ImageEditorClosed?.Invoke();
+        }
 
         private void CreateCanvasBitmap()
         {
@@ -85,6 +94,8 @@ namespace screenerWpf
 
         private void CloseWindow()
         {
+            // Wywołanie zdarzenia przed zamknięciem okna
+            EditorClosed?.Invoke();
             Close();
         }
 

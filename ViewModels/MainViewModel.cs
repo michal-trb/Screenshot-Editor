@@ -79,7 +79,7 @@ namespace screenerWpf
             LoadLastVideos();
         }
 
-        private void ToggleScreenshotPopup()
+        public void ToggleScreenshotPopup()
         {
             IsScreenshotPopupOpen = !IsScreenshotPopupOpen;
             if (IsScreenshotPopupOpen)
@@ -93,7 +93,7 @@ namespace screenerWpf
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        private void ToggleRecordPopup()
+        public void ToggleRecordPopup()
         {
             IsRecordPopupOpen = !IsRecordPopupOpen;
             if (IsRecordPopupOpen)
@@ -104,14 +104,15 @@ namespace screenerWpf
 
         private void ExecuteCaptureFull(object parameter)
         {
+            MinimizeMainWindow();
+
             Bitmap bitmap = screenCaptureService.CaptureScreen();
-            ClosePopups();
             ShowEditorWindow(bitmap);
         }
 
         private void ExecuteCaptureWindowScroll(object parameter)
         {
-            ClosePopups();
+            MinimizeMainWindow();
 
             var bitmap = screenCaptureService.CaptureWithScrollAsync().Result;
             if (bitmap != null) 
@@ -122,7 +123,7 @@ namespace screenerWpf
 
         private void ExecuteCaptureWindow(object parameter)
         {
-            ClosePopups();
+            MinimizeMainWindow();
 
             var bitmap = screenCaptureService.CaptureWindow();
             if (bitmap != null)
@@ -133,7 +134,7 @@ namespace screenerWpf
 
         private void ExecuteCaptureArea(object parameter)
         {
-            ClosePopups();
+            MinimizeMainWindow();
 
             Rectangle area = windowService.SelectArea();
             if (!area.IsEmpty)
@@ -231,8 +232,6 @@ namespace screenerWpf
         }
         private void ExecuteRecordVideo(object parameter)
         {
-            ClosePopups();
-
             // Rozpoczęcie nagrywania
             screenCaptureService.StartRecording();
             ShowStopRecordingButton();
@@ -240,8 +239,6 @@ namespace screenerWpf
 
         private void ExecuteAreaRecordVideo(object parameter)
         {
-            ClosePopups();
-
             var area = windowService.SelectArea();
             if (!area.IsEmpty)
             {
@@ -275,6 +272,15 @@ namespace screenerWpf
         {
             IsScreenshotPopupOpen = false;
             IsRecordPopupOpen = false;
+        }
+
+        private void MinimizeMainWindow()
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow != null)
+            {
+                mainWindow.WindowState = WindowState.Minimized;
+            }
         }
     }
 }
