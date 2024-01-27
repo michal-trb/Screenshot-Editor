@@ -9,12 +9,10 @@ using screenerWpf.Models;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Linq;
-using System.Threading.Tasks;
 using screenerWpf.Views;
 using screenerWpf.Properties;
 using System.ComponentModel;
 using screenerWpf.Helpers;
-using System.Windows.Navigation;
 
 namespace screenerWpf
 {
@@ -123,7 +121,7 @@ namespace screenerWpf
             }
         }
 
-        private void ExecuteCaptureFull(object parameter)
+        public void ExecuteCaptureFull(object parameter)
         {
             MinimizeMainWindow();
 
@@ -131,7 +129,25 @@ namespace screenerWpf
             ShowEditorWindow(bitmap);
         }
 
-        private void ExecuteCaptureWindowScroll(object parameter)
+        public void ExecuteCaptureFullJumpTask()
+        {
+            MessageBox.Show("Przed Minimalize.", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (screenCaptureService == null)
+            {
+                MessageBox.Show("screenCaptureService jest null", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if (screenCaptureService != null)
+            {
+                MessageBox.Show("screenCaptureService nie jest null", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            Bitmap bitmap = screenCaptureService.CaptureScreen();
+            MessageBox.Show("Po capture screen", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            ShowEditorWindow(bitmap);
+        }
+
+        public void ExecuteCaptureWindowScroll(object parameter)
         {
             MinimizeMainWindow();
 
@@ -142,7 +158,7 @@ namespace screenerWpf
             }
         }
 
-        private void ExecuteCaptureWindow(object parameter)
+        public void ExecuteCaptureWindow(object parameter)
         {
             MinimizeMainWindow();
 
@@ -153,7 +169,7 @@ namespace screenerWpf
             }
         }
 
-        private void ExecuteCaptureArea(object parameter)
+        public void ExecuteCaptureArea(object parameter)
         {
             MinimizeMainWindow();
 
@@ -165,7 +181,7 @@ namespace screenerWpf
             }
         }
 
-        private void ShowEditorWindow(Bitmap bitmap)
+        public void ShowEditorWindow(Bitmap bitmap)
         {
             if (bitmap == null)
             {
@@ -251,14 +267,15 @@ namespace screenerWpf
                 MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd");
             }
         }
-        private void ExecuteRecordVideo(object parameter)
+
+        public void ExecuteRecordVideo(object parameter)
         {
             // Rozpoczęcie nagrywania
             screenCaptureService.StartRecording();
             ShowStopRecordingButton();
         }
 
-        private void ExecuteAreaRecordVideo(object parameter)
+        public void ExecuteAreaRecordVideo(object parameter)
         {
             var area = windowService.SelectArea();
             if (!area.IsEmpty)

@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using screenerWpf.Interfaces;
+using screenerWpf.Properties;
 using screenerWpf.Sevices;
 using System;
+using System.Linq;
 using System.Windows;
-using screenerWpf.Properties;
+using System.Windows.Shell;
 
 namespace screenerWpf
 {
@@ -30,18 +32,90 @@ namespace screenerWpf
             }
 
             MainViewModelService = mainViewModel;
-
         }
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
+            SetupJumpList();
+
             var mainWindow = serviceProvider.GetRequiredService<Main>();
-            // Ustaw DataContext głównego okna
             mainWindow.DataContext = MainViewModelService;
             mainWindow.Show();
+
+            if (e.Args.Length > 0)
+            {
+                HandleJumpListArguments(e.Args.FirstOrDefault());
+            }
         }
+
+        private void SetupJumpList()
+        {
+            JumpList jumpList = new JumpList();
+
+            // Task for screenshot
+            AddJumpTask(jumpList, "Take Screenshot", "Create a new screenshot", "screenshot");
+
+            // Task for scrolling screenshot
+            AddJumpTask(jumpList, "Scrolling Screenshot", "Create a scrolling screenshot", "captureScroll");
+
+            // Task for window screenshot
+            AddJumpTask(jumpList, "Window Screenshot", "Create a window screenshot", "captureWindow");
+
+            // Task for area screenshot
+            AddJumpTask(jumpList, "Area Screenshot", "Create a screenshot of a selected area", "captureArea");
+
+            // Task for video recording
+            AddJumpTask(jumpList, "Record Video", "Start video recording", "recordVideo");
+
+            // Task for area video recording
+            AddJumpTask(jumpList, "Area Video Recording", "Record video in a selected area", "recordAreaVideo");
+
+            jumpList.Apply();
+            JumpList.SetJumpList(Application.Current, jumpList);
+        }
+
+        private void AddJumpTask(JumpList jumpList, string title, string description, string argument)
+        {
+            JumpTask task = new JumpTask
+            {
+                Title = title,
+                Description = description,
+                ApplicationPath = "C:\\screenerWpf\\bin\\x64\\Debug\\net7.0-windows\\screenerWpf.exe",
+                Arguments = argument
+            };
+            jumpList.JumpItems.Add(task);
+        }
+
+        private void HandleJumpListArguments(string args)
+        {
+            switch (args)
+            {
+                case "screenshot":
+                    MainViewModelService?.ExecuteCaptureFull(null);
+                    break;
+                case "captureScroll":
+                    MainViewModelService?.ExecuteCaptureWindowScroll(null);
+                    break;
+                case "captureWindow":
+                    MainViewModelService?.ExecuteCaptureWindow(null);
+                    break;
+                case "captureArea":
+                    MainViewModelService?.ExecuteCaptureArea(null);
+                    break;
+                case "recordVideo":
+                    MainViewModelService?.ExecuteRecordVideo(null);
+                    break;
+                case "recordAreaVideo":
+                    MainViewModelService?.ExecuteAreaRecordVideo(null);
+                    break;
+                default:
+                    // Handle unknown arguments or log them
+                    break;
+            }
+        }
+
 
         private void LoadTheme()
         {
@@ -64,6 +138,5 @@ namespace screenerWpf
             Application.Current.Resources.MergedDictionaries.Add(sourceResourceDictionary);
             Application.Current.Resources.MergedDictionaries.Add(themeResourceDictionary);
         }
-
     }
 }

@@ -138,12 +138,15 @@
     <PackageReference Include="WriteableBitmapEx" Version="1.6.8" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Page Include="App.xaml" />
-  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="obj\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </ApplicationDefinition>
   </ItemGroup>
 
   <ItemGroup>

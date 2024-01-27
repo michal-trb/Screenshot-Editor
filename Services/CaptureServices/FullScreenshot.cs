@@ -10,6 +10,7 @@ namespace screenerWpf.Sevices.CaptureServices
         {
             // Uzyskanie współczynnika DPI
             var presentationSource = PresentationSource.FromVisual(Application.Current.MainWindow);
+
             double dpiX = 96; // Domyślne DPI
             double dpiY = 96; // Domyślne DPI
 
@@ -18,7 +19,6 @@ namespace screenerWpf.Sevices.CaptureServices
                 dpiX = presentationSource.CompositionTarget.TransformToDevice.M11 * 96;
                 dpiY = presentationSource.CompositionTarget.TransformToDevice.M22 * 96;
             }
-
             // Uzyskanie rozmiarów ekranu głównego z uwzględnieniem DPI
             int screenWidth = (int)(SystemParameters.PrimaryScreenWidth * dpiX / 96);
             int screenHeight = (int)(SystemParameters.PrimaryScreenHeight * dpiY / 96);
@@ -29,6 +29,7 @@ namespace screenerWpf.Sevices.CaptureServices
             // Rysowanie zrzutu ekranu na bitmapie
             using (Graphics g = Graphics.FromImage(bitmap))
             {
+
                 g.CopyFromScreen(0, 0, 0, 0, new Size(screenWidth, screenHeight));
             }
 
