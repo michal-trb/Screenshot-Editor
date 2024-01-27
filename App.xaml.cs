@@ -78,15 +78,17 @@ namespace screenerWpf
 
         private void AddJumpTask(JumpList jumpList, string title, string description, string argument)
         {
+            var fullPath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
             JumpTask task = new JumpTask
             {
                 Title = title,
                 Description = description,
-                ApplicationPath = "C:\\screenerWpf\\bin\\x64\\Debug\\net7.0-windows\\screenerWpf.exe",
+                ApplicationPath = fullPath,
                 Arguments = argument
             };
             jumpList.JumpItems.Add(task);
         }
+
 
         private void HandleJumpListArguments(string args)
         {
