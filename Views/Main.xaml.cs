@@ -26,6 +26,40 @@ namespace screenerWpf
 
         }
 
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            base.OnPreviewMouseDown(e);
+
+            if (!IsMouseOverPopup() 
+                && !IsClickOnPopupButton(e))
+            {
+                CloseAllPopups();
+            }
+        }
+
+        private bool IsMouseOverPopup()
+        {
+            // Sprawdź, czy kursor myszy znajduje się nad jednym z popupów
+            return ScreenshotPopup.IsMouseOver || RecordPopup.IsMouseOver;
+        }
+
+        private bool IsClickOnPopupButton(MouseButtonEventArgs e)
+        {
+            // Sprawdź, czy kliknięto na jednym z przycisków otwierających popupy
+            var source = e.Source as FrameworkElement;
+            return source == OpenScreenshotPopupButton || source == OpenRecordPopupButton;
+        }
+
+        private void CloseAllPopups()
+        {
+            var viewModel = DataContext as MainViewModel;
+            if (viewModel != null)
+            {
+                viewModel.IsScreenshotPopupOpen = false;
+                viewModel.IsRecordPopupOpen = false;
+            }
+        }
+
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
             PopupManager.CloseAllPopups();
@@ -93,7 +127,7 @@ namespace screenerWpf
             }
             else
             {
-                this.Width = 300; // Zmniejsz szerokość, gdy wszystkie Expandery są zwinięte
+                this.Width = 304; // Zmniejsz szerokość, gdy wszystkie Expandery są zwinięte
             }
         }
 
@@ -104,24 +138,6 @@ namespace screenerWpf
             {
                 viewModel.IsRecordPopupOpen = false;
                 viewModel.IsScreenshotPopupOpen = false;
-            }
-        }
-
-        private void RecordPopup_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var viewModel = DataContext as MainViewModel; 
-            if (viewModel != null)
-            {
-                viewModel.ToggleRecordPopup();
-            }
-        }
-
-        private void ScreenshotPopup_MouseEnter(object sender, MouseEventArgs e)
-        {
-            var viewModel = DataContext as MainViewModel;
-            if (viewModel != null)
-            {
-                viewModel.ToggleScreenshotPopup();
             }
         }
 
@@ -178,12 +194,6 @@ namespace screenerWpf
         private void MainWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             PopupManager.CloseAllPopups();
-        }
-
-        private void ActivateMainWindow()
-        {
-            this.Topmost = true;
-            this.Topmost = false;
         }
     }
 }

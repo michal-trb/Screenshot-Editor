@@ -7,17 +7,13 @@
         mc:Ignorable="d"
         Style="{DynamicResource WindowStyle}"
         Title="{x:Static local:Resource.MainTitle}"
-        Height="130" Width="300"
+        Height="133" Width="304"
         WindowStyle="None"    
         LocationChanged="Window_LocationChanged"
         MouseLeftButtonDown="MainWindow_MouseLeftButtonDown"
         Deactivated="Window_Deactivated">
-
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/Views/LightStyle.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -49,7 +45,7 @@
                 <Button Grid.Column="0"
                         Content="Options"
                         Click="OptionsButton_Click"
-                        Style="{StaticResource TitleBarButtonStyle}"
+                        Style="{DynamicResource TitleBarButtonStyle}"
                         HorizontalAlignment="Left"
                         Grid.ColumnSpan="2"
                         Margin="2,2,0,2"
@@ -57,9 +53,9 @@
 
                 <!-- StackPanel z przyciskami po prawej stronie -->
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button Content="_" Click="MinimizeWindow" Style="{StaticResource TitleBarButtonStyle}"/>
-                    <Button Content="[]" Click="MaximizeRestoreWindow" Style="{StaticResource TitleBarButtonStyle}"/>
-                    <Button Content="X" Click="CloseWindow" Style="{StaticResource TitleBarButtonStyle}"/>
+                    <Button Content="_" Click="MinimizeWindow" Style="{DynamicResource TitleBarButtonStyle}"/>
+                    <Button Content="[]" Click="MaximizeRestoreWindow" Style="{DynamicResource TitleBarButtonStyle}"/>
+                    <Button Content="X" Click="CloseWindow" Style="{DynamicResource TitleBarButtonStyle}"/>
                 </StackPanel>
             </Grid>
         </Border>
@@ -74,13 +70,14 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Button Content="{x:Static local:Resource.ScreenshotButton}" 
                         Command="{Binding CaptureFullCommand}" 
-                        Style="{StaticResource RoundedButtonStyle}"
+                        Style="{DynamicResource RoundedButtonStyle}"
                         Margin="3,3,0,3" FontFamily="Segoe UI Semibold" />
-                <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" 
-                        MouseEnter="ScreenshotPopup_MouseEnter"
+                <Button x:Name="OpenScreenshotPopupButton"
+                        Content="▼" Style="{DynamicResource DropdownButtonStyle}" 
+                        Command="{Binding ToggleScreenshotPopupCommand}"
                         Margin="-10,3,3,3" />
                 <Popup x:Name="ScreenshotPopup" IsOpen="{Binding IsScreenshotPopupOpen}" AllowsTransparency="True">
-                    <ContentControl Style="{StaticResource PopupContentScreenshotStyle}"/>
+                    <ContentControl Style="{DynamicResource PopupContentScreenshotStyle}"/>
                 </Popup>
             </StackPanel>
 
@@ -89,13 +86,14 @@
                 <Button x:Name="RecordButton" 
                         Content="{x:Static local:Resource.RecordButton}"
                         Command="{Binding RecordVideoCommand}"
-                        Style="{StaticResource RoundedButtonStyle}"
+                        Style="{DynamicResource RoundedButtonStyle}"
                         Margin="3,3,0,3" FontFamily="Segoe UI Semibold" />
-                <Button Content="▼" Style="{StaticResource DropdownButtonStyle}" 
-                        MouseEnter="RecordPopup_MouseEnter"
+                <Button Content="▼" Style="{DynamicResource DropdownButtonStyle}"
+                        x:Name="OpenRecordPopupButton"
+                        Command="{Binding ToggleRecordPopupCommand}"
                         Margin="-10,3,3,3"/>
                 <Popup x:Name="RecordPopup" IsOpen="{Binding IsRecordPopupOpen}" AllowsTransparency="True">
-                    <ContentControl Style="{StaticResource PopupContentRecordStyle}"/>
+                    <ContentControl Style="{DynamicResource PopupContentRecordStyle}"/>
                 </Popup>
             </StackPanel>
         </Grid>
@@ -121,7 +119,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Style="{StaticResource ThumbnailBorderStyle}">
+                                <Border Style="{DynamicResource ThumbnailBorderStyle}">
                                     <Grid Width="150" Height="150">
                                         <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
                                         <StackPanel Orientation="Vertical" 
@@ -172,7 +170,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Style="{StaticResource ThumbnailBorderStyle}">
+                                <Border Style="{DynamicResource ThumbnailBorderStyle}">
                                     <Grid Width="150" Height="150">
                                         <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
                                         <StackPanel Orientation="Vertical" 

@@ -3,6 +3,7 @@ using screenerWpf.Interfaces;
 using screenerWpf.Sevices;
 using System;
 using System.Windows;
+using screenerWpf.Properties;
 
 namespace screenerWpf
 {
@@ -16,6 +17,8 @@ namespace screenerWpf
 
         public App()
         {
+            LoadTheme();
+
             serviceProvider = ServiceProviderFactory.CreateServiceProvider();
 
             var windowService = serviceProvider.GetRequiredService<IWindowService>() as WindowService;
@@ -38,6 +41,28 @@ namespace screenerWpf
             // Ustaw DataContext głównego okna
             mainWindow.DataContext = MainViewModelService;
             mainWindow.Show();
+        }
+
+        private void LoadTheme()
+        {
+            string savedTheme = Settings.Default.Theme;
+            string themePath;
+
+            switch (savedTheme)
+            {
+                case "Dark":
+                    themePath = "Views/DarkStyle.xaml";
+                    break;
+                default:
+                    themePath = "Views/LightStyle.xaml";
+                    break;
+            }
+
+            var themeResourceDictionary = new ResourceDictionary { Source = new Uri(themePath, UriKind.Relative) };
+            var sourceResourceDictionary = new ResourceDictionary { Source = new Uri("Views\\Styles.xaml", UriKind.Relative) };
+
+            Application.Current.Resources.MergedDictionaries.Add(sourceResourceDictionary);
+            Application.Current.Resources.MergedDictionaries.Add(themeResourceDictionary);
         }
 
     }

@@ -2,22 +2,37 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:screenerWpf.Resources"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- This is Light style colors LightStyle.xaml-->
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
-    <!-- Definicja kolorów -->
-    <Color x:Key="Background50">#f7f7f7</Color>
-    <Color x:Key="Background100">#f0f0f0</Color>
-    <Color x:Key="TitleBarMain50">#f7f7f7</Color>
-    <Color x:Key="TitleBarMain100">#f0f0f0</Color>
-    <Color x:Key="Button400">#f7f7f7</Color>
-    <Color x:Key="Button600">#e3e3e3</Color>
-    <Color x:Key="Button700">#aaaaaa</Color>
-    <Color x:Key="ButtonDeep500">#d1d1d1</Color>
-    <Color x:Key="ButtonDeep600">#aaaaaa</Color>
-    <Color x:Key="ButtonDeep700">#969696</Color>
-    <Color x:Key="BorderBrushColor">#6a6a6a</Color>
+    <Color x:Key="Background950">#FAFCFE</Color>
+    <!-- Bardzo jasny, prawie biały -->
+    <Color x:Key="Background900">#F4F6F8</Color>
+    <!-- Jasny szary -->
+    <Color x:Key="TitleBarMain950">#FAFCFE</Color>
+    <!-- Bardzo jasny, dla paska tytułowego -->
+    <Color x:Key="TitleBarMain900">#F4F6F8</Color>
+    <!-- Jasny szary dla paska tytułowego -->
+    <Color x:Key="Button800">#DDE1E6</Color>
+    <!-- Jasny szary dla przycisków -->
+    <Color x:Key="Button600">#C5C9CF</Color>
+    <!-- Średnio jasny szary dla przycisków -->
+    <Color x:Key="Button500">#B2B6BC</Color>
+    <!-- Nieco ciemniejszy szary dla przycisków -->
+    <Color x:Key="Button400">#A0A4AA</Color>
+    <!-- Jeszcze ciemniejszy szary dla przycisków -->
+    <Color x:Key="ButtonDeep800">#D1D5DB</Color>
+    <!-- Średnio jasny szary dla głębszych elementów przycisków -->
+    <Color x:Key="ButtonDeep900">#BCC0C6</Color>
+    <!-- Jasny szary dla głębszych elementów przycisków -->
+    <Color x:Key="ButtonDeep600">#AEB2B8</Color>
+    <!-- Szary dla głębszych elementów przycisków -->
+    <Color x:Key="BorderBrushColor">#9DA1A7</Color>
+    <!-- Szary dla obramowań -->
     <Color x:Key="ForegroundColor">#333333</Color>
+    <!-- Ciemny dla tekstu, bez zmian -->
+
     <Thickness x:Key="StandardMargin">5</Thickness>
     <sys:Double x:Key="StandardWidth">35</sys:Double>
     <sys:Double x:Key="StandardHeight">35</sys:Double>
@@ -25,307 +40,19 @@
     <sys:Double x:Key="StandardFontSize">10</sys:Double>
     <CornerRadius x:Key="StandardCornerRadius">10</CornerRadius>
 
-    <SolidColorBrush x:Key="Background50Color" Color="{StaticResource Background50}"/>
-    <SolidColorBrush x:Key="Background100Color" Color="{StaticResource Background100}"/>
-    <SolidColorBrush x:Key="TitleBarMainColor" Color="{StaticResource TitleBarMain50}"/>
-    <SolidColorBrush x:Key="Button400Color" Color="{StaticResource Button400}"/>
+    <SolidColorBrush x:Key="Background950Color" Color="{StaticResource Background950}"/>
+    <SolidColorBrush x:Key="Background900Color" Color="{StaticResource Background900}"/>
+    <SolidColorBrush x:Key="TitleBarMainColor" Color="{StaticResource TitleBarMain950}"/>
+    <SolidColorBrush x:Key="Button800Color" Color="{StaticResource Button800}"/>
     <SolidColorBrush x:Key="Button600Color" Color="{StaticResource Button600}"/>
-    <SolidColorBrush x:Key="Button700Color" Color="{StaticResource Button700}"/>
-    <SolidColorBrush x:Key="ButtonDeep500Color" Color="{StaticResource ButtonDeep500}"/>
+    <SolidColorBrush x:Key="Button500Color" Color="{StaticResource Button500}"/>
+    <SolidColorBrush x:Key="Button400Color" Color="{StaticResource Button400}"/>
+    <SolidColorBrush x:Key="ButtonDeep800Color" Color="{StaticResource ButtonDeep800}"/>
+    <SolidColorBrush x:Key="ButtonDeep900Color" Color="{StaticResource ButtonDeep900}"/>
     <SolidColorBrush x:Key="ButtonDeep600Color" Color="{StaticResource ButtonDeep600}"/>
-    <SolidColorBrush x:Key="ButtonDeep700Color" Color="{StaticResource ButtonDeep700}"/>
 
     <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}"/>
     <SolidColorBrush x:Key="BorderBrushColorBrush" Color="{StaticResource BorderBrushColor}"/>
 
-    <Style TargetType="Window" x:Key="WindowStyle">
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="{StaticResource Background50}" Offset="0"/>
-                    <GradientStop Color="{StaticResource Background100}" Offset="1"/>
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <Style x:Key="TitleBarStyle" TargetType="Border">
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="{StaticResource TitleBarMain50}" Offset="0"/>
-                    <GradientStop Color="{StaticResource TitleBarMain100}" Offset="1"/>
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>   
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColorBrush}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="5"/>
-        <Setter Property="Height" Value="35"/>
-        <Setter Property="Margin" Value="0"/>
-    </Style>
-    <Style x:Key="TitleBarStyleMain" TargetType="Border">
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="{StaticResource TitleBarMain50}" Offset="0"/>
-                    <GradientStop Color="{StaticResource TitleBarMain100}" Offset="1"/>
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColorBrush}"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="CornerRadius" Value="5"/>
-        <Setter Property="Height" Value="30"/>
-        <Setter Property="Margin" Value="0"/>
-    </Style>
-    <Style x:Key="ThumbnailBorderStyle" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource Background50Color}"/> 
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColorBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="CornerRadius" Value="5"/>
-        <Setter Property="Margin" Value="5"/>
-        <Setter Property="Padding" Value="5"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource Button600Color}"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-    <Style x:Key="LabelStyle" TargetType="Label">
-        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-        <Setter Property="Background" Value="{StaticResource Background100Color}"/>
-        <Setter Property="Padding" Value="5"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="5"/>
-    </Style>
-
-    <Style x:Key="RoundedButtonStyle" TargetType="Button">
-        <Setter Property="Margin" Value="10"/>
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.15,0">
-                    <GradientStop Color="{StaticResource Button400}" Offset="0"/>
-                    <GradientStop Color="{StaticResource Button600}" Offset="1"/>
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColorBrush}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="Width" Value="120"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="border"
-                         Background="{TemplateBinding Background}"
-                         BorderBrush="{TemplateBinding BorderBrush}"
-                         BorderThickness="{TemplateBinding BorderThickness}"
-                         CornerRadius="5">
-                        <ContentPresenter HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" 
-                                 Value="True">
-                            <Setter TargetName="border"
-                                    Property="Background"
-                                    Value="{StaticResource Button700Color}"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed"
-                                 Value="True">
-                            <Setter TargetName="border"
-                                    Property="Background"
-                                    Value="{StaticResource Button600Color}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="CustomComboBoxStyle"
-           TargetType="ComboBox">
-        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
-        <Setter Property="Padding" Value="5"/>
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="ComboBox">
-                    <Grid>
-                        <ToggleButton Background="{TemplateBinding Background}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
-                              IsChecked="{Binding IsDropDownOpen,
-                                Mode=TwoWay,
-                                RelativeSource={RelativeSource 
-                                TemplatedParent}}"/>
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                  Margin="{TemplateBinding Padding}"
-                                  Content="{TemplateBinding SelectionBoxItem}"
-                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                  IsHitTestVisible="False"/>
-                        <Popup IsOpen="{Binding IsDropDownOpen,
-                                RelativeSource={RelativeSource
-                                TemplatedParent}}"
-                           Placement="Bottom"
-                           AllowsTransparency="True"
-                           Focusable="False"
-                           PopupAnimation="Slide">
-                            <Border Background="{StaticResource Button600Color}" Padding="5">
-                                <ScrollViewer>
-                                    <ItemsPresenter/>
-                                </ScrollViewer>
-                            </Border>
-                        </Popup>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
-        <Setter Property="Width" Value="30"/>
-        <Setter Property="Height" Value="23"/>
-        <Setter Property="Margin" Value="2"/>
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.15,0">
-                    <GradientStop Color="{StaticResource Button400}" Offset="0"/>
-                    <GradientStop Color="{StaticResource Button600}" Offset="1"/>
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColorBrush}"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="border"
-                       Background="{TemplateBinding Background}"
-                       BorderBrush="{TemplateBinding BorderBrush}"
-                       BorderThickness="{TemplateBinding BorderThickness}"
-                       CornerRadius="5">
-                        <ContentPresenter HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" 
-                                 Value="True">
-                            <Setter TargetName="border" 
-                                    Property="Background" 
-                                    Value="{StaticResource ButtonDeep500Color}"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" 
-                                 Value="True">
-                            <Setter TargetName="border"
-                                    Property="Background" 
-                                    Value="{StaticResource ButtonDeep600Color}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <Style x:Key="DropdownButtonStyle" TargetType="Button" >
-        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
-        <Setter Property="Width" Value="25"/>
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.15,0">
-                    <GradientStop Color="{StaticResource ButtonDeep500}" Offset="0"/>
-                    <GradientStop Color="{StaticResource ButtonDeep600}" Offset="1"/>
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border x:Name="border"
-                 Background="{TemplateBinding Background}"
-                 BorderBrush="{TemplateBinding BorderBrush}"
-                 BorderThickness="{TemplateBinding BorderThickness}"
-                 CornerRadius="5">
-                        <ContentPresenter HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" 
-                                 Value="True">
-                            <Setter TargetName="border" 
-                                    Property="Background" 
-                                    Value="{StaticResource ButtonDeep500Color}"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed"
-                                 Value="True">
-                            <Setter TargetName="border"
-                                    Property="Background" 
-                                    Value="{StaticResource ButtonDeep600Color}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBrushColorBrush}"/>
-    </Style>
-    <Style x:Key="PopupContentRecordStyle" TargetType="{x:Type ContentControl}">
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <Border BorderBrush="{StaticResource BorderBrushColorBrush}"
-                            BorderThickness="1"
-                            CornerRadius="10"
-                            Background="{StaticResource Background100Color}">
-                        <StackPanel>
-                            <Button Content="{x:Static local:Resource.RecordVideo}" 
-                                    Command="{Binding Path=DataContext.RecordVideoCommand,
-                                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                    Style="{StaticResource RoundedButtonStyle}"/>
-                            <Button Content="{x:Static local:Resource.RecordAreaVideo}" 
-                                    Command="{Binding Path=DataContext.RecordAreaVideoCommand,
-                                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                    Style="{StaticResource RoundedButtonStyle}"/>
-                        </StackPanel>
-
-                    </Border>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="PopupContentScreenshotStyle" TargetType="{x:Type ContentControl}">
-        <Setter Property="ContentTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <Border BorderBrush="{StaticResource BorderBrushColorBrush}" 
-                            BorderThickness="1" 
-                            CornerRadius="10" 
-                            Background="{StaticResource Background100Color}">
-                        <StackPanel>
-                            <Button Content="{x:Static local:Resource.FullScreen}" 
-                                Command="{Binding Path=DataContext.CaptureFullCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{StaticResource RoundedButtonStyle}"/>
-                            <Button Content="{x:Static local:Resource.SelectArea}" 
-                                Command="{Binding Path=DataContext.CaptureAreaCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{StaticResource RoundedButtonStyle}"/>
-                            <Button Content="{x:Static local:Resource.CaptureWindow}" 
-                                Command="{Binding Path=DataContext.CaptureWindowCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{StaticResource RoundedButtonStyle}"/>
-                            <Button Content="{x:Static local:Resource.CaptureWindowScroll}" 
-                                Command="{Binding Path=DataContext.CaptureWindowScrollCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{StaticResource RoundedButtonStyle}"/>
-                        </StackPanel>
-                    </Border>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
 </ResourceDictionary>

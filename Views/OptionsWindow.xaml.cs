@@ -17,17 +17,43 @@ namespace screenerWpf.Views
         {
             InitializeComponent();
             DataContext = optionsViewModel;
-
-            var appResources = Application.Current.Resources.MergedDictionaries;
-            var currentTheme = appResources.FirstOrDefault(rd => rd.Source != null && (rd.Source.OriginalString.Contains("LightStyle") || rd.Source.OriginalString.Contains("DarkStyle")));
-            if (currentTheme != null)
+            var savedTheme = Properties.Settings.Default.Theme;
+            if (!string.IsNullOrEmpty(savedTheme))
             {
-                var toggleButton = FindName("ToggleButton") as ToggleButton;
-                if (toggleButton != null)
+                styleCheckBox.IsChecked = savedTheme == "Dark";
+            }
+
+            if (!string.IsNullOrEmpty(savedTheme))
+            {
+                if (savedTheme == "Dark")
                 {
-                    toggleButton.IsChecked = currentTheme.Source.OriginalString.Contains("DarkStyle");
+                    ChangeTheme("Views\\DarkStyle.xaml");
+                }
+                else
+                {
+                    ChangeTheme("Views\\LightStyle.xaml");
                 }
             }
+        }
+
+        private void ThemeCheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            ChangeTheme("Views\\DarkStyle.xaml");
+            Properties.Settings.Default.Theme = "Dark";
+            Properties.Settings.Default.Save();
+        }
+
+        private void ThemeCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ChangeTheme("Views\\LightStyle.xaml");
+            Properties.Settings.Default.Theme = "Light";
+            Properties.Settings.Default.Save();
+        }
+
+        private void ChangeTheme(string themePath)
+        {
+            var newDict = new ResourceDictionary { Source = new Uri(themePath, UriKind.Relative) };
+            Application.Current.Resources.MergedDictionaries[1] = newDict;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

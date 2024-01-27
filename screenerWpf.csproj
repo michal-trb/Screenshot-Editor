@@ -8,6 +8,7 @@
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
 
+
   <ItemGroup>
     <None Remove="Icons\arrow-left-64.png" />
     <None Remove="Icons\blur-64.png" />

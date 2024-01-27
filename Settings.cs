@@ -16,7 +16,7 @@
             // this.SettingsSaving += this.SettingsSavingEventHandler;
             //
         }
-        
+
         private void SettingChangingEventHandler(object sender, System.Configuration.SettingChangingEventArgs e) {
             // Dodaj tutaj kod obsługi zdarzenia SettingChangingEvent.
         }
