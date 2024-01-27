@@ -11,26 +11,52 @@
 
   <ItemGroup>
     <None Remove="Icons\arrow-left-64.png" />
+    <None Remove="Icons\arrow-left-wh-64.png" />
     <None Remove="Icons\blur-64.png" />
+    <None Remove="Icons\blur-wh-64.png" />
     <None Remove="Icons\brush-64.png" />
+    <None Remove="Icons\brush-wh-64.png" />
     <None Remove="Icons\bubble-64.png" />
+    <None Remove="Icons\bubble-wh-64.png" />
     <None Remove="Icons\file-64.png" />
+    <None Remove="Icons\file-wh-64.png" />
     <None Remove="Icons\folder-16.png" />
     <None Remove="Icons\folder-sc-16.png" />
+    <None Remove="Icons\folder-sc-wh-16.png" />
     <None Remove="Icons\folder-vi-16.png" />
+    <None Remove="Icons\folder-vi-wh-16.png" />
     <None Remove="Icons\pdf-file-64.png" />
+    <None Remove="Icons\pdf-file-wh-64.png" />
     <None Remove="Icons\rect-64.png" />
+    <None Remove="Icons\rect-wh-64.png" />
     <None Remove="Icons\save-64.png" />
+    <None Remove="Icons\save-wh-64.png" />
     <None Remove="Icons\text-64.png" />
+    <None Remove="Icons\text-wh-64.png" />
     <None Remove="Properties\Settings.settings" />
     <None Remove="tessdata\eng.traineddata" />
     <None Remove="tessdata\pol.traineddata" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Icons\folder-16.png">
+    <Content Include="Icons\arrow-left-wh-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Content>
+    <Content Include="Icons\blur-wh-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\brush-wh-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\bubble-wh-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\file-wh-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\folder-16.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -52,19 +78,37 @@
     <Content Include="Icons\folder-sc-16.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\folder-sc-wh-16.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\folder-vi-16.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\folder-vi-wh-16.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\pdf-file-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\pdf-file-wh-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\rect-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\rect-wh-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\save-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\save-wh-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\text-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\text-wh-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Properties\Settings.settings">

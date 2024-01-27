@@ -147,7 +147,7 @@
                     Click="OpenScreenshotsFolder"
                     Background="Transparent" 
                     BorderThickness="0">
-                <Image Source="/Icons/folder-sc-16.png" 
+                <Image Source="{DynamicResource FolderScIcon}"
                        Width="16"
                        Height="16"
                        ToolTip="{x:Static local:Resource.OpenScreenshots}" />
@@ -198,7 +198,7 @@
                     Click="OpenVideosFolder"
                     Background="Transparent" 
                     BorderThickness="0">
-                <Image Source="/Icons/folder-vi-16.png"
+                <Image Source="{DynamicResource FolderViIcon}"
                        Width="16" 
                        Height="16"
                        ToolTip="{x:Static local:Resource.OpenVideos}" />

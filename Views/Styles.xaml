@@ -153,7 +153,7 @@
         </Setter.Value>
     </Setter>
 </Style>
-<Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+    <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
     <Setter Property="Width" Value="30"/>
     <Setter Property="Height" Value="23"/>
     <Setter Property="Margin" Value="2"/>
@@ -250,11 +250,11 @@
                         <Button Content="{x:Static local:Resource.RecordVideo}" 
                                     Command="{Binding Path=DataContext.RecordVideoCommand,
                                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                    Style="{StaticResource RoundedButtonStyle}"/>
+                                    Style="{DynamicResource RoundedButtonStyle}"/>
                         <Button Content="{x:Static local:Resource.RecordAreaVideo}" 
                                     Command="{Binding Path=DataContext.RecordAreaVideoCommand,
                                         RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                    Style="{StaticResource RoundedButtonStyle}"/>
+                                    Style="{DynamicResource RoundedButtonStyle}"/>
                     </StackPanel>
 
                 </Border>
@@ -267,27 +267,27 @@
     <Setter Property="ContentTemplate">
         <Setter.Value>
             <DataTemplate>
-                <Border BorderBrush="{StaticResource BorderBrushColorBrush}" 
+                    <Border BorderBrush="{DynamicResource BorderBrushColorBrush}" 
                             BorderThickness="0" 
                             CornerRadius="10" 
-                            Background="{StaticResource Background900Color}">
+                            Background="{DynamicResource Background900Color}">
                     <StackPanel>
                         <Button Content="{x:Static local:Resource.FullScreen}" 
                                 Command="{Binding Path=DataContext.CaptureFullCommand,
                                     RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{StaticResource RoundedButtonStyle}"/>
+                                Style="{DynamicResource RoundedButtonStyle}"/>
                         <Button Content="{x:Static local:Resource.SelectArea}" 
                                 Command="{Binding Path=DataContext.CaptureAreaCommand,
                                     RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{StaticResource RoundedButtonStyle}"/>
+                                Style="{DynamicResource RoundedButtonStyle}"/>
                         <Button Content="{x:Static local:Resource.CaptureWindow}" 
                                 Command="{Binding Path=DataContext.CaptureWindowCommand,
                                     RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{StaticResource RoundedButtonStyle}"/>
+                                Style="{DynamicResource RoundedButtonStyle}"/>
                         <Button Content="{x:Static local:Resource.CaptureWindowScroll}" 
                                 Command="{Binding Path=DataContext.CaptureWindowScrollCommand,
                                     RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{StaticResource RoundedButtonStyle}"/>
+                                Style="{DynamicResource RoundedButtonStyle}"/>
                     </StackPanel>
                 </Border>
             </DataTemplate>

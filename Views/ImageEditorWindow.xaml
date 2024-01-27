@@ -60,8 +60,7 @@
                 </StackPanel>
             </Grid>
         </Border>
-        <!-- PRZYCISKI 
- -->
+        <!-- PRZYCISKI  -->
 
         <Grid Grid.Row="3" HorizontalAlignment="Center" Margin="0,3,0,3" MaxWidth="120">
             <Grid.ColumnDefinitions>
@@ -82,92 +81,51 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Przyciski z ikonami -->
-            <Button Grid.Row="0" 
-                    Grid.Column="0"
-                    Command="{Binding SaveCommand}" 
-                    Style="{StaticResource RoundedButtonStyle}"
-                    Width="{DynamicResource StandardWidth}" 
-                    Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="0" Grid.Column="0" Command="{Binding SaveCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
-                    <Image Source="/Icons/file-64.png" Height="{DynamicResource StandardIconHeight}"/>
+                    <Image Source="{DynamicResource FileIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>
             </Button>
 
-            <Button Grid.Row="0"
-                    Grid.Column="1"
-                    Command="{Binding SavePdfCommand}" 
-                    Style="{StaticResource RoundedButtonStyle}"
-                    Width="{DynamicResource StandardWidth}" 
-                    Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="0" Grid.Column="1" Command="{Binding SavePdfCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
-                    <Image Source="/Icons/pdf-file-64.png" Height="{DynamicResource StandardIconHeight}"/>
+                    <Image Source="{DynamicResource PdfFileIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>
             </Button>
 
-            <Button Grid.Row="1"
-                    Grid.Column="0"
-                    Command="{Binding DrawArrowCommand}" 
-                    Style="{StaticResource RoundedButtonStyle}" 
-                    Width="{DynamicResource StandardWidth}" 
-                    Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="1" Grid.Column="0" Command="{Binding DrawArrowCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
-                    <Image Source="/Icons/arrow-left-64.png" Height="{DynamicResource StandardIconHeight}"/>
+                    <Image Source="{DynamicResource ArrowLeftIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>
             </Button>
 
-            <Button Grid.Row="1" 
-                    Grid.Column="1" 
-                    Command="{Binding AddTextCommand}"
-                    Style="{StaticResource RoundedButtonStyle}"
-                    Width="{DynamicResource StandardWidth}" 
-                    Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="1" Grid.Column="1" Command="{Binding AddTextCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
-                    <Image Source="/Icons/text-64.png" Height="{DynamicResource StandardIconHeight}"/>
+                    <Image Source="{DynamicResource TextIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>
             </Button>
 
-            <Button Grid.Row="2" 
-                    Grid.Column="0" 
-                    Command="{Binding DrawRectCommand}"
-                    Style="{StaticResource RoundedButtonStyle}"
-                    Width="{DynamicResource StandardWidth}" 
-                    Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="2" Grid.Column="0" Command="{Binding DrawRectCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
-                    <Image Source="/Icons/rect-64.png" Height="{DynamicResource StandardIconHeight}"/>
+                    <Image Source="{DynamicResource RectIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>
             </Button>
 
-            <Button Grid.Row="2" 
-                    Grid.Column="1" 
-                    Command="{Binding BlurCommand}" 
-                    Style="{StaticResource RoundedButtonStyle}"
-                    Width="{DynamicResource StandardWidth}" 
-                    Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="2" Grid.Column="1" Command="{Binding BlurCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
-                    <Image Source="/Icons/blur-64.png" Height="{DynamicResource StandardIconHeight}"/>
+                    <Image Source="{DynamicResource BlurIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>
             </Button>
 
-            <Button Grid.Row="3" 
-                    Grid.Column="0" 
-                    Command="{Binding SpeechBubbleCommand}" 
-                    Style="{StaticResource RoundedButtonStyle}" 
-                    Width="{DynamicResource StandardWidth}" 
-                    Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="3" Grid.Column="0" Command="{Binding SpeechBubbleCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
-                    <Image Source="/Icons/bubble-64.png" Height="{DynamicResource StandardIconHeight}"/>
+                    <Image Source="{DynamicResource BubbleIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>
             </Button>
 
-            <Button Grid.Row="3"
-                    Grid.Column="1"
-                    Command="{Binding BrushCommand}"
-                    Style="{StaticResource RoundedButtonStyle}"
-                    Width="{DynamicResource StandardWidth}" 
-                    Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="3" Grid.Column="1" Command="{Binding BrushCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
-                    <Image Source="/Icons/brush-64.png" Height="{DynamicResource StandardIconHeight}"/>
+                    <Image Source="{DynamicResource BrushIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>
             </Button>
 
@@ -184,9 +142,7 @@
                     Command="{Binding UploadToDropboxCommand}" 
                     Style="{DynamicResource RoundedButtonStyle}"
                     Width="100" FontSize="{DynamicResource StandardFontSize}">
-            </Button>
-
-            <!-- Dodaj więcej przycisków tutaj, jeśli są potrzebne -->
+            </Button> 
         </Grid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" 

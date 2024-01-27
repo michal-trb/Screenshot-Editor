@@ -53,6 +53,15 @@
 
     <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}"/>
     <SolidColorBrush x:Key="BorderBrushColorBrush" Color="{StaticResource BorderBrushColor}"/>
-
+    <BitmapImage x:Key="FolderScIcon" UriSource="/Icons/folder-sc-16.png"/>
+    <BitmapImage x:Key="FolderViIcon" UriSource="/Icons/folder-vi-16.png"/>
+    <BitmapImage x:Key="FileIcon" UriSource="/Icons/file-64.png"/>
+    <BitmapImage x:Key="PdfFileIcon" UriSource="/Icons/pdf-file-64.png"/>
+    <BitmapImage x:Key="ArrowLeftIcon" UriSource="/Icons/arrow-left-64.png"/>
+    <BitmapImage x:Key="TextIcon" UriSource="/Icons/text-64.png"/>
+    <BitmapImage x:Key="RectIcon" UriSource="/Icons/rect-64.png"/>
+    <BitmapImage x:Key="BlurIcon" UriSource="/Icons/blur-64.png"/>
+    <BitmapImage x:Key="BubbleIcon" UriSource="/Icons/bubble-64.png"/>
+    <BitmapImage x:Key="BrushIcon" UriSource="/Icons/brush-64.png"/>
 
 </ResourceDictionary>
