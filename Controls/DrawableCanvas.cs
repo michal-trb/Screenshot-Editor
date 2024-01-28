@@ -18,7 +18,22 @@ namespace screenerWpf.Controls
 
         public DrawableCanvas()
         {
+            ContextMenu contextMenu = new ContextMenu();
+            MenuItem copyMenuItem = new MenuItem { Header = "Kopiuj" };
+            copyMenuItem.Click += CopyMenuItem_Click;
+            contextMenu.Items.Add(copyMenuItem);
+            this.ContextMenu = contextMenu;
+        }
 
+        private void CopyMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            CopyCanvasToClipboard();
+        }
+
+        private void CopyCanvasToClipboard()
+        {
+            RenderTargetBitmap bitmap = GetRenderTargetBitmap(); // Metoda, którą już zdefiniowałeś
+            Clipboard.SetImage(bitmap);
         }
 
         public ImageSource BackgroundImage
