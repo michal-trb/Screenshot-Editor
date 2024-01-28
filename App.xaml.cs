@@ -47,6 +47,8 @@ namespace screenerWpf
             if (e.Args.Length > 0)
             {
                 HandleJumpListArguments(e.Args.FirstOrDefault());
+                Shutdown();
+                return;
             }
         }
 
@@ -59,9 +61,6 @@ namespace screenerWpf
 
             // Task for scrolling screenshot
             AddJumpTask(jumpList, "Scrolling Screenshot", "Create a scrolling screenshot", "captureScroll");
-
-            // Task for window screenshot
-            AddJumpTask(jumpList, "Window Screenshot", "Create a window screenshot", "captureWindow");
 
             // Task for area screenshot
             AddJumpTask(jumpList, "Area Screenshot", "Create a screenshot of a selected area", "captureArea");
@@ -99,9 +98,6 @@ namespace screenerWpf
                     break;
                 case "captureScroll":
                     MainViewModelService?.ExecuteCaptureWindowScroll(null);
-                    break;
-                case "captureWindow":
-                    MainViewModelService?.ExecuteCaptureWindow(null);
                     break;
                 case "captureArea":
                     MainViewModelService?.ExecuteCaptureArea(null);
