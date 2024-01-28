@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using screenerWpf.Helpers;
@@ -14,7 +15,8 @@ namespace screenerWpf.Controls
         private DrawableElement selectedElement;
         public bool isFirstClick = true;
         public RenderTargetBitmap originalTargetBitmap;
-
+        private ScaleTransform scaleTransform = new ScaleTransform();
+        private TranslateTransform moveTransform = new TranslateTransform();
 
         public DrawableCanvas()
         {
@@ -23,6 +25,70 @@ namespace screenerWpf.Controls
             copyMenuItem.Click += CopyMenuItem_Click;
             contextMenu.Items.Add(copyMenuItem);
             this.ContextMenu = contextMenu;
+            this.MouseWheel += DrawableCanvas_MouseWheel;
+
+            // Ustaw transformacje
+            var transformGroup = new TransformGroup();
+            transformGroup.Children.Add(scaleTransform);
+            transformGroup.Children.Add(moveTransform);
+
+            this.MouseWheel += DrawableCanvas_MouseWheel;
+            // Ustawienie transformacji
+            this.RenderTransform = scaleTransform;
+
+            // Ustawienie Clip
+            this.Loaded += (sender, e) => UpdateClip();
+            this.SizeChanged += (sender, e) => UpdateClip();
+        }
+
+        private void UpdateClip()
+        {
+            this.Clip = new RectangleGeometry(new Rect(0, 0, this.ActualWidth, this.ActualHeight));
+        }
+
+        private void DrawableCanvas_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control)
+            {
+                const double scaleFactor = 1.1;
+                const double minScale = 0.2; // Minimalna skala
+
+                double zoom = e.Delta > 0 ? scaleFactor : 1 / scaleFactor;
+                double newScaleX = scaleTransform.ScaleX * zoom;
+                double newScaleY = scaleTransform.ScaleY * zoom;
+
+                if (newScaleX >= minScale && newScaleY >= minScale)
+                {
+                    var mousePosition = e.GetPosition(this);
+
+                    if (newScaleX < 1 && newScaleY < 1)
+                    {
+                        // Gdy skala jest mniejsza niż 1, wyśrodkuj zawartość
+                        CenterContent();
+                    }
+                    else
+                    {
+                        // W przeciwnym przypadku stosuj standardowe skalowanie
+                        scaleTransform.CenterX = mousePosition.X;
+                        scaleTransform.CenterY = mousePosition.Y;
+                    }
+
+                    scaleTransform.ScaleX = newScaleX;
+                    scaleTransform.ScaleY = newScaleY;
+                }
+
+                e.Handled = true;
+            }
+        }
+
+        private void CenterContent()
+        {
+            // Centrowanie zawartości canvasa
+            double offsetX = (this.ActualWidth - (this.ActualWidth * scaleTransform.ScaleX)) / 2;
+            double offsetY = (this.ActualHeight - (this.ActualHeight * scaleTransform.ScaleY)) / 2;
+
+            moveTransform.X = offsetX;
+            moveTransform.Y = offsetY;
         }
 
         private void CopyMenuItem_Click(object sender, RoutedEventArgs e)
