@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent"
         Topmost="True" ShowInTaskbar="False" IsHitTestVisible="False">
+
     <Grid>
-        <!-- Tutaj możesz umieścić inne elementy UI jeśli potrzebne -->
+        <Border x:Name="highlightBorder" BorderBrush="Red" BorderThickness="2" Background="Transparent" />
     </Grid>
 </Window>

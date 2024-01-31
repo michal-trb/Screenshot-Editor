@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using System.Windows.Controls;
 
 namespace screenerWpf.Views
 {
@@ -25,7 +26,7 @@ namespace screenerWpf.Views
             InitializeComponent();
             SetWindowPosAndSize(targetWindowHandle);
             OpenControlWindow();
-            this.Closed += OverlayWindow_Closed; // Dodanie obsługi zdarzenia zamknięcia
+            this.Closed += OverlayWindow_Closed;
         }
 
         private void SetWindowPosAndSize(IntPtr targetWindowHandle)
@@ -47,21 +48,41 @@ namespace screenerWpf.Views
 
         public void UpdatePositionAndSize(IntPtr targetWindowHandle)
         {
+            IntPtr desktopWindowHandle = GetDesktopWindow();
+
+            if (targetWindowHandle == desktopWindowHandle)
+            {
+                // Możesz usunąć tę część lub zostawić ją niewidoczną, jeśli nie chcesz używać highlightBorder
+                highlightBorder.Visibility = Visibility.Hidden;
+                return;
+            }
+            else
+            {
+                // Możesz usunąć tę część lub zostawić ją niewidoczną, jeśli nie chcesz używać highlightBorder
+                highlightBorder.Visibility = Visibility.Visible;
+            }
+
             GetWindowRect(targetWindowHandle, out RECT rect);
 
-            this.Left = rect.Left;
-            this.Top = rect.Top;
-            this.Width = rect.Right - rect.Left;
-            this.Height = rect.Bottom - rect.Top;
+            var dpiScale = VisualTreeHelper.GetDpi(this);
+            var dpiFactorX = dpiScale.DpiScaleX;
+            var dpiFactorY = dpiScale.DpiScaleY;
+
+            this.Left = rect.Left / dpiFactorX;
+            this.Top = rect.Top / dpiFactorY;
+            this.Width = (rect.Right - rect.Left) / dpiFactorX;
+            this.Height = (rect.Bottom - rect.Top) / dpiFactorY;
             this.InvalidateVisual(); // Odświeża okno
         }
+
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetDesktopWindow();
 
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
-            int borderWidth = 2;
 
-            // Rysuj ramkę
+            int borderWidth = 2;
             drawingContext.DrawRectangle(
                 Brushes.Transparent,
                 new Pen(Brushes.Red, borderWidth),
@@ -87,7 +108,6 @@ namespace screenerWpf.Views
             StopRequested?.Invoke(this, EventArgs.Empty);
         }
 
-        // P/Invoke deklaracje
         [DllImport("user32.dll")]
         static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
@@ -108,7 +128,6 @@ namespace screenerWpf.Views
 
         private void OverlayWindow_Closed(object sender, EventArgs e)
         {
-            // Zamknij ControlWindow jeśli jest otwarte
             if (controlWindow != null)
             {
                 controlWindow.Close();
