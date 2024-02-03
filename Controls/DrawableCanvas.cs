@@ -119,7 +119,6 @@ namespace screenerWpf.Controls
                 canvas.InvalidateVisual();
             }
         }
-
         protected override void OnRender(DrawingContext dc)
         {
             if (BackgroundImage != null)
@@ -166,10 +165,22 @@ namespace screenerWpf.Controls
             {
                 SelectElement(element);
             }
-            InvalidateVisual();
+            else
+            {
+                DeselectCurrentElement();
+            }
             Focus();
         }
 
+        private void DeselectCurrentElement()
+        {
+            if (selectedElement != null)
+            {
+                selectedElement.IsSelected = false;
+                selectedElement = null;
+                InvalidateVisual();
+            }
+        }
         internal void RemoveElement(IDrawable selectedElement)
         {
             if (selectedElement != null)
