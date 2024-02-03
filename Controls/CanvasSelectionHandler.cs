@@ -26,20 +26,18 @@ namespace screenerWpf.Controls
             Point clickPosition = e.GetPosition(drawableCanvas);
             lastMousePosition = clickPosition;
 
-            if (drawableCanvas.isFirstClick)
+            if (!TrySelectSpeechBubbleTail(clickPosition) && !TrySelectElement(clickPosition))
             {
-                drawableCanvas.originalTargetBitmap = drawableCanvas.GetRenderTargetBitmap();
-                drawableCanvas.isFirstClick = false;
-            }
-
-            var element = drawableCanvas.elementManager.GetElementAtPoint(clickPosition);
-            if (element != null)
-            {
-                selectedElement = element;
-            }
-            else
-            {
-                DeselectCurrentElement();
+                // Jeśli nie kliknięto w ogonek dymku ani w strzałkę, sprawdź inne elementy
+                var element = drawableCanvas.elementManager.GetElementAtPoint(clickPosition);
+                if (element != null)
+                {
+                    selectedElement = element;
+                }
+                else
+                {
+                    DeselectCurrentElement();
+                }
             }
         }
 
