@@ -11,6 +11,7 @@ namespace screenerWpf.CanvasHandler.Drawers
     public class BlurDrawer : DrawableElementDrawer
     {
         private DrawableBlur CurrentBlurArea { get; set; }
+        private Point startDragPoint;
 
         public BlurDrawer(DrawableCanvas canvas) : base(canvas)
         {
@@ -18,8 +19,8 @@ namespace screenerWpf.CanvasHandler.Drawers
 
         public override void StartDrawing(MouseButtonEventArgs e)
         {
-            Point startPoint = e.GetPosition(DrawableCanvas);
-            InitializeDrawableElements(startPoint);
+            startDragPoint = e.GetPosition(DrawableCanvas);
+            InitializeDrawableElements(startDragPoint);
         }
 
         public override void UpdateDrawing(MouseEventArgs e)
@@ -27,11 +28,7 @@ namespace screenerWpf.CanvasHandler.Drawers
             if (CurrentBlurArea == null) return;
 
             var currentPoint = e.GetPosition(DrawableCanvas);
-            double width = Math.Abs(currentPoint.X - CurrentBlurArea.Position.X);
-            double height = Math.Abs(currentPoint.Y - CurrentBlurArea.Position.Y);
-
-            CurrentBlurArea.Size = new Size(width, height);
-            CurrentBlurArea.UpdateVisual(); // Aktualizacja wizualna obszaru rozmycia
+            UpdateBlurArea(currentPoint);
 
             DrawableCanvas.InvalidateVisual();
         }
@@ -53,6 +50,18 @@ namespace screenerWpf.CanvasHandler.Drawers
             };
 
             DrawableCanvas.AddElement(CurrentBlurArea);
+        }
+
+        private void UpdateBlurArea(Point currentPoint)
+        {
+            var x = Math.Min(currentPoint.X, startDragPoint.X);
+            var y = Math.Min(currentPoint.Y, startDragPoint.Y);
+            var width = Math.Abs(currentPoint.X - startDragPoint.X);
+            var height = Math.Abs(currentPoint.Y - startDragPoint.Y);
+
+            CurrentBlurArea.Position = new Point(x, y);
+            CurrentBlurArea.Size = new Size(width, height);
+            CurrentBlurArea.UpdateVisual();
         }
     }
 }

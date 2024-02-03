@@ -75,27 +75,65 @@ namespace screenerWpf.Models.DrawableElements
 
         public override void Move(Vector delta)
         {
+            // Zdefiniowanie nowych zmiennych dla pozycji i rozmiaru
+            double newX = Position.X;
+            double newY = Position.Y;
+            double newWidth = Size.Width;
+            double newHeight = Size.Height;
+
             switch (currentDragHandle)
             {
                 case DragHandle.None:
-                    Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+                    newX += delta.X;
+                    newY += delta.Y;
                     break;
                 case DragHandle.TopLeft:
-                    Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
-                    Size = new Size(Size.Width - delta.X, Size.Height - delta.Y);
+                    newX += delta.X;
+                    newY += delta.Y;
+                    newWidth -= delta.X;
+                    newHeight -= delta.Y;
                     break;
                 case DragHandle.TopRight:
-                    Size = new Size(Size.Width + delta.X, Size.Height - delta.Y);
-                    Position = new Point(Position.X, Position.Y + delta.Y);
+                    newWidth += delta.X;
+                    newY += delta.Y;
+                    newHeight -= delta.Y;
                     break;
                 case DragHandle.BottomLeft:
-                    Size = new Size(Size.Width - delta.X, Size.Height + delta.Y);
-                    Position = new Point(Position.X + delta.X, Position.Y);
+                    newX += delta.X;
+                    newWidth -= delta.X;
+                    newHeight += delta.Y;
                     break;
                 case DragHandle.BottomRight:
-                    Size = new Size(Size.Width + delta.X, Size.Height + delta.Y);
+                    newWidth += delta.X;
+                    newHeight += delta.Y;
                     break;
             }
+
+            // Sprawdzanie i dostosowywanie, jeśli szerokość lub wysokość są ujemne
+            if (newWidth < 0)
+            {
+                newX += newWidth;
+                newWidth = -newWidth;
+                // Zmiana przeciąganego narożnika na przeciwny w osi X
+                currentDragHandle = currentDragHandle == DragHandle.TopLeft ? DragHandle.TopRight :
+                                    currentDragHandle == DragHandle.TopRight ? DragHandle.TopLeft :
+                                    currentDragHandle == DragHandle.BottomLeft ? DragHandle.BottomRight :
+                                    DragHandle.BottomLeft;
+            }
+            if (newHeight < 0)
+            {
+                newY += newHeight;
+                newHeight = -newHeight;
+                // Zmiana przeciąganego narożnika na przeciwny w osi Y
+                currentDragHandle = currentDragHandle == DragHandle.TopLeft ? DragHandle.BottomLeft :
+                                    currentDragHandle == DragHandle.BottomLeft ? DragHandle.TopLeft :
+                                    currentDragHandle == DragHandle.TopRight ? DragHandle.BottomRight :
+                                    DragHandle.TopRight;
+            }
+
+            // Ustawienie nowych wartości pozycji i rozmiaru
+            Position = new Point(newX, newY);
+            Size = new Size(newWidth, newHeight);
         }
     }
 }

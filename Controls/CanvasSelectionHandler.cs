@@ -23,6 +23,12 @@ namespace screenerWpf.Controls
 
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
         {
+            if (drawableCanvas.isFirstClick)
+            {
+                drawableCanvas.originalTargetBitmap = drawableCanvas.GetRenderTargetBitmap();
+                drawableCanvas.isFirstClick = false;
+            }
+
             Point clickPosition = e.GetPosition(drawableCanvas);
             lastMousePosition = clickPosition;
 
