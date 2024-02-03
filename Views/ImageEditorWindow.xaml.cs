@@ -42,7 +42,6 @@ namespace screenerWpf
             viewModel.MinimizeRequest += MinimizeWindow;
             viewModel.MaximizeRestoreRequest += MaximizeRestoreWindow;
             viewModel.CloseRequest += CloseWindow;
-            this.Topmost = true;
         }
 
         private void CreateCanvasBitmap()
@@ -159,6 +158,15 @@ namespace screenerWpf
         private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             inputHandler.Canvas_MouseLeftButtonDown(sender, e);
+        }
+
+        private void Canvas_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is DrawableCanvas canvas)
+            {
+                inputHandler.Canvas_MouseDoubleClick(sender, e);
+
+            }
         }
 
         private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

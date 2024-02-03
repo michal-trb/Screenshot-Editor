@@ -6,6 +6,7 @@ namespace screenerWpf.Interfaces
     public interface ICanvasInputHandler
     {
         void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e);
+        void Canvas_MouseDoubleClick(object sender, MouseButtonEventArgs e);
         void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e);
         void Canvas_MouseMove(object sender, MouseEventArgs e);
         void Canvas_PreviewKeyDown(object sender, KeyEventArgs e);

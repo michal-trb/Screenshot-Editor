@@ -281,6 +281,7 @@
                         x:Name="drawableCanvas"
                         Margin="5"
                         Focusable="True"
+                        controls:DrawableCanvas.MouseDoubleClick="Canvas_MouseDoubleClick"
                         MouseLeftButtonDown="Canvas_MouseLeftButtonDown"
                         MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
                         MouseMove="Canvas_MouseMove">

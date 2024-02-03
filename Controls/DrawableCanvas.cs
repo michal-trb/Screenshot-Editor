@@ -17,6 +17,14 @@ namespace screenerWpf.Controls
         public RenderTargetBitmap originalTargetBitmap;
         private ScaleTransform scaleTransform = new ScaleTransform();
         private TranslateTransform moveTransform = new TranslateTransform();
+        public static readonly RoutedEvent MouseDoubleClickEvent = EventManager.RegisterRoutedEvent(
+           "MouseDoubleClick", RoutingStrategy.Bubble, typeof(MouseButtonEventHandler), typeof(DrawableCanvas));
+
+        public event MouseButtonEventHandler MouseDoubleClick
+        {
+            add { AddHandler(MouseDoubleClickEvent, value); }
+            remove { RemoveHandler(MouseDoubleClickEvent, value); }
+        }
 
         public DrawableCanvas()
         {
@@ -45,6 +53,19 @@ namespace screenerWpf.Controls
         private void UpdateClip()
         {
             this.Clip = new RectangleGeometry(new Rect(0, 0, this.ActualWidth, this.ActualHeight));
+        }
+
+        protected override void OnMouseLeftButtonDown(MouseButtonEventArgs e)
+        {
+            base.OnMouseLeftButtonDown(e);
+
+            if (e.ClickCount == 2)
+            {
+                // Podnoszenie zdarzenia MouseDoubleClick
+                var newEventArgs = new MouseButtonEventArgs(e.MouseDevice, e.Timestamp, e.ChangedButton);
+                newEventArgs.RoutedEvent = MouseDoubleClickEvent;
+                RaiseEvent(newEventArgs);
+            }
         }
 
         private void DrawableCanvas_MouseWheel(object sender, MouseWheelEventArgs e)

@@ -26,9 +26,9 @@ namespace screenerWpf.Controls
             drawableCanvas = canvas;
 
             actionHandler = new CanvasActionHandler(drawableCanvas);
-            selectionHandler = new CanvasSelectionHandler(drawableCanvas);
             editingHandler = new CanvasEditingHandler(drawableCanvas);
             savingHandler = new CanvasSavingHandler(drawableCanvas);
+            selectionHandler = new CanvasSelectionHandler(drawableCanvas, editingHandler); // Zmodyfikowane przekazywanie
         }
 
         // Zdarzenia myszy przekierowane do odpowiednich handlerów
@@ -36,6 +36,11 @@ namespace screenerWpf.Controls
         {
             selectionHandler.HandleLeftButtonDown(e);
             actionHandler.HandleLeftButtonDown(e);
+        }
+
+        public void Canvas_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            selectionHandler.HandleDoubleClick(e);
         }
 
         public void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -123,19 +128,6 @@ namespace screenerWpf.Controls
             var textRecognitionHandler = new TextRecognitionHandler(drawableCanvas);
             textRecognitionHandler.StartRecognizeFromImage();
         }
-        public void EditText()
-        {
-            if (selectionHandler.HasSelectedElement())
-            {
-                var selectedElement = selectionHandler.GetSelectedElement();
-                if (selectedElement != null)
-                {
-                    // Zakładamy, że IDrawable ma właściwość, która zwraca jego lokalizację
-                    Point location = selectedElement.GetLocation();
-                    editingHandler.StartEditing(selectedElement, location);
-                }
-            }
-        }
 
         public void CommandBinding_DeleteExecuted(object sender, ExecutedRoutedEventArgs e)
         {
@@ -198,6 +190,11 @@ namespace screenerWpf.Controls
         public static double GetCurrentTransparency()
         {
             return Transparency;
+        }
+
+        public void EditText()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

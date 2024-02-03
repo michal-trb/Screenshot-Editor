@@ -1,9 +1,9 @@
-﻿using System;
+﻿using screenerWpf.Interfaces;
+using screenerWpf.Models.DrawableElements;
+using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using screenerWpf.Interfaces;
-using screenerWpf.Models.DrawableElements;
 
 namespace screenerWpf.Controls
 {
@@ -12,13 +12,13 @@ namespace screenerWpf.Controls
         private DrawableCanvas drawableCanvas;
         private IDrawable selectedElement;
         private Point lastMousePosition;
-
+        private ICanvasEditingHandler editingHandler; // Dodano zmienną
         private const double SpeechBubbleTailTolerance = 40; // Tolerance in pixels
         private const double ArrowTolerance = 30; // Tolerance in pixels
-
-        public CanvasSelectionHandler(DrawableCanvas canvas)
+        public CanvasSelectionHandler(DrawableCanvas canvas, ICanvasEditingHandler editingHandler)
         {
             drawableCanvas = canvas;
+            this.editingHandler = editingHandler; // Przypisanie do zmiennej
         }
 
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
@@ -32,7 +32,44 @@ namespace screenerWpf.Controls
                 drawableCanvas.isFirstClick = false;
             }
 
-            if (!TrySelectSpeechBubbleTail(clickPosition) && !TrySelectElement(clickPosition))
+            var element = drawableCanvas.elementManager.GetElementAtPoint(clickPosition);
+            if (element != null)
+            {
+                selectedElement = element;
+            }
+            else
+            {
+                DeselectCurrentElement();
+            }
+        }
+
+        public void HandleDoubleClick(MouseButtonEventArgs e)
+        {
+            Point clickPosition = e.GetPosition(drawableCanvas);
+            lastMousePosition = clickPosition;
+
+            if (drawableCanvas.isFirstClick)
+            {
+                drawableCanvas.originalTargetBitmap = drawableCanvas.GetRenderTargetBitmap();
+                drawableCanvas.isFirstClick = false;
+            }
+
+            var element = drawableCanvas.elementManager.GetElementAtPoint(clickPosition);
+            if (element != null)
+            {
+                selectedElement = element;
+
+                // Sprawdzanie, czy element jest tekstowy i uruchamianie edycji
+                if (element is DrawableText drawableText)
+                {
+                    editingHandler.StartEditing(drawableText, clickPosition);
+                }
+                else if (element is DrawableSpeechBubble speechBubble)
+                {
+                    editingHandler.StartEditing(speechBubble, clickPosition);
+                }
+            }
+            else
             {
                 DeselectCurrentElement();
             }

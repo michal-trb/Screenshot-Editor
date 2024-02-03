@@ -21,5 +21,6 @@ namespace screenerWpf.Interfaces
 
         // Pobranie zaznaczonego elementu
         IDrawable GetSelectedElement();
+        void HandleDoubleClick(MouseButtonEventArgs e);
     }
 }

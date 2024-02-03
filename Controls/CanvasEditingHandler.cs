@@ -22,87 +22,79 @@ namespace screenerWpf.Controls
         {
             if (element is DrawableText drawableText)
             {
-                CreateEditableTextBox(drawableText, location);
+                EditTextBox(drawableText, location);
                 editableElement = element;
             }
-            else if (element is DrawableSpeechBubble speechBubble)
+
+        }
+
+
+        private void EditTextBox(DrawableText drawableText, Point location)
+        {
+            var dialog = new TextEditingDialog(drawableText.Text);
+            if (dialog.ShowDialog() == true)
             {
-                CreateEditableTextBoxInSpeechBubble(speechBubble, location);
-                editableElement = element;
+                drawableText.Text = dialog.EditedText;
+                // Tutaj możesz odświeżyć Canvas lub zrobić inne potrzebne akcje
             }
-        }
-
-        private void CreateEditableTextBox(DrawableText drawableText, Point location)
-        {
-            // Tworzenie TextBox dla edycji tekstu
-            editableTextBox = new TextBox
-            {
-                Text = drawableText.Text,
-                FontFamily = drawableText.Typeface.FontFamily,
-                FontSize = drawableText.FontSize,
-                Foreground = new SolidColorBrush(drawableText.Color),
-                Background = Brushes.Transparent,
-                BorderThickness = new Thickness(0),
-                AcceptsReturn = true,
-                AcceptsTab = true
-            };
-
-            PositionEditableTextBox(location);
-            AttachTextBoxEvents();
-        }
-
-        private void CreateEditableTextBoxInSpeechBubble(DrawableSpeechBubble speechBubble, Point location)
-        {
-            // Analogicznie jak wyżej, ale dostosowane do dymku mowy
-            // ...
-        }
-
-        private void PositionEditableTextBox(Point location)
-        {
-            Canvas.SetLeft(editableTextBox, location.X);
-            Canvas.SetTop(editableTextBox, location.Y);
-            drawableCanvas.Children.Add(editableTextBox);
-            editableTextBox.Focus();
-        }
-
-        private void AttachTextBoxEvents()
-        {
-            editableTextBox.LostFocus += EditableTextBox_LostFocus;
-            editableTextBox.KeyDown += EditableTextBox_KeyDown;
         }
 
         private void EditableTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            FinishEditing(sender as TextBox);
-        }
-
-        private void EditableTextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
+            if (sender is TextBox textBox && editableElement is DrawableText drawableText)
             {
-                FinishEditing(sender as TextBox);
-            }
-        }
-
-        public void FinishEditing(TextBox textBox)
-        {
-            if (textBox == null) return;
-
-            if (editableElement is DrawableText drawableText)
-            {
+                // Aktualizacja tekstu w DrawableText
                 drawableText.Text = textBox.Text;
-            }
-            else if (editableElement is DrawableSpeechBubble speechBubble)
-            {
-                speechBubble.Text = textBox.Text;
-                // Możliwe dodatkowe aktualizacje dla dymków mowy
-            }
 
-            // Usuwanie TextBox i odświeżanie płótna
-            drawableCanvas.Children.Remove(textBox);
-            drawableCanvas.InvalidateVisual();
-            editableTextBox = null;
-            editableElement = null;
+                // Usunięcie TextBox z płótna i odświeżenie
+                drawableCanvas.Children.Remove(textBox);
+                drawableCanvas.InvalidateVisual();
+
+                // Wyczyszczenie referencji
+                editableTextBox = null;
+                editableElement = null;
+            }
         }
+    }
+}
+public partial class TextEditingDialog : Window
+{
+    public string EditedText { get; private set; }
+
+    public TextEditingDialog(string initialText)
+    {
+        var textBox = new TextBox
+        {
+            Text = initialText,
+            Margin = new Thickness(10),
+            AcceptsReturn = true,
+            AcceptsTab = true,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+            MaxWidth = 300,
+            MaxHeight = 200
+        };
+
+        var okButton = new Button
+        {
+            Content = "OK",
+            Width = 80,
+            Height = 30,
+            Margin = new Thickness(10),
+            HorizontalAlignment = HorizontalAlignment.Right
+        };
+        okButton.Click += (s, e) =>
+        {
+            EditedText = textBox.Text;
+            this.DialogResult = true;
+        };
+
+        var stackPanel = new StackPanel();
+        stackPanel.Children.Add(textBox);
+        stackPanel.Children.Add(okButton);
+
+        this.Content = stackPanel;
+        this.SizeToContent = SizeToContent.WidthAndHeight;
+        this.ResizeMode = ResizeMode.NoResize;
     }
 }
