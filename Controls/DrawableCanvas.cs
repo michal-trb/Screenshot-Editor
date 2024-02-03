@@ -35,6 +35,7 @@ namespace screenerWpf.Controls
             this.MouseWheel += DrawableCanvas_MouseWheel;
             // Ustawienie transformacji
             this.RenderTransform = scaleTransform;
+            this.ClipToBounds = true;
 
             // Ustawienie Clip
             this.Loaded += (sender, e) => UpdateClip();

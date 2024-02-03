@@ -275,21 +275,20 @@
 
         <!-- ViewBox for DrawableCanvas -->
         <Border Grid.Row="3" Grid.Column="1" BorderThickness="1" CornerRadius="{DynamicResource StandardCornerRadius}">
+            <Grid ClipToBounds="True">
                 <Viewbox Stretch="Uniform">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-
                     <controls:DrawableCanvas
-                    Margin="5,5,5,5"
-                    x:Name="drawableCanvas" 
-                    Focusable="True"
-                    MouseLeftButtonDown="Canvas_MouseLeftButtonDown"
-                    MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
-                    MouseMove="Canvas_MouseMove">
+                        x:Name="drawableCanvas"
+                        Margin="5"
+                        Focusable="True"
+                        MouseLeftButtonDown="Canvas_MouseLeftButtonDown"
+                        MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
+                        MouseMove="Canvas_MouseMove">
+               
                         <controls:DrawableCanvas.Background>
-                            <ImageBrush 
-                            ImageSource="{Binding initialImage,
-                            RelativeSource={RelativeSource FindAncestor, 
-                            AncestorType={x:Type local:ImageEditorWindow}}}" 
+                            <ImageBrush ImageSource="{Binding initialImage,
+                                                  RelativeSource={RelativeSource FindAncestor, 
+                                                  AncestorType={x:Type local:ImageEditorWindow}}}" 
                             Stretch="Uniform"/>
                         </controls:DrawableCanvas.Background>
                         <ItemsControl ItemsSource="{Binding Elements}">
@@ -300,23 +299,16 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemContainerStyle>
                                 <Style TargetType="{x:Type FrameworkElement}">
-                                    <Setter 
-                                    Property="Canvas.Left"
-                                    Value="{Binding Position.X}" />
-                                    <Setter 
-                                    Property="Canvas.Top" 
-                                    Value="{Binding Position.Y}" />
+                                    <Setter Property="Canvas.Left" Value="{Binding Position.X}" />
+                                    <Setter Property="Canvas.Top" Value="{Binding Position.Y}" />
                                 </Style>
                             </ItemsControl.ItemContainerStyle>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <!-- Definicja wyglądu dla IDrawable (możesz wymagać szczegółowej konfiguracji w zależności od Twoich klas) -->
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </controls:DrawableCanvas>
-                </ScrollViewer>
-            </Viewbox>
+
+                </Viewbox>
+            </Grid>
         </Border>
+
     </Grid>
 </Window>
