@@ -30,7 +30,7 @@ namespace screenerWpf.CanvasHandler.Drawers
                 Color = CanvasInputHandler.GetCurrentColor(),
                 FontSize = CanvasInputHandler.GetCurrentFontSize(),
                 Typeface = CanvasInputHandler.GetCurrentTypeface(),
-                EndTailPoint = new Point(location.X - 15, location.Y - 15),
+                EndTailPoint = new Point(location.X - 15, location.Y + 80),
                 Brush = new SolidColorBrush(CanvasInputHandler.GetCurrentColor())
             };
             DrawableCanvas.AddElement(CurrentSpeechBubble);

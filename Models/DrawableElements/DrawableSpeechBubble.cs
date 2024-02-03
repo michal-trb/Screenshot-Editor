@@ -67,16 +67,26 @@ namespace screenerWpf.Models.DrawableElements
         private void DrawSpeechBubbleTail(DrawingContext context, Rect bubbleRect, Point endPoint)
         {
             // Punkt startowy ogonka na środku dolnej krawędzi dymku
-            Point tailStart = new Point(bubbleRect.Left + bubbleRect.Width / 2, bubbleRect.Top);
+            Point tailStart = new Point(bubbleRect.Left + bubbleRect.Width / 2, bubbleRect.Bottom - bubbleRect.Height / 2);
+
+            // Obliczenie wektora kierunkowego od środka ogonka do endPoint
+            Vector direction = endPoint - tailStart;
+            direction.Normalize();
+
+            // Obliczanie ortogonalnego wektora do kierunku
+            Vector orthogonal = new Vector(-direction.Y, direction.X) * (20 / 2); // 20 to szerokość ogonka
+
+            // Punkt lewy i prawy na krawędzi dymku
+            Point leftPoint = tailStart + orthogonal;
+            Point rightPoint = tailStart - orthogonal;
 
             StreamGeometry tailGeometry = new StreamGeometry();
             using (StreamGeometryContext geometryContext = tailGeometry.Open())
             {
-                geometryContext.BeginFigure(tailStart, true /* is filled */, true /* is closed */);
-                geometryContext.LineTo(new Point(tailStart.X - 10, tailStart.Y + 10), true /* is stroked */, false /* is smooth join */);
+                geometryContext.BeginFigure(leftPoint, true /* is filled */, true /* is closed */);
                 geometryContext.LineTo(endPoint, true /* is stroked */, false /* is smooth join */);
-                geometryContext.LineTo(new Point(tailStart.X + 10, tailStart.Y + 25), true /* is stroked */, false /* is smooth join */);
-                geometryContext.LineTo(tailStart, true /* is stroked */, false /* is smooth join */);
+                geometryContext.LineTo(rightPoint, true /* is stroked */, false /* is smooth join */);
+                geometryContext.LineTo(leftPoint, true /* is stroked */, false /* is smooth join */); // Zamknięcie kształtu
             }
 
             context.DrawGeometry(Brushes.White, new Pen(Brushes.Black, 1), tailGeometry);
