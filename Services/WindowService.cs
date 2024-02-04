@@ -45,13 +45,10 @@ namespace screenerWpf.Sevices
                     dpiY = graphics.DpiY / 96.0;
                 }
 
-                // Adjust the rectangle to match the screen's DPI and subtract the offset
-                int offsetX = 7;
-                int offsetY = 7;
 
                 var scaledRect = new Rectangle(
-                    (int)((selector.SelectedRectangle.X - offsetX) * dpiX),
-                    (int)((selector.SelectedRectangle.Y - offsetY) * dpiY),
+                    (int)((selector.SelectedRectangle.X) * dpiX),
+                    (int)((selector.SelectedRectangle.Y) * dpiY),
                     (int)(selector.SelectedRectangle.Width * dpiX),
                     (int)(selector.SelectedRectangle.Height * dpiY));
 

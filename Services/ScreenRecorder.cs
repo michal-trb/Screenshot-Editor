@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows;
+using Xceed.Wpf.AvalonDock.Properties;
 
 class ScreenRecorder
 {
@@ -34,24 +35,29 @@ class ScreenRecorder
     public void StopRecording()
     {
         recorder.Stop();
-        RecordingCompleted?.Invoke(videoPath);
-        // Opcjonalnie zdezaktywuj i wyczyść obiekt recorder po zakończeniu nagrania
-        DeinitializeRecorder();
     }
 
     public void StartRecordingArea(string videoPath, Rectangle area)
     {
         this.videoPath = videoPath;
-        area = AdjustAreaToVirtualScreen(area);
 
-        // Wykrywanie dostępnych monitorów i dodawanie ich jako źródeł nagrania
-        var monitors = Recorder.GetDisplays();
+        // Pobranie DPI dla bieżącego ekranu
+        var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        var dpiYProperty = typeof(SystemParameters).GetProperty("Dpi", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+        var dpiX = (int)dpiXProperty.GetValue(null, null);
+        var dpiY = (int)dpiYProperty.GetValue(null, null);
+
+        // Konwersja wartości Rectangle na wartości DPI
+        double scalingFactorX = dpiX / 96.0;
+        double scalingFactorY = dpiY / 96.0;
+
+        double left = area.Left * scalingFactorX;
+        double top = area.Top * scalingFactorY;
+        double width = area.Width * scalingFactorX;
+        double height = area.Height * scalingFactorY;
         var sources = new List<RecordingSourceBase>();
 
-        foreach (var monitor in monitors)
-        {
-            sources.Add(new DisplayRecordingSource(monitor.DeviceName));
-        }
+        sources.AddRange(Recorder.GetDisplays());
 
         RecorderOptions options = new RecorderOptions
         {
@@ -62,17 +68,16 @@ class ScreenRecorder
             OutputOptions = new OutputOptions
             {
                 RecorderMode = RecorderMode.Video,
-                OutputFrameSize = new ScreenSize(area.Width, area.Height),
                 Stretch = StretchMode.Uniform,
-                SourceRect = new ScreenRect(area.Left, area.Top, area.Width, area.Height)
+                SourceRect = new ScreenRect(left, top, width, height)
             },
         };
 
         recorder = Recorder.CreateRecorder(options);
+        recorder.Record(videoPath);
         recorder.OnRecordingComplete += OnRecordingComplete;
         recorder.OnRecordingFailed += OnRecordingFailed;
         recorder.OnStatusChanged += OnStatusChanged;
-        recorder.Record(videoPath);
     }
 
     private void DeinitializeRecorder()
@@ -87,28 +92,15 @@ class ScreenRecorder
         }
     }
 
-    private Rectangle AdjustAreaToVirtualScreen(Rectangle area)
-    {
-        int virtualScreenLeft = Convert.ToInt32(SystemParameters.VirtualScreenLeft);
-        int virtualScreenTop = Convert.ToInt32(SystemParameters.VirtualScreenTop);
-
-        Rectangle adjustedArea = new Rectangle(
-            area.Left - virtualScreenLeft,
-            area.Top - virtualScreenTop,
-            area.Width,
-            area.Height);
-
-        return adjustedArea;
-    }
-
     private void OnRecordingComplete(object sender, RecordingCompleteEventArgs e)
     {
-        // Obsługa zdarzenia zakończenia nagrywania
+        RecordingCompleted?.Invoke(e.FilePath); // Użyj e.FilePath zamiast videoPath, aby upewnić się, że mamy ścieżkę do gotowego pliku
+        DeinitializeRecorder(); // Możesz także tutaj zdezaktywować recorder, jeśli jest to potrzebne
     }
 
     private void OnRecordingFailed(object sender, RecordingFailedEventArgs e)
     {
-        Console.WriteLine($"Recording failed: {e.Error}");
+        DeinitializeRecorder(); // Możesz także tutaj zdezaktywować recorder, jeśli jest to potrzebne
     }
 
     private void OnStatusChanged(object sender, RecordingStatusEventArgs e)
