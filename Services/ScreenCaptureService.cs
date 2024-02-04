@@ -68,12 +68,6 @@ namespace screenerWpf.Sevices
             overlay.CreateOverlayFromRect(area);
         }
 
-        public Task<Bitmap> CaptureWithScrollAsync()
-        {
-            var windowScrollScreenshot = new WindowScrollScreenshot();
-            return windowScrollScreenshot.CaptureWithScrollAsync();
-        }
-
         public Bitmap CaptureWindow()
         {
             var windowsScreenshot = new WindowScreenshot();

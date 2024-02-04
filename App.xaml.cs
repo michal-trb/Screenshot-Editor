@@ -96,9 +96,6 @@ namespace screenerWpf
                 case "screenshot":
                     MainViewModelService?.ExecuteCaptureFull(null);
                     break;
-                case "captureScroll":
-                    MainViewModelService?.ExecuteCaptureWindowScroll(null);
-                    break;
                 case "captureArea":
                     MainViewModelService?.ExecuteCaptureArea(null);
                     break;

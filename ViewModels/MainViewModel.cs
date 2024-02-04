@@ -65,7 +65,6 @@ namespace screenerWpf
             ToggleRecordPopupCommand = new RelayCommand(param => ToggleRecordPopup());
             CaptureFullCommand = new RelayCommand(ExecuteCaptureFull);
             CaptureAreaCommand = new RelayCommand(ExecuteCaptureArea);
-            CaptureWindowScrollCommand = new RelayCommand(ExecuteCaptureWindowScroll);
             CaptureWindowCommand = new RelayCommand(ExecuteCaptureWindow);
             RecordVideoCommand = new RelayCommand(ExecuteRecordVideo);
             RecordAreaVideoCommand = new RelayCommand(ExecuteAreaRecordVideo);
@@ -145,17 +144,6 @@ namespace screenerWpf
             MessageBox.Show("Po capture screen", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
 
             ShowEditorWindow(bitmap);
-        }
-
-        public void ExecuteCaptureWindowScroll(object parameter)
-        {
-            MinimizeMainWindow();
-
-            var bitmap = screenCaptureService.CaptureWithScrollAsync().Result;
-            if (bitmap != null) 
-            {
-                ShowEditorWindow(bitmap);
-            }
         }
 
         public void ExecuteCaptureWindow(object parameter)

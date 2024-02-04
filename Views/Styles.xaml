@@ -284,10 +284,6 @@
                                 Command="{Binding Path=DataContext.CaptureWindowCommand,
                                     RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
                                 Style="{DynamicResource RoundedButtonStyle}"/>
-                        <Button Content="{x:Static local:Resource.CaptureWindowScroll}" 
-                                Command="{Binding Path=DataContext.CaptureWindowScrollCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{DynamicResource RoundedButtonStyle}"/>
                     </StackPanel>
                 </Border>
             </DataTemplate>
