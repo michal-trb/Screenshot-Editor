@@ -259,12 +259,14 @@ namespace screenerWpf
         public void ExecuteRecordVideo(object parameter)
         {
             // Rozpoczęcie nagrywania
+            MinimizeMainWindow();
             screenCaptureService.StartRecording();
             ShowStopRecordingButton();
         }
 
         public void ExecuteAreaRecordVideo(object parameter)
         {
+            MinimizeMainWindow();
             var area = windowService.SelectArea();
             if (!area.IsEmpty)
             {

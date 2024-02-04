@@ -12,6 +12,7 @@ namespace screenerWpf.Views
             InitializeComponent();
             Top = SystemParameters.WorkArea.Height - Height - 10;
             Left = SystemParameters.WorkArea.Width - Width - 10;
+            this.Opacity = 0.25; // Przykładowa wartość, dostosuj w razie potrzeby
         }
 
         private void StopRecordingButton_Click(object sender, RoutedEventArgs e)

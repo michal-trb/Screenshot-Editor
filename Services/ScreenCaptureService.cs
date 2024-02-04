@@ -4,7 +4,6 @@ using System;
 using System.IO;
 using System.Windows;
 using screenerWpf.Properties;
-
 using screenerWpf.Sevices.CaptureServices;
 using System.Threading.Tasks;
 using screenerWpf.Services.CaptureServices;
@@ -23,8 +22,6 @@ namespace screenerWpf.Sevices
             this.windowService = windowService;
             screenRecorder = new ScreenRecorder();
             screenRecorder.RecordingCompleted += OnRecordingCompleted;
-            this.overlay = new OverlayWindow();
-
         }
 
         private void OnRecordingCompleted(string filePath)
@@ -61,6 +58,7 @@ namespace screenerWpf.Sevices
 
         public void StartAreaRecording(Rectangle area)
         {
+            this.overlay = new OverlayWindow();
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             string fileName = $"Recording_{timestamp}.mp4";
             string filePath = Path.Combine(Settings.Default.RecordsSavePath, fileName);

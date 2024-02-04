@@ -1,8 +1,9 @@
 ﻿<Window x:Class="screenerWpf.Views.StopRecordingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="StopRecordingWindow" Height="50" Width="100"
+        Title="StopRecordingWindow" Height="30" Width="60"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent" Topmost="True">
-
-    <Button Content="Stop Rec." Background="Red" Foreground="White" Click="StopRecordingButton_Click"/>
+    <Border CornerRadius="5" >
+        <Button Content="Stop Rec." Background="Red" Foreground="White" Click="StopRecordingButton_Click" BorderThickness="0,0,0,0"/>
+    </Border>
 </Window>
