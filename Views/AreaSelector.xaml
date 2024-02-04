@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:screenerWpf"
         mc:Ignorable="d"
         WindowStyle="None"
-        WindowState="Maximized"
         AllowsTransparency="True"
         Background="Transparent"
         Title="AreaSelector">

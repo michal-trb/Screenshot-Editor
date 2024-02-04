@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
-using System.Windows.Interop;
 
 namespace screenerWpf.Services.CaptureServices
 {
@@ -16,19 +15,15 @@ namespace screenerWpf.Services.CaptureServices
         private static extern uint BitBlt(IntPtr hDestDC, int x, int y, int nWidth, int nHeight, IntPtr hSrcDC, int xSrc, int ySrc, CopyPixelOperation dwRop);
         [DllImport("user32.dll")]
         private static extern bool ReleaseDC(IntPtr hWnd, IntPtr hDC);
-        [DllImport("user32.dll")]
-        private static extern int GetSystemMetrics(int nIndex);
-
-        private const int SM_CXSCREEN = 0;
-        private const int SM_CYSCREEN = 1;
 
         public static Bitmap CaptureScreen()
         {
             IntPtr desktopWindow = GetDesktopWindow();
             IntPtr desktopDC = GetWindowDC(desktopWindow);
 
-            int screenWidth = GetSystemMetrics(SM_CXSCREEN);
-            int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+            // Pobieranie wymiarów całego obszaru roboczego
+            int screenWidth = Convert.ToInt32(SystemParameters.VirtualScreenWidth);
+            int screenHeight = Convert.ToInt32(SystemParameters.VirtualScreenHeight);
 
             Bitmap screenImage = new Bitmap(screenWidth, screenHeight);
 

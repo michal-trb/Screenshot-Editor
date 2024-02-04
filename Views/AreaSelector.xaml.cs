@@ -14,8 +14,12 @@ namespace screenerWpf
         {
             InitializeComponent();
 
+            this.Left = SystemParameters.VirtualScreenLeft;
+            this.Top = SystemParameters.VirtualScreenTop;
+            this.Width = SystemParameters.VirtualScreenWidth;
+            this.Height = SystemParameters.VirtualScreenHeight;
+
             this.WindowStyle = WindowStyle.None;
-            this.WindowState = WindowState.Maximized;
             this.Topmost = true;
             this.Opacity = 1;
             this.Background = new SolidColorBrush(Colors.White) { Opacity = 0.1 };
