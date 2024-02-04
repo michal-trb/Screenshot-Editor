@@ -8,6 +8,7 @@ using screenerWpf.Properties;
 using screenerWpf.Sevices.CaptureServices;
 using System.Threading.Tasks;
 using screenerWpf.Services.CaptureServices;
+using screenerWpf.Views;
 
 namespace screenerWpf.Sevices
 {
@@ -15,12 +16,15 @@ namespace screenerWpf.Sevices
     {
         private ScreenRecorder screenRecorder;
         private IWindowService windowService;
+        private OverlayWindow overlay;
 
         public ScreenCaptureService(IWindowService windowService)
         {
             this.windowService = windowService;
             screenRecorder = new ScreenRecorder();
             screenRecorder.RecordingCompleted += OnRecordingCompleted;
+            this.overlay = new OverlayWindow();
+
         }
 
         private void OnRecordingCompleted(string filePath)
@@ -52,6 +56,7 @@ namespace screenerWpf.Sevices
         public void StopRecording()
         {
             screenRecorder.StopRecording();
+            overlay.Close();
         }
 
         public void StartAreaRecording(Rectangle area)
@@ -60,6 +65,7 @@ namespace screenerWpf.Sevices
             string fileName = $"Recording_{timestamp}.mp4";
             string filePath = Path.Combine(Settings.Default.RecordsSavePath, fileName);
             screenRecorder.StartRecordingArea(filePath, area);
+            overlay.CreateOverlayFromRect(area);
         }
 
         public Task<Bitmap> CaptureWithScrollAsync()

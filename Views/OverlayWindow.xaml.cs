@@ -29,6 +29,20 @@ namespace screenerWpf.Views
             this.Closed += OverlayWindow_Closed;
         }
 
+        public void CreateOverlayFromRect(System.Drawing.Rectangle rect)
+        {
+            var dpiScale = VisualTreeHelper.GetDpi(this);
+            var dpiFactorX = dpiScale.DpiScaleX;
+            var dpiFactorY = dpiScale.DpiScaleY;
+
+            this.Left = rect.Left / dpiFactorX;
+            this.Top = rect.Top / dpiFactorY;
+            this.Width = (rect.Right - rect.Left) / dpiFactorX;
+            this.Height = (rect.Bottom - rect.Top) / dpiFactorY;
+
+            this.Show(); // Pokaż okno overlay
+        }
+
         private void SetWindowPosAndSize(IntPtr targetWindowHandle)
         {
             GetWindowRect(targetWindowHandle, out RECT rect);
@@ -89,8 +103,8 @@ namespace screenerWpf.Views
                 new Rect(
                     borderWidth / 2.0,
                     borderWidth / 2.0,
-                    this.Width - borderWidth,
-                    this.Height - borderWidth));
+                    this.Width + borderWidth,
+                    this.Height + borderWidth));
         }
 
         private void OpenControlWindow()
