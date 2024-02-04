@@ -2,9 +2,14 @@
 using screenerWpf.Views;
 using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace screenerWpf.Sevices.CaptureServices
 {
@@ -53,25 +58,44 @@ namespace screenerWpf.Sevices.CaptureServices
             return selectedWindow;
         }
 
+        [DllImport("user32.dll")]
+        private static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, uint nFlags);
+
+        [DllImport("user32.dll")]
+        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
+        [DllImport("dwmapi.dll")]
+        private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
+
+        private const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
+
         public static Bitmap CaptureWindow(IntPtr hWnd)
         {
-            GetWindowRect(hWnd, out RECT windowRect);
-            Rectangle rect = RectToRectangle(windowRect);
-            Bitmap bmp = new Bitmap(rect.Width, rect.Height);
+            RECT rect;
+            int size = Marshal.SizeOf(typeof(RECT));
+            DwmGetWindowAttribute(hWnd, DWMWA_EXTENDED_FRAME_BOUNDS, out rect, size);
+
+            int width = rect.Right - rect.Left;
+            int height = rect.Bottom - rect.Top;
+
+            Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                g.CopyFromScreen(rect.Left, rect.Top, 0, 0, new Size(rect.Width, rect.Height));
+                g.CopyFromScreen(rect.Left, rect.Top, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);
             }
             return bmp;
         }
 
-        private static Rectangle RectToRectangle(RECT rect)
+        [StructLayout(LayoutKind.Sequential)]
+        public struct RECT
         {
-            return new Rectangle(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
         }
 
-        [DllImport("user32.dll")]
-        private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+
 
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out POINT lpPoint);
@@ -81,12 +105,6 @@ namespace screenerWpf.Sevices.CaptureServices
 
         [DllImport("user32.dll")]
         private static extern short GetAsyncKeyState(int vKey);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct RECT
-        {
-            public int Left, Top, Right, Bottom;
-        }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct POINT
