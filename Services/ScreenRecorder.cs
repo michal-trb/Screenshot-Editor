@@ -41,20 +41,10 @@ class ScreenRecorder
     {
         this.videoPath = videoPath;
 
-        // Pobranie DPI dla bieżącego ekranu
-        var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-        var dpiYProperty = typeof(SystemParameters).GetProperty("Dpi", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
-        var dpiX = (int)dpiXProperty.GetValue(null, null);
-        var dpiY = (int)dpiYProperty.GetValue(null, null);
-
-        // Konwersja wartości Rectangle na wartości DPI
-        double scalingFactorX = dpiX / 96.0;
-        double scalingFactorY = dpiY / 96.0;
-
-        double left = area.Left * scalingFactorX;
-        double top = area.Top * scalingFactorY;
-        double width = area.Width * scalingFactorX;
-        double height = area.Height * scalingFactorY;
+        double left = area.Left;
+        double top = area.Top;
+        double width = area.Width;
+        double height = area.Height;
         var sources = new List<RecordingSourceBase>();
 
         sources.AddRange(Recorder.GetDisplays());
