@@ -21,7 +21,11 @@ namespace screenerWpf.Models
         {
             FilePath = filePath;
             FileName = Path.GetFileName(filePath);
-            Thumbnail = LoadThumbnail(filePath);
+            try
+            {
+                Thumbnail = LoadThumbnail(filePath);
+            }
+            catch { }
         }
 
         private ImageSource LoadThumbnail(string filePath)
