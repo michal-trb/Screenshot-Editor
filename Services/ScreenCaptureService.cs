@@ -7,6 +7,7 @@ using screenerWpf.Properties;
 
 using screenerWpf.Sevices.CaptureServices;
 using System.Threading.Tasks;
+using screenerWpf.Services.CaptureServices;
 
 namespace screenerWpf.Sevices
 {

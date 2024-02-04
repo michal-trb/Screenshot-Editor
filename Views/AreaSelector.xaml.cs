@@ -27,6 +27,7 @@ namespace screenerWpf
             this.MouseUp += Grid_MouseUp;
             this.KeyDown += Grid_KeyDown;
         }
+
         protected override void OnRender(DrawingContext drawingContext)
         {
             base.OnRender(drawingContext);
@@ -75,10 +76,6 @@ namespace screenerWpf
                 SelectedRectangle = new Rect(startPoint, currentPoint);
                 this.InvalidateVisual();
             }
-
-            // Wyświetlanie dymka z pozycją kursora
-            Point position = e.GetPosition(this);
-            this.Title = $"X: {position.X}, Y: {position.Y}";
         }
 
         private void Grid_KeyDown(object sender, KeyEventArgs e)

@@ -33,20 +33,34 @@ namespace screenerWpf.Sevices
         public Rectangle SelectArea()
         {
             AreaSelector selector = new AreaSelector();
-            selector.Cursor = Cursors.Cross; // Change cursor to crosshair
             bool? result = selector.ShowDialog();
 
             if (result == true)
             {
-                // The selected area is now highlighted with a semi-transparent overlay.
-                return new Rectangle(
-                    (int)selector.SelectedRectangle.X,
-                    (int)selector.SelectedRectangle.Y,
-                    (int)selector.SelectedRectangle.Width,
-                    (int)selector.SelectedRectangle.Height);
+                // Get the DPI scale of the screen
+                double dpiX, dpiY;
+                using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+                {
+                    dpiX = graphics.DpiX / 96.0;
+                    dpiY = graphics.DpiY / 96.0;
+                }
+
+                // Adjust the rectangle to match the screen's DPI and subtract the offset
+                int offsetX = 7;
+                int offsetY = 7;
+
+                var scaledRect = new Rectangle(
+                    (int)((selector.SelectedRectangle.X - offsetX) * dpiX),
+                    (int)((selector.SelectedRectangle.Y - offsetY) * dpiY),
+                    (int)(selector.SelectedRectangle.Width * dpiX),
+                    (int)(selector.SelectedRectangle.Height * dpiY));
+
+                return scaledRect;
             }
+
             return Rectangle.Empty;
         }
+
 
 
         public void ShowVideoPlayerWindow(string videoPath)
