@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 using screenerWpf.Commands;
+using screenerWpf.Controls;
 using screenerWpf.Interfaces;
 using screenerWpf.Models;
 
@@ -28,6 +29,9 @@ namespace screenerWpf.ViewModels
         public ICommand BrushCommand { get; private set; }
         public ICommand RecognizeTextCommand { get; private set; }
         public ICommand UploadToDropboxCommand { get; private set; }
+        public ICommand UndoCommand { get; private set; }
+        public ICommand RedoCommand { get; private set; }
+
         public ObservableCollection<ColorInfo> Colors { get; private set; }
         public ObservableCollection<int> Thicknesses { get; private set; }
         public ObservableCollection<string> FontFamilies { get; private set; }
@@ -36,8 +40,9 @@ namespace screenerWpf.ViewModels
         public event Action MinimizeRequest;
         public event Action MaximizeRestoreRequest;
         public event Action CloseRequest;
+        private readonly DrawableCanvas drawableCanvas;
 
-        public ImageEditorViewModel(ICanvasInputHandler inputHandler)
+        public ImageEditorViewModel(ICanvasInputHandler inputHandler, DrawableCanvas drawableCanvas)
         {
             this.inputHandler = inputHandler ?? throw new ArgumentNullException(nameof(inputHandler));
 
@@ -54,7 +59,7 @@ namespace screenerWpf.ViewModels
             CloseCommand = new RelayCommand(_ => OnClose());
 
             UploadToDropboxCommand = new RelayCommand(async _ => await new DropboxUploader().UploadFileAsync(ExecuteSaveFast()));
-
+            this.drawableCanvas = drawableCanvas;
         }
 
         private void InitializeStartValues()
@@ -111,6 +116,8 @@ namespace screenerWpf.ViewModels
             BlurCommand = new RelayCommand(ExecuteBlur);
             BrushCommand = new RelayCommand(ExecuteBrush);
             RecognizeTextCommand = new RelayCommand(ExecuteRecognizeText);
+            UndoCommand = new RelayCommand(ExecuteUndo);
+            RedoCommand = new RelayCommand(ExecuteRedo);
         }
         private void OnMinimize()
         {
@@ -330,6 +337,16 @@ namespace screenerWpf.ViewModels
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void ExecuteUndo(object parameter)
+        {
+            drawableCanvas.Undo();
+        }
+
+        private void ExecuteRedo(object parameter)
+        {
+            drawableCanvas.Redo();
         }
     }
 }

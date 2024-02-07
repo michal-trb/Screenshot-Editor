@@ -35,7 +35,7 @@ namespace screenerWpf
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
             drawableCanvas.PreviewKeyDown += this.inputHandler.Canvas_PreviewKeyDown;
 
-            var viewModel = new ImageEditorViewModel(this.inputHandler);
+            var viewModel = new ImageEditorViewModel(this.inputHandler, drawableCanvas);
 
             DataContext = viewModel;
 

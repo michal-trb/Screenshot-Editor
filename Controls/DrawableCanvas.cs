@@ -1,17 +1,19 @@
-﻿using System;
+﻿using screenerWpf.Helpers;
+using screenerWpf.Interfaces;
+using screenerWpf.Services;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using screenerWpf.Helpers;
-using screenerWpf.Interfaces;
 
 namespace screenerWpf.Controls
 {
     public class DrawableCanvas : Canvas
     {
         public ElementManager elementManager = new ElementManager();
+        private HistoryManager historyManager = new HistoryManager();
         private DrawableElement selectedElement;
         public bool isFirstClick = true;
         public RenderTargetBitmap originalTargetBitmap;
@@ -173,12 +175,6 @@ namespace screenerWpf.Controls
             InvalidateVisual();
         }
 
-        public void AddElement(DrawableElement element)
-        {
-            elementManager.AddElement(element);
-            InvalidateVisual();
-        }
-
         public void SelectElementAtPoint(Point point)
         {
             var element = elementManager.GetElementAtPoint(point);
@@ -199,14 +195,6 @@ namespace screenerWpf.Controls
             {
                 selectedElement.IsSelected = false;
                 selectedElement = null;
-                InvalidateVisual();
-            }
-        }
-        internal void RemoveElement(IDrawable selectedElement)
-        {
-            if (selectedElement != null)
-            {
-                elementManager.RemoveElement((DrawableElement)selectedElement);
                 InvalidateVisual();
             }
         }
@@ -237,6 +225,41 @@ namespace screenerWpf.Controls
         internal RenderTargetBitmap GetOriginalTargetBitmap()
         {
             return originalTargetBitmap;
+        }
+
+        public void AddElement(DrawableElement element)
+        {
+            elementManager.AddElement(element);
+            historyManager.AddAction(new AddElementAction(this, element));
+            InvalidateVisual();
+        }
+
+        public void RemoveElement(IDrawable element)
+        {
+            if (element != null)
+            {
+                elementManager.RemoveElement((DrawableElement)element);
+                historyManager.AddAction(new RemoveElementAction(this, (DrawableElement)element));
+                InvalidateVisual();
+            }
+        }
+
+        public void Undo()
+        {
+            if (historyManager.CanUndo)
+            {
+                historyManager.Undo();
+                InvalidateVisual();
+            }
+        }
+
+        public void Redo()
+        {
+            if (historyManager.CanRedo)
+            {
+                historyManager.Redo();
+                InvalidateVisual();
+            }
         }
     }
 }
