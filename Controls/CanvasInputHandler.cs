@@ -1,4 +1,5 @@
 ﻿using screenerWpf.Interfaces;
+using screenerWpf.Models.DrawableElements;
 using screenerWpf.Sevices;
 using System.Windows;
 using System.Windows.Input;
@@ -142,21 +143,98 @@ namespace screenerWpf.Controls
         public void ChangeFontSize(double fontSize)
         {
             SelectedFontSize = fontSize;
+            if (selectionHandler.HasSelectedElement())
+            {
+                var selectedElement = selectionHandler.GetSelectedElement();
+                if (selectedElement != null && selectedElement is DrawableText text)
+                {
+                    text.FontSize = SelectedFontSize;
+                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                }
+                if (selectedElement != null && selectedElement is DrawableSpeechBubble speechBubble)
+                {
+                    speechBubble.FontSize = SelectedFontSize;
+                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                }
+            }
         }
 
-        public void ChangeColor(Color comboBox)
+        public void ChangeColor(Color color)
         {
-            SelectedColor = comboBox;
+            SelectedColor = color;
+            if (selectionHandler.HasSelectedElement())
+            {
+                var selectedElement = selectionHandler.GetSelectedElement();
+                if (selectedElement != null && selectedElement is DrawableText text)
+                {
+                    text.Color = SelectedColor;
+                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                }
+                if (selectedElement is DrawableSpeechBubble speechBubble)
+                {
+                    speechBubble.Color = SelectedColor;
+                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                }
+                if (selectedElement is DrawableRectangle rectangle)
+                {
+                    rectangle.Color = SelectedColor;
+                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                }
+                if (selectedElement is DrawableBrush brush)
+                {
+                    brush.Color = SelectedColor;
+                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                }
+                if (selectedElement is DrawableArrow arrow)
+                {
+                    arrow.Color = SelectedColor;
+                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                }
+            }
         }
 
         public void ChangeArrowThickness(double comboBoxArrowThickness)
         {
             ArrowThickness = comboBoxArrowThickness;
+            if (selectionHandler.HasSelectedElement())
+            {
+                var selectedElement = selectionHandler.GetSelectedElement();
+                if (selectedElement != null)
+                {
+                    if (selectedElement is DrawableArrow arrow)
+                    {
+                        arrow.Thickness = ArrowThickness;
+                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    }
+                    if (selectedElement is DrawableRectangle rectangle)
+                    {
+                        rectangle.StrokeThickness = ArrowThickness;
+                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    }
+                    if (selectedElement is DrawableBrush brush)
+                    {
+                        brush.thickness = ArrowThickness;
+                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    }
+                }
+            }
         }
 
         public void ChangeTransparency(double transparency)
         {
             Transparency = transparency;
+            if (selectionHandler.HasSelectedElement())
+            {
+                var selectedElement = selectionHandler.GetSelectedElement();
+                if (selectedElement != null)
+                {
+                    if (selectedElement is DrawableBrush brush)
+                    {
+                        brush.transparency = Transparency;
+                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    }
+                }
+            }
         }
 
         public static Color GetCurrentColor()

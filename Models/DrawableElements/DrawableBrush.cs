@@ -7,13 +7,15 @@ namespace screenerWpf.Models.DrawableElements
     internal class DrawableBrush : DrawableElement
     {
         private List<Point> points = new List<Point>();
-        private double thickness;
-        private Color color;
+        public double thickness;
+        public double transparency;
+        public Color color;
         private StreamGeometry geometry;
         private bool needsRedraw = true;
 
         public DrawableBrush(Color color, double thickness, double transparency)
         {
+            this.transparency = transparency;
             this.color = Color.FromArgb((byte)(255 * transparency / 100), color.R, color.G, color.B);
             this.thickness = thickness;
 
@@ -76,7 +78,7 @@ namespace screenerWpf.Models.DrawableElements
         {
             Redraw();
 
-            var pen = new Pen(new SolidColorBrush(color), thickness)
+            var pen = new Pen(new SolidColorBrush(Color.FromArgb((byte)(255 * transparency / 100), color.R, color.G, color.B)), thickness)
             {
                 LineJoin = PenLineJoin.Round,
                 EndLineCap = PenLineCap.Round,
