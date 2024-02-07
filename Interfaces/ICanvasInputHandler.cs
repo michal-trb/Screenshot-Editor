@@ -9,8 +9,6 @@ namespace screenerWpf.Interfaces
         void Canvas_MouseDoubleClick(object sender, MouseButtonEventArgs e);
         void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e);
         void Canvas_MouseMove(object sender, MouseEventArgs e);
-        void Canvas_PreviewKeyDown(object sender, KeyEventArgs e);
-
         void DrawArrow();
         void DrawRect();
         void AddText();
@@ -20,8 +18,6 @@ namespace screenerWpf.Interfaces
         void Brush();
         void RecognizeText();
         void EditText();
-        void CommandBinding_DeleteExecuted(object sender, ExecutedRoutedEventArgs e);
-
         void ChangeFontFamily(FontFamily selectedFontFamily);
         void ChangeFontSize(double fontSize);
         void ChangeColor(Color color);
@@ -29,5 +25,8 @@ namespace screenerWpf.Interfaces
         void ChangeTransparency(double transparency);
         string SaveFast();
         void SavePdf();
+        void CommandBinding_DeleteExecuted();
+        void CommandBinding_CopyExecuted();
+        void CommandBinding_PasteExecuted();
     }
 }

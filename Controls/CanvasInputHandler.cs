@@ -56,18 +56,9 @@ namespace screenerWpf.Controls
             actionHandler.HandleMouseMove(e);
         }
 
-        public void Canvas_PreviewKeyDown(object sender, KeyEventArgs e)
+        public void CommandBinding_DeleteExecuted()
         {
-            if (e.Key == Key.C && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                actionHandler.HandleCopy();
-                e.Handled = true;
-            }
-            if (e.Key == Key.V && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-            {
-                actionHandler.HandlePaste();
-                e.Handled = true;
-            }
+            selectionHandler.DeleteSelectedElement();
         }
 
         // Metody obsługi przycisków i innych akcji
@@ -130,14 +121,24 @@ namespace screenerWpf.Controls
             textRecognitionHandler.StartRecognizeFromImage();
         }
 
-        public void CommandBinding_DeleteExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            selectionHandler.DeleteSelectedElement();
-        }
-
         public void ChangeFontFamily(FontFamily selectedFontFamily)
         {
             SelectedFontFamily = selectedFontFamily;
+            var typeface = GetCurrentTypeface();
+            if (selectionHandler.HasSelectedElement())
+            {
+                var selectedElement = selectionHandler.GetSelectedElement();
+                if (selectedElement is DrawableText text)
+                {
+                    text.Typeface = typeface;
+                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                }
+                if (selectedElement is DrawableSpeechBubble speechBubble)
+                {
+                    speechBubble.Typeface = typeface;
+                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                }
+            }
         }
 
         public void ChangeFontSize(double fontSize)
@@ -146,12 +147,12 @@ namespace screenerWpf.Controls
             if (selectionHandler.HasSelectedElement())
             {
                 var selectedElement = selectionHandler.GetSelectedElement();
-                if (selectedElement != null && selectedElement is DrawableText text)
+                if (selectedElement is DrawableText text)
                 {
                     text.FontSize = SelectedFontSize;
                     drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
                 }
-                if (selectedElement != null && selectedElement is DrawableSpeechBubble speechBubble)
+                if (selectedElement is DrawableSpeechBubble speechBubble)
                 {
                     speechBubble.FontSize = SelectedFontSize;
                     drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
@@ -165,14 +166,14 @@ namespace screenerWpf.Controls
             if (selectionHandler.HasSelectedElement())
             {
                 var selectedElement = selectionHandler.GetSelectedElement();
-                if (selectedElement != null && selectedElement is DrawableText text)
+                if (selectedElement is DrawableText text)
                 {
                     text.Color = SelectedColor;
                     drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
                 }
                 if (selectedElement is DrawableSpeechBubble speechBubble)
                 {
-                    speechBubble.Color = SelectedColor;
+                    speechBubble.Brush = new SolidColorBrush(SelectedColor);
                     drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
                 }
                 if (selectedElement is DrawableRectangle rectangle)
@@ -208,7 +209,7 @@ namespace screenerWpf.Controls
                     }
                     if (selectedElement is DrawableRectangle rectangle)
                     {
-                        rectangle.StrokeThickness = ArrowThickness;
+                        rectangle.Thickness = ArrowThickness;
                         drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
                     }
                     if (selectedElement is DrawableBrush brush)
@@ -231,6 +232,11 @@ namespace screenerWpf.Controls
                     if (selectedElement is DrawableBrush brush)
                     {
                         brush.transparency = Transparency;
+                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    }
+                    if (selectedElement is DrawableRectangle rectangle)
+                    {
+                        rectangle.Transparency = Transparency;
                         drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
                     }
                 }
@@ -273,6 +279,16 @@ namespace screenerWpf.Controls
         public void EditText()
         {
             throw new System.NotImplementedException();
+        }
+
+        public void CommandBinding_CopyExecuted()
+        {
+            actionHandler.HandleCopy();
+        }
+
+        public void CommandBinding_PasteExecuted()
+        {
+            actionHandler.HandlePaste();
         }
     }
 }

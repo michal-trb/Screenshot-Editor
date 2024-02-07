@@ -8,16 +8,19 @@ namespace screenerWpf.Models.DrawableElements
     {
         public Point Position { get; set; }
         public Size Size { get; set; }
-        public Color StrokeColor { get; set; }
-        public double StrokeThickness { get; set; }
+        public Color Color { get; set; }
+        public double Thickness { get; set; }
+        public double Transparency { get; internal set; }
+
         private enum DragHandle { None, TopLeft, TopRight, BottomLeft, BottomRight }
         private DragHandle currentDragHandle = DragHandle.None;
         public DrawableRectangle() : base(4)
         {
             Position = new Point(0, 0);
             Size = new Size(100, 50); // Domyślny rozmiar
-            StrokeColor = Colors.Black; // Domyślny kolor obrysu
-            StrokeThickness = 1.0; // Domyślna grubość obrysu
+            Color = Colors.Black; // Domyślny kolor obrysu
+            Thickness = 1.0; // Domyślna grubość obrysu
+            Transparency = 100;
         }
 
         public override void Draw(DrawingContext context)
@@ -25,13 +28,11 @@ namespace screenerWpf.Models.DrawableElements
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            // Najpierw rysuj elementy specyficzne dla tej klasy
             Rect rect = new Rect(Position, Size);
             Brush fillBrush = new SolidColorBrush();
-            Pen strokePen = new Pen(new SolidColorBrush(StrokeColor), StrokeThickness);
+            Pen strokePen = new Pen(new SolidColorBrush(Color.FromArgb((byte)(255 * Transparency / 100), Color.R, Color.G, Color.B)), Thickness);
             context.DrawRectangle(fillBrush, strokePen, rect);
 
-            // Następnie rysuj uchwyty, jeśli element jest zaznaczony
             if (IsSelected)
             {
                 UpdateHandlePoints(); // Aktualizuj pozycje uchwytów

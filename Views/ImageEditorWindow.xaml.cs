@@ -33,7 +33,6 @@ namespace screenerWpf
             CreateCanvasBitmap();
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
-            drawableCanvas.PreviewKeyDown += this.inputHandler.Canvas_PreviewKeyDown;
 
             var viewModel = new ImageEditorViewModel(this.inputHandler, drawableCanvas);
 
@@ -177,11 +176,6 @@ namespace screenerWpf
         private void Canvas_MouseMove(object sender, MouseEventArgs e)
         {
             inputHandler.Canvas_MouseMove(sender, e);
-        }
-
-        private void CommandBinding_DeleteExecuted(object sender, ExecutedRoutedEventArgs e)
-        {
-            inputHandler.CommandBinding_DeleteExecuted(sender, e);
         }
     }
 }

@@ -13,6 +13,13 @@
         <ResourceDictionary>
         </ResourceDictionary>
     </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="C" Modifiers="Control" Command="{Binding CopyCommand}" />
+        <KeyBinding Key="V" Modifiers="Control" Command="{Binding PasteCommand}" />
+        <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
+    </Window.InputBindings>
+
     <Grid  Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>

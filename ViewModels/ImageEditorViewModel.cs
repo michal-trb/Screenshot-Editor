@@ -31,7 +31,9 @@ namespace screenerWpf.ViewModels
         public ICommand UploadToDropboxCommand { get; private set; }
         public ICommand UndoCommand { get; private set; }
         public ICommand RedoCommand { get; private set; }
-
+        public ICommand CopyCommand { get; private set; }
+        public ICommand PasteCommand { get; private set; }
+        public ICommand DeleteCommand { get; private set; }
         public ObservableCollection<ColorInfo> Colors { get; private set; }
         public ObservableCollection<int> Thicknesses { get; private set; }
         public ObservableCollection<string> FontFamilies { get; private set; }
@@ -118,6 +120,9 @@ namespace screenerWpf.ViewModels
             RecognizeTextCommand = new RelayCommand(ExecuteRecognizeText);
             UndoCommand = new RelayCommand(ExecuteUndo);
             RedoCommand = new RelayCommand(ExecuteRedo);
+            CopyCommand = new RelayCommand(ExecuteCopy);
+            PasteCommand = new RelayCommand(ExecutePaste);
+            DeleteCommand = new RelayCommand(ExecuteDelete);
         }
         private void OnMinimize()
         {
@@ -347,6 +352,30 @@ namespace screenerWpf.ViewModels
         private void ExecuteRedo(object parameter)
         {
             drawableCanvas.Redo();
+        }
+
+        private void ExecuteDelete(object parameter)
+        {
+            if (inputHandler != null)
+            {
+                inputHandler.CommandBinding_DeleteExecuted();
+            }
+        }
+
+        private void ExecuteCopy(object parameter)
+        {
+            if (inputHandler != null)
+            {
+                inputHandler.CommandBinding_CopyExecuted();
+            }
+        }
+
+        private void ExecutePaste(object parameter)
+        {
+            if (inputHandler != null)
+            {
+                inputHandler.CommandBinding_PasteExecuted();
+            }
         }
     }
 }
