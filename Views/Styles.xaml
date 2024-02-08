@@ -290,5 +290,22 @@
         </Setter.Value>
     </Setter>
 </Style>
-
+    <Style x:Key="TextBoxStyle" TargetType="TextBox">
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                    <GradientStop Color="{DynamicResource Background950}" Offset="0"/>
+                    <GradientStop Color="{DynamicResource Background900}" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushColorBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+   
 </ResourceDictionary>

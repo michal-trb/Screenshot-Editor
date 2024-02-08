@@ -8,6 +8,7 @@ using screenerWpf.Commands;
 using screenerWpf.Controls;
 using screenerWpf.Interfaces;
 using screenerWpf.Models;
+using screenerWpf.Views;
 
 namespace screenerWpf.ViewModels
 {
@@ -37,6 +38,7 @@ namespace screenerWpf.ViewModels
         public ICommand PasteCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
+        public ICommand ResizeCommand { get; private set; }
         public ObservableCollection<ColorInfo> Colors { get; private set; }
         public ObservableCollection<int> Thicknesses { get; private set; }
         public ObservableCollection<string> FontFamilies { get; private set; }
@@ -127,7 +129,9 @@ namespace screenerWpf.ViewModels
             PasteCommand = new RelayCommand(ExecutePaste);
             DeleteCommand = new RelayCommand(ExecuteDelete);
             SaveCommand = new RelayCommand(ExecuteSave);
+            ResizeCommand = new RelayCommand(ExecuteResize);
         }
+
         private void OnMinimize()
         {
             MinimizeRequest?.Invoke();
@@ -397,5 +401,20 @@ namespace screenerWpf.ViewModels
                 inputHandler.CommandBinding_PasteExecuted();
             }
         }
+
+        private void ExecuteResize(object obj)
+        {
+            var resizeDialog = new ResizeDialog((int)drawableCanvas.ActualWidth, (int)drawableCanvas.ActualHeight);
+            if (resizeDialog.ShowDialog() == true)
+            {
+                int newWidth = resizeDialog.NewWidth;
+                int newHeight = resizeDialog.NewHeight;
+
+                drawableCanvas.Height = newHeight; 
+                drawableCanvas.Width = newWidth;
+            }
+            drawableCanvas.InvalidateVisual();
+        }
+
     }
 }

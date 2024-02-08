@@ -55,8 +55,8 @@ namespace screenerWpf
             double targetHeight = initialImage.PixelHeight * 0.9;
 
             // Sprawdź, czy obliczone wymiary są mniejsze niż minimalne
-            targetWidth = Math.Max(targetWidth, 600);
-            targetHeight = Math.Max(targetHeight, 920);
+            targetWidth = Math.Max(targetWidth, 920);
+            targetHeight = Math.Max(targetHeight, 600);
 
             // Ustaw nowe wymiary okna
             this.Width = targetWidth;
