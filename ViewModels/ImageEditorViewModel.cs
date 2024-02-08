@@ -22,7 +22,6 @@ namespace screenerWpf.ViewModels
         public ICommand MinimizeCommand { get; private set; }
         public ICommand MaximizeRestoreCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
-        public ICommand SaveButtonCommand { get; private set; }
         public ICommand SavePdfCommand { get; private set; }
         public ICommand DrawArrowCommand { get; private set; }
         public ICommand AddTextCommand { get; private set; }
@@ -114,7 +113,6 @@ namespace screenerWpf.ViewModels
 
         private void InitializeCommands()
         {
-            SaveButtonCommand = new RelayCommand(ExecuteSaveButton);
             SavePdfCommand = new RelayCommand(ExecuteSavePdf);
             DrawArrowCommand = new RelayCommand(ExecuteDrawArrow);
             AddTextCommand = new RelayCommand(ExecuteAddText);
@@ -190,11 +188,6 @@ namespace screenerWpf.ViewModels
         }
 
         private void ExecuteSave(object obj)
-        {
-            inputHandler.Save();
-        }
-
-        private void ExecuteSaveButton(object obj)
         {
             inputHandler.Save();
         }

@@ -30,49 +30,82 @@ namespace screenerWpf.Models.DrawableElements
 
         private void Redraw()
         {
-            if (needsRedraw && points.Count >= 2)
+            if (needsRedraw && points.Count >= 4)
             {
+                var smoothedPoints = SmoothPoints(points, 2); // Zastosowanie wygładzania z oknem 2
                 geometry.Clear();
                 using (var ctx = geometry.Open())
                 {
-                    ctx.BeginFigure(points[0], false, false);
-                    ctx.PolyBezierTo(CreateSmoothCurvePoints(points), true, false);
+                    var splinePoints = CreateCatmullRomPoints(smoothedPoints, 10); // Użycie wygładzonych punktów
+                    ctx.BeginFigure(splinePoints[0], false, false);
+                    ctx.PolyLineTo(splinePoints, true, false);
                 }
                 needsRedraw = false;
             }
         }
 
-        private List<Point> CreateSmoothCurvePoints(List<Point> originalPoints)
+        private List<Point> SmoothPoints(List<Point> originalPoints, int windowSize)
         {
-            var smoothPoints = new List<Point>();
-            if (originalPoints.Count < 2)
-                return originalPoints;
+            if (windowSize < 1 || originalPoints.Count < 2)
+                return new List<Point>(originalPoints);
 
-            // Dodanie pierwszego punktu
-            smoothPoints.Add(originalPoints[0]);
-
-            for (int i = 0; i < originalPoints.Count - 1; i++)
+            var smoothedPoints = new List<Point>();
+            for (int i = 0; i < originalPoints.Count; i++)
             {
-                var p0 = originalPoints[i];
-                var p1 = originalPoints[i + 1];
-                var p2 = (i + 2 < originalPoints.Count) ? originalPoints[i + 2] : p1;
-
-                var controlPoint1 = new Point(p0.X + (p1.X - p0.X) / 3, p0.Y + (p1.Y - p0.Y) / 3);
-                var controlPoint2 = new Point(p1.X - (p2.X - p0.X) / 3, p1.Y - (p2.Y - p0.Y) / 3);
-
-                smoothPoints.Add(controlPoint1);
-                smoothPoints.Add(controlPoint2);
-                smoothPoints.Add(p1);
+                double sumX = 0, sumY = 0;
+                int count = 0;
+                for (int j = -windowSize; j <= windowSize; j++)
+                {
+                    int index = i + j;
+                    if (index >= 0 && index < originalPoints.Count)
+                    {
+                        sumX += originalPoints[index].X;
+                        sumY += originalPoints[index].Y;
+                        count++;
+                    }
+                }
+                smoothedPoints.Add(new Point(sumX / count, sumY / count));
             }
 
-            return smoothPoints;
+            return smoothedPoints;
         }
 
 
-        private Point MidPoint(Point p0, Point p1)
+        private List<Point> CreateCatmullRomPoints(List<Point> points, int density)
         {
-            return new Point((p0.X + p1.X) / 2.0, (p0.Y + p1.Y) / 2.0);
+            if (points.Count < 4)
+                return new List<Point>(points);
+
+            var splinePoints = new List<Point>();
+
+            for (int i = 1; i < points.Count - 2; i++)
+            {
+                for (int j = 0; j < density; j++)
+                {
+                    double t = j / (double)density;
+                    double t2 = t * t;
+                    double t3 = t2 * t;
+
+                    Point pi_1 = points[i - 1];
+                    Point pi = points[i];
+                    Point pi1 = points[i + 1];
+                    Point pi2 = points[i + 2];
+
+                    double x = 0.5 * (2 * pi.X + (pi1.X - pi_1.X) * t +
+                        (2 * pi_1.X - 5 * pi.X + 4 * pi1.X - pi2.X) * t2 +
+                        (3 * pi.X - pi_1.X - 3 * pi1.X + pi2.X) * t3);
+
+                    double y = 0.5 * (2 * pi.Y + (pi1.Y - pi_1.Y) * t +
+                        (2 * pi_1.Y - 5 * pi.Y + 4 * pi1.Y - pi2.Y) * t2 +
+                        (3 * pi.Y - pi_1.Y - 3 * pi1.Y + pi2.Y) * t3);
+
+                    splinePoints.Add(new Point(x, y));
+                }
+            }
+
+            return splinePoints;
         }
+
 
         public override void Draw(DrawingContext context)
         {

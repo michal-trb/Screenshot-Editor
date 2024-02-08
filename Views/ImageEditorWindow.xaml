@@ -92,7 +92,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Command="{Binding ExecuteSaveButton}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="0" Grid.Column="0" Command="{Binding SaveCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
                     <Image Source="{DynamicResource FileIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>

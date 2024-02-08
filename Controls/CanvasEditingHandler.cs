@@ -25,7 +25,21 @@ namespace screenerWpf.Controls
                 EditTextBox(drawableText, location);
                 editableElement = element;
             }
+            else if (element is DrawableSpeechBubble drawableSpeechBubble)
+            {
+                EditSpeechBubble(drawableSpeechBubble, location);
+                editableElement = element;
+            }
+        }
 
+        private void EditSpeechBubble(DrawableSpeechBubble drawableSpeechBubble, Point location)
+        {
+            var dialog = new TextEditingDialog(drawableSpeechBubble.Text);
+            if (dialog.ShowDialog() == true)
+            {
+                drawableSpeechBubble.Text = dialog.EditedText;
+                drawableCanvas.InvalidateVisual(); // Odświeżanie canvas, aby pokazać zaktualizowany tekst
+            }
         }
 
 

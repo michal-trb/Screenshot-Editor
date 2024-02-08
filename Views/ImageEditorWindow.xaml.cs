@@ -50,9 +50,8 @@ namespace screenerWpf
         }
         private void AdjustWindowSize()
         {
-            // Oblicz 90% wielkości screenshotu
-            double targetWidth = initialImage.PixelWidth * 0.9;
-            double targetHeight = initialImage.PixelHeight * 0.9;
+            double targetWidth = initialImage.PixelWidth * 0.7;
+            double targetHeight = initialImage.PixelHeight * 0.7;
 
             // Sprawdź, czy obliczone wymiary są mniejsze niż minimalne
             targetWidth = Math.Max(targetWidth, 920);
