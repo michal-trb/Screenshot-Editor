@@ -5,6 +5,7 @@ using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using screenerWpf.Controls;
+using screenerWpf.Interfaces;
 
 namespace screenerWpf.Models.DrawableElements
 {
@@ -195,6 +196,22 @@ namespace screenerWpf.Models.DrawableElements
                 // Rysowanie RenderTargetBitmap na głównym DrawingVisual
                 dc.DrawImage(blurredBitmap, new Rect(0, 0, cropRect.Width, cropRect.Height));
             }
+        }
+
+        public override DrawableElement Clone()
+        {
+            return new DrawableBlur(Canvas)
+            {
+                StrokeColor = this.StrokeColor,
+                StrokeThickness = this.StrokeThickness,
+                BlurEffect = this.BlurEffect,
+                Visual = this.Visual,
+                Canvas = this.Canvas,
+                Color = this.Color,
+                Position = new Point(Position.X + 5, Position.Y + 5),
+                Size = this.Size,
+                Scale = this.Scale,
+            };
         }
     }
 }

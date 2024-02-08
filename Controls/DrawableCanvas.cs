@@ -14,7 +14,7 @@ namespace screenerWpf.Controls
     {
         public ElementManager elementManager = new ElementManager();
         private HistoryManager historyManager = new HistoryManager();
-        private DrawableElement selectedElement;
+        public DrawableElement selectedElement;
         public bool isFirstClick = true;
         public RenderTargetBitmap originalTargetBitmap;
         private ScaleTransform scaleTransform = new ScaleTransform();

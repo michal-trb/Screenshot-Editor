@@ -60,4 +60,6 @@ public abstract class DrawableElement : IDrawable
         Geometry rectangleGeometry = new RectangleGeometry(rect);
         return rectangleGeometry.FillContains(point);
     }
+
+    public abstract DrawableElement Clone();
 }

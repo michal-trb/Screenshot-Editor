@@ -93,5 +93,10 @@ namespace screenerWpf.Models.DrawableElements
         {
             return new();
         }
+
+        public override DrawableElement Clone()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

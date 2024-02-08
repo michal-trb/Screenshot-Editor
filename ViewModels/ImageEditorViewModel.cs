@@ -13,6 +13,8 @@ namespace screenerWpf.ViewModels
 {
     internal class ImageEditorViewModel : INotifyPropertyChanged
     {
+        private IDrawable copiedElement;
+
         private readonly ICanvasInputHandler inputHandler;
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -364,6 +366,11 @@ namespace screenerWpf.ViewModels
 
         private void ExecuteCopy(object parameter)
         {
+            if (drawableCanvas.selectedElement != null)
+            {
+                // Zakładając, że masz metodę Clone() w klasach elementów rysowalnych
+                copiedElement = drawableCanvas.selectedElement.Clone();
+            }
             if (inputHandler != null)
             {
                 inputHandler.CommandBinding_CopyExecuted();
@@ -372,7 +379,13 @@ namespace screenerWpf.ViewModels
 
         private void ExecutePaste(object parameter)
         {
-            if (inputHandler != null)
+            if (copiedElement != null)
+            {
+                var elementToPaste = copiedElement.Clone();
+                drawableCanvas.AddElement(elementToPaste);
+                drawableCanvas.InvalidateVisual();
+            }
+            if (copiedElement == null && inputHandler != null)
             {
                 inputHandler.CommandBinding_PasteExecuted();
             }

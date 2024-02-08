@@ -128,5 +128,10 @@ namespace screenerWpf.Models.DrawableElements
             HandlePoints[2] = rect.BottomLeft; // Lewy dolny narożnik
             HandlePoints[3] = rect.BottomRight; // Prawy dolny narożnik
         }
+
+        public override DrawableElement Clone()
+        {
+            return new DrawableImage(this.imageSource, new Point(Position.X + 5, Position.Y + 5));
+        }
     }
 }

@@ -76,5 +76,19 @@ namespace screenerWpf.Models.DrawableElements
 
             return new Rect(Position, textSize);
         }
+
+        public override DrawableElement Clone()
+        {
+            return new DrawableText
+            {
+                Text = this.Text,
+                Color = this.Color,
+                Position = new Point(Position.X+5, Position.Y+5),
+                Size = this.Size,
+                Scale = this.Scale,
+                FontSize = this.FontSize,
+                Typeface = this.Typeface,
+            };
+        }
     }
 }

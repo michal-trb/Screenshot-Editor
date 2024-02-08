@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace screenerWpf.Models.DrawableElements
@@ -135,6 +136,19 @@ namespace screenerWpf.Models.DrawableElements
             // Ustawienie nowych wartości pozycji i rozmiaru
             Position = new Point(newX, newY);
             Size = new Size(newWidth, newHeight);
+        }
+
+        public override DrawableElement Clone()
+        {
+            return new DrawableRectangle
+            {
+                Thickness = this.Thickness,
+                Transparency = this.Transparency,
+                Color = this.Color,
+                Position = new Point(Position.X + 5, Position.Y + 5),
+                Size = this.Size,
+                Scale = this.Scale,
+            };
         }
     }
 }

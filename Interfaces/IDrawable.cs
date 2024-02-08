@@ -13,5 +13,6 @@ namespace screenerWpf.Interfaces
         void Move(Vector delta);
         Point GetLocation();
         Rect GetBounds();
+        DrawableElement Clone();
     }
 }

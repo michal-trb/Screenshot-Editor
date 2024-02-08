@@ -161,5 +161,21 @@ namespace screenerWpf.Models.DrawableElements
             double handleRadius = 10; // Promień, w którym punkt jest uznawany za bliski uchwytowi
             return (point - handle).Length <= handleRadius;
         }
+
+        public override DrawableElement Clone()
+        {
+            return new DrawableSpeechBubble
+            {
+                Text = this.Text,
+                EndTailPoint = this.EndTailPoint,
+                Color = this.Color,
+                Position = new Point(Position.X + 5, Position.Y + 5),
+                Size = this.Size,
+                Scale = this.Scale,
+                FontSize = this.FontSize,
+                Typeface = this.Typeface,
+                Brush = this.Brush,
+            };
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using screenerWpf.Interfaces;
+using System;
 using System.Windows;
 using System.Windows.Media;
 
@@ -140,5 +141,17 @@ namespace screenerWpf.Models.DrawableElements
             }
         }
 
+        public override DrawableElement Clone()
+        {
+            return new DrawableArrow
+            {
+                EndPoint = this.EndPoint,
+                Thickness = this.Thickness,
+                Color = this.Color,
+                Position = new Point(Position.X + 5, Position.Y + 5),
+                Size = this.Size,
+                Scale = this.Scale,
+            };
+        }
     }
 }
