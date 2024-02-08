@@ -17,6 +17,7 @@
     <Window.InputBindings>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding CopyCommand}" />
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding PasteCommand}" />
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}" />
         <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
     </Window.InputBindings>
 
@@ -88,7 +89,7 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Command="{Binding SaveCommand}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
+            <Button Grid.Row="0" Grid.Column="0" Command="{Binding ExecuteSaveButton}" Style="{DynamicResource RoundedButtonStyle}" Width="{DynamicResource StandardWidth}" Height="{DynamicResource StandardHeight}">
                 <Button.Content>
                     <Image Source="{DynamicResource FileIcon}" Height="{DynamicResource StandardIconHeight}"/>
                 </Button.Content>

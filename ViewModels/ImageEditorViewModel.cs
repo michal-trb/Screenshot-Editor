@@ -21,7 +21,7 @@ namespace screenerWpf.ViewModels
         public ICommand MinimizeCommand { get; private set; }
         public ICommand MaximizeRestoreCommand { get; private set; }
         public ICommand CloseCommand { get; private set; }
-        public ICommand SaveCommand { get; private set; }
+        public ICommand SaveButtonCommand { get; private set; }
         public ICommand SavePdfCommand { get; private set; }
         public ICommand DrawArrowCommand { get; private set; }
         public ICommand AddTextCommand { get; private set; }
@@ -36,6 +36,7 @@ namespace screenerWpf.ViewModels
         public ICommand CopyCommand { get; private set; }
         public ICommand PasteCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
+        public ICommand SaveCommand { get; private set; }
         public ObservableCollection<ColorInfo> Colors { get; private set; }
         public ObservableCollection<int> Thicknesses { get; private set; }
         public ObservableCollection<string> FontFamilies { get; private set; }
@@ -111,7 +112,7 @@ namespace screenerWpf.ViewModels
 
         private void InitializeCommands()
         {
-            SaveCommand = new RelayCommand(ExecuteSave);
+            SaveButtonCommand = new RelayCommand(ExecuteSaveButton);
             SavePdfCommand = new RelayCommand(ExecuteSavePdf);
             DrawArrowCommand = new RelayCommand(ExecuteDrawArrow);
             AddTextCommand = new RelayCommand(ExecuteAddText);
@@ -125,6 +126,7 @@ namespace screenerWpf.ViewModels
             CopyCommand = new RelayCommand(ExecuteCopy);
             PasteCommand = new RelayCommand(ExecutePaste);
             DeleteCommand = new RelayCommand(ExecuteDelete);
+            SaveCommand = new RelayCommand(ExecuteSave);
         }
         private void OnMinimize()
         {
@@ -184,6 +186,11 @@ namespace screenerWpf.ViewModels
         }
 
         private void ExecuteSave(object obj)
+        {
+            inputHandler.Save();
+        }
+
+        private void ExecuteSaveButton(object obj)
         {
             inputHandler.Save();
         }
