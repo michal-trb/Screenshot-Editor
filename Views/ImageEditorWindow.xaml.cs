@@ -29,7 +29,13 @@ namespace screenerWpf
             drawableCanvas.Width = initialBitmap.PixelWidth;
             drawableCanvas.Height = initialBitmap.PixelHeight;
 
-            Loaded += (sender, e) => drawableCanvas.Focus();
+            Loaded += (sender, e) =>
+            {
+                drawableCanvas.Focus();
+                AdjustWindowSize();
+                this.Activate();
+            };
+            
             CreateCanvasBitmap();
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
@@ -41,6 +47,29 @@ namespace screenerWpf
             viewModel.MinimizeRequest += MinimizeWindow;
             viewModel.MaximizeRestoreRequest += MaximizeRestoreWindow;
             viewModel.CloseRequest += CloseWindow;
+        }
+        private void AdjustWindowSize()
+        {
+            // Oblicz 90% wielkości screenshotu
+            double targetWidth = initialImage.PixelWidth * 0.9;
+            double targetHeight = initialImage.PixelHeight * 0.9;
+
+            // Sprawdź, czy obliczone wymiary są mniejsze niż minimalne
+            targetWidth = Math.Max(targetWidth, 600);
+            targetHeight = Math.Max(targetHeight, 920);
+
+            // Ustaw nowe wymiary okna
+            this.Width = targetWidth;
+            this.Height = targetHeight;
+
+            // Opcjonalnie, możesz chcieć dostosować położenie okna, aby było wyśrodkowane
+            CenterWindowOnScreen();
+        }
+
+        private void CenterWindowOnScreen()
+        {
+            this.Left = (SystemParameters.WorkArea.Width - this.Width) / 2;
+            this.Top = (SystemParameters.WorkArea.Height - this.Height) / 2;
         }
 
         private void CreateCanvasBitmap()

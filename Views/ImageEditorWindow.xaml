@@ -18,6 +18,9 @@
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding CopyCommand}" />
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding PasteCommand}" />
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}" />
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding UndoCommand}" />
+        <KeyBinding Key="Z" Modifiers="Control+Shift" Command="{Binding RedoCommand}" />
+
         <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
     </Window.InputBindings>
 
