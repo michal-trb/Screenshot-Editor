@@ -2,18 +2,23 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using screenerWpf.Commands;
 using screenerWpf.Controls;
 using screenerWpf.Interfaces;
 using screenerWpf.Models;
+using screenerWpf.Models.DrawableElements;
 using screenerWpf.Views;
 
 namespace screenerWpf.ViewModels
 {
     internal class ImageEditorViewModel : INotifyPropertyChanged
     {
+        private BitmapSource initialImage; // Dodano właściwość dla obrazu inicjalnego
+
         private IDrawable copiedElement;
 
         private readonly ICanvasInputHandler inputHandler;
@@ -38,6 +43,7 @@ namespace screenerWpf.ViewModels
         public ICommand DeleteCommand { get; private set; }
         public ICommand SaveCommand { get; private set; }
         public ICommand ResizeCommand { get; private set; }
+        public ICommand AddNiceBackgroundCommand { get; private set; }
         public ObservableCollection<ColorInfo> Colors { get; private set; }
         public ObservableCollection<int> Thicknesses { get; private set; }
         public ObservableCollection<string> FontFamilies { get; private set; }
@@ -48,9 +54,11 @@ namespace screenerWpf.ViewModels
         public event Action CloseRequest;
         private readonly DrawableCanvas drawableCanvas;
 
-        public ImageEditorViewModel(ICanvasInputHandler inputHandler, DrawableCanvas drawableCanvas)
+        public ImageEditorViewModel(ICanvasInputHandler inputHandler, DrawableCanvas drawableCanvas, BitmapSource initialBitmap)
         {
             this.inputHandler = inputHandler ?? throw new ArgumentNullException(nameof(inputHandler));
+            this.drawableCanvas = drawableCanvas;
+            this.initialImage = initialBitmap; // Przypisanie obrazu inicjalnego
 
             InitializeCommands();
             InitializeColors();
@@ -128,6 +136,7 @@ namespace screenerWpf.ViewModels
             DeleteCommand = new RelayCommand(ExecuteDelete);
             SaveCommand = new RelayCommand(ExecuteSave);
             ResizeCommand = new RelayCommand(ExecuteResize);
+            AddNiceBackgroundCommand = new RelayCommand(ExecuteAddNiceBackground);
         }
 
         private void OnMinimize()
@@ -409,5 +418,45 @@ namespace screenerWpf.ViewModels
             drawableCanvas.InvalidateVisual();
         }
 
+        private void ExecuteAddNiceBackground(object obj)
+        {
+            // 1. Dodaj tło na cały canvas
+            var backgroundSize = new Size(drawableCanvas.ActualWidth, drawableCanvas.ActualHeight);
+            var background = new DrawableBackground
+            {
+                Position = new Point(0, 0),
+                Size = backgroundSize
+            };
+            drawableCanvas.AddElementAtBottom(background); // Dodaje tło na samym dole
+
+            // 2. Przeskaluj i wyśrodkuj istniejące elementy (oprócz tła)
+            ScaleAndRepositionElements(0.7); // Skalowanie do 70% i wyśrodkowanie
+
+            // 3. Dodaj screenshot na wierzch tła
+            var screenshotSize = new Size(initialImage.PixelWidth * 0.7, initialImage.PixelHeight * 0.7);
+            var screenshotPosition = new Point(
+                (backgroundSize.Width - screenshotSize.Width) / 2, // Wyśrodkuj w poziomie
+                (backgroundSize.Height - screenshotSize.Height) / 2 // Wyśrodkuj w pionie
+            );
+
+            var screenshot = new DrawableScreenshot(initialImage, screenshotPosition, screenshotSize);
+            drawableCanvas.AddElement(screenshot); // Dodaj screenshot na wierzch tła
+        }
+
+
+        private void ScaleAndRepositionElements(double scale)
+        {
+            foreach (var element in drawableCanvas.elementManager.Elements
+                     .Where(e => !(e is DrawableBackground) && !(e is DrawableScreenshot)).ToList())
+            {
+                // Przeskalowanie i wyśrodkowanie jak wcześniej opisano
+                element.Size = new Size(element.Size.Width * scale, element.Size.Height * scale);
+                double offsetX = (drawableCanvas.ActualWidth - element.Size.Width) / 2;
+                double offsetY = (drawableCanvas.ActualHeight - element.Size.Height) / 2;
+                element.Position = new Point(offsetX, offsetY);
+            }
+            // Nie trzeba wywoływać BringToFront, ponieważ elementy są dodawane w określonej kolejności
+            drawableCanvas.InvalidateVisual(); // Odśwież widok, aby zobaczyć zmiany
+        }
     }
 }

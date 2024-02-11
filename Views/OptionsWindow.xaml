@@ -2,37 +2,97 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:screenerWpf.Views"
-        Title="Options" Height="600" Width="920">
-    <Window.Resources>
-        <!-- Inne zasoby -->
-        <local:BooleanToGridLengthConverter x:Key="BooleanToGridLengthConverter"/>
-    </Window.Resources>
-    
+        Title="Options" Height="600" Width="920"
+        Style="{DynamicResource WindowStyle}">
+
     <Grid>
-        <CheckBox x:Name="styleCheckBox" Content="Dark Style" Checked="ThemeCheckBox_Checked" Unchecked="ThemeCheckBox_Unchecked"/>
+        <!-- Definicja wierszy -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Wiersz dla przełącznika motywu -->
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Definicja kolumn dla głównego Grid -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+
+        </Grid.ColumnDefinitions>
+
+        <!-- Osobny Grid dla przełącznika motywu -->
+        <Grid Grid.Row="0" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <!-- Kolumna dla tekstu "Light Mode" -->
+                <ColumnDefinition Width="Auto"/>
+                <!-- Kolumna dla ToggleButton -->
+                <ColumnDefinition Width="*"/>
+                <!-- Kolumna dla tekstu "Dark Mode" -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Etykieta Light Mode -->
+            <TextBlock Text="Light Mode" Grid.Column="0" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+
+            <!-- ToggleButton -->
+            <ToggleButton x:Name="themeToggleButton" Grid.Column="1" Width="40" Height="20" Margin="10,0" VerticalAlignment="Center" HorizontalAlignment="Center" Checked="ThemeToggleButton_Checked" Unchecked="ThemeToggleButton_Unchecked">
+                <ToggleButton.Template>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="border" Width="40" Height="20" Background="{TemplateBinding Background}" CornerRadius="10">
+                            <Grid>
+                                <Ellipse x:Name="switch" Width="18" Height="18" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" Fill="White"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="DarkSlateGray"/>
+                                <Setter TargetName="switch" Property="HorizontalAlignment" Value="Right"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter TargetName="border" Property="Background" Value="Gainsboro"/>
+                                <Setter TargetName="switch" Property="HorizontalAlignment" Value="Left"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </ToggleButton.Template>
+            </ToggleButton>
+
+            <!-- Etykieta Dark Mode -->
+            <TextBlock Text="Dark Mode" Grid.Column="2" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        </Grid>
+
 
         <!-- Screenshots Save Path -->
-        <TextBlock HorizontalAlignment="Left" Margin="10,12,0,0" TextWrapping="Wrap" Text="Screenshots Save Path" VerticalAlignment="Top"/>
-        <TextBox x:Name="screenshotsSavePath" Margin="179,10,510,524" VerticalAlignment="Top" 
+        <TextBlock Text="Screenshots Save Path" Grid.Row="1" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <TextBox x:Name="screenshotsSavePath" Style="{DynamicResource TextBoxStyle}" Grid.Row="1" Grid.Column="1" Margin="0,5" 
                  Text="{Binding ScreenshotsSavePath, UpdateSourceTrigger=PropertyChanged}"/>
 
         <!-- Screenshots Library Path -->
-        <TextBlock HorizontalAlignment="Left" Margin="10,35,0,0" TextWrapping="Wrap" Text="Screenshots Library Path" VerticalAlignment="Top"/>
-        <TextBox x:Name="screenshotsLibraryPath" Margin="179,33,510,501" VerticalAlignment="Top" 
+        <TextBlock Text="Screenshots Library Path" Grid.Row="2" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <TextBox x:Name="screenshotsLibraryPath" Style="{DynamicResource TextBoxStyle}" Grid.Row="2" Grid.Column="1" Margin="0,5" 
                  Text="{Binding ScreenshotsLibraryPath, UpdateSourceTrigger=PropertyChanged}"/>
 
         <!-- Records Save Path -->
-        <TextBlock HorizontalAlignment="Left" Margin="10,58,0,0" TextWrapping="Wrap" Text="Records Save Path" VerticalAlignment="Top"/>
-        <TextBox x:Name="recordsSavePath" Margin="179,56,510,478" VerticalAlignment="Top" 
+        <TextBlock Text="Records Save Path" Grid.Row="3" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <TextBox x:Name="recordsSavePath" Style="{DynamicResource TextBoxStyle}" Grid.Row="3" Grid.Column="1" Margin="0,5" 
                  Text="{Binding RecordsSavePath, UpdateSourceTrigger=PropertyChanged}"/>
 
+        <!-- Dropbox App Key -->
+        <TextBlock Text="Dropbox App Key" Grid.Row="4" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <TextBox x:Name="dropboxAppKey" Style="{DynamicResource TextBoxStyle}" Grid.Row="4" Grid.Column="1" Margin="0,5" 
+                 Text="{Binding DropboxAppKey, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Dropbox App Secret -->
+        <TextBlock Text="Dropbox App Secret" Grid.Row="5" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <TextBox x:Name="dropboxAppSecret" Style="{DynamicResource TextBoxStyle}" Grid.Row="5" Grid.Column="1" Margin="0,5" 
+                 Text="{Binding DropboxAppSecret, UpdateSourceTrigger=PropertyChanged}"/>
+
         <!-- Save Button -->
-        <Button Content="Save" HorizontalAlignment="Right" Margin="0,0,10,10" VerticalAlignment="Bottom" Width="75" Height="25" Click="SaveButton_Click"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,81,0,0" TextWrapping="Wrap" Text="Dropbox App Key" VerticalAlignment="Top"/>
-        <TextBox x:Name="dropboxAppKey" Margin="179,79,510,0" VerticalAlignment="Top" 
-            Text="{Binding DropboxAppKey, UpdateSourceTrigger=PropertyChanged}"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,104,0,0" TextWrapping="Wrap" Text="Dropbox App Secret" VerticalAlignment="Top"/>
-        <TextBox x:Name="dropboxAppSecret" Margin="179,102,510,0" VerticalAlignment="Top" 
-            Text="{Binding DropboxAppSecret, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Content="Save" Style="{DynamicResource RoundedButtonStyle}" Grid.Row="6" Grid.Column="1" Margin="0,10,10,10" HorizontalAlignment="Right"/>
     </Grid>
 </Window>

@@ -140,6 +140,7 @@
                 </Button.Content>
             </Button>
 
+
             <!-- Przyciski bez ikon -->
             <Button Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" 
                     Content="Recognize Text" 
@@ -177,6 +178,8 @@
                 ToolTip="Ponów (Ctrl+Y)"
                 Width="100" 
                 Style="{DynamicResource RoundedButtonStyle}"/>
+            <Button Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding AddNiceBackgroundCommand}" Content="Nice background"/>
+
 
         </Grid>
 

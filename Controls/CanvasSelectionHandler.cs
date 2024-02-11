@@ -36,6 +36,7 @@ namespace screenerWpf.Controls
             {
                 // Jeśli nie kliknięto w ogonek dymku ani w strzałkę, sprawdź inne elementy
                 var element = drawableCanvas.elementManager.GetElementAtPoint(clickPosition);
+
                 if (element != null)
                 {
                     selectedElement = element;
@@ -96,6 +97,7 @@ namespace screenerWpf.Controls
         private bool TrySelectElement(Point clickPoint)
         {
             var element = drawableCanvas.elementManager.GetElementAtPoint(clickPoint);
+
             if (element != null)
             {
                 selectedElement = element;

@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows;
-using Xceed.Wpf.AvalonDock.Properties;
 
 class ScreenRecorder
 {

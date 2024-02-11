@@ -40,7 +40,7 @@ namespace screenerWpf
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
 
-            var viewModel = new ImageEditorViewModel(this.inputHandler, drawableCanvas);
+            var viewModel = new ImageEditorViewModel(this.inputHandler, this.drawableCanvas, initialBitmap);
 
             DataContext = viewModel;
 

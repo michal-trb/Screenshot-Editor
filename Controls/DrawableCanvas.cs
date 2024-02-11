@@ -178,6 +178,7 @@ namespace screenerWpf.Controls
         public void SelectElementAtPoint(Point point)
         {
             var element = elementManager.GetElementAtPoint(point);
+
             if (element != null)
             {
                 SelectElement(element);
@@ -261,5 +262,12 @@ namespace screenerWpf.Controls
                 InvalidateVisual();
             }
         }
+        public void AddElementAtBottom(DrawableElement element)
+        {
+            // Zakładamy, że elementManager to miejsce, gdzie przechowywane są wszystkie elementy
+            elementManager.Elements.Insert(0, element); // Dodaje element na początku listy
+            InvalidateVisual(); // Odświeża płótno
+        }
+
     }
 }

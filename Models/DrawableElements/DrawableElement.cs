@@ -11,6 +11,7 @@ public abstract class DrawableElement : IDrawable
     public Color Color { get; set; }
     public bool IsSelected { get; set; }
     public double Scale { get; internal set; }
+    public bool CanBeSelected { get; set; } = true; 
 
     public abstract void Draw(DrawingContext context);
     public abstract Rect GetBounds();

@@ -20,7 +20,7 @@ namespace screenerWpf.Views
             var savedTheme = Properties.Settings.Default.Theme;
             if (!string.IsNullOrEmpty(savedTheme))
             {
-                styleCheckBox.IsChecked = savedTheme == "Dark";
+                themeToggleButton.IsChecked = savedTheme == "Dark";
             }
 
             if (!string.IsNullOrEmpty(savedTheme))
@@ -36,14 +36,14 @@ namespace screenerWpf.Views
             }
         }
 
-        private void ThemeCheckBox_Checked(object sender, RoutedEventArgs e)
+        private void ThemeToggleButton_Checked(object sender, RoutedEventArgs e)
         {
             ChangeTheme("Views\\DarkStyle.xaml");
             Properties.Settings.Default.Theme = "Dark";
             Properties.Settings.Default.Save();
         }
 
-        private void ThemeCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private void ThemeToggleButton_Unchecked(object sender, RoutedEventArgs e)
         {
             ChangeTheme("Views\\LightStyle.xaml");
             Properties.Settings.Default.Theme = "Light";
@@ -63,16 +63,6 @@ namespace screenerWpf.Views
             this.Close();
         }
 
-        private void ToggleSwitch_Checked(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme(dark: true);
-        }
-
-        private void ToggleSwitch_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme(dark: false);
-
-        }
         private void ChangeTheme(bool dark)
         {
             var appResources = Application.Current.Resources.MergedDictionaries;
@@ -91,22 +81,6 @@ namespace screenerWpf.Views
                 appResources.Remove(currentTheme);
                 appResources.Add(new ResourceDictionary { Source = new Uri(lightThemePath, UriKind.Absolute) });
             }
-        }
-
-
-    }
-
-    public class BooleanToGridLengthConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (bool)value ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            GridLength gridLength = (GridLength)value;
-            return gridLength.Value > 0;
         }
     }
 }

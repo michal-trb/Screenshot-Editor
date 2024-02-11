@@ -30,8 +30,7 @@ namespace screenerWpf.Helpers
 
         public DrawableElement GetElementAtPoint(Point point)
         {
-            // Zwraca pierwszy element, który pasuje do testu trafienia
-            return Elements.FirstOrDefault(element => element.HitTest(point));
+            return Elements.FirstOrDefault(element => element.CanBeSelected && element.HitTest(point));
         }
 
         public void BringToFront(DrawableElement element)

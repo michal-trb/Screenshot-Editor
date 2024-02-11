@@ -151,7 +151,6 @@ namespace screenerWpf.Controls
         {
             currentAction = action;
         }
-
         private void SelectElementAtMousePosition(MouseButtonEventArgs e)
         {
             drawableCanvas.SelectElementAtPoint(e.GetPosition(drawableCanvas));
