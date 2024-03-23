@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using ControlzEx.Theming;
 using screenerWpf.Controls;
 using screenerWpf.Interfaces;
 using screenerWpf.ViewModels;

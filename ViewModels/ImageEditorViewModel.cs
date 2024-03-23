@@ -12,6 +12,8 @@ using screenerWpf.Interfaces;
 using screenerWpf.Models;
 using screenerWpf.Models.DrawableElements;
 using screenerWpf.Views;
+using MahApps.Metro.Controls; // Add this line
+using ColorPicker.Models;
 
 namespace screenerWpf.ViewModels
 {
@@ -61,7 +63,6 @@ namespace screenerWpf.ViewModels
             this.initialImage = initialBitmap; // Przypisanie obrazu inicjalnego
 
             InitializeCommands();
-            InitializeColors();
             InitializeThicknesses();
             InitializeFontFamilies();
             InitializeFontSizes();
@@ -82,7 +83,7 @@ namespace screenerWpf.ViewModels
             SelectedFontSize = 12;
             SelectedThickness = 2;
             SelectedTransparency = 100;
-            SelectedColor = Colors.FirstOrDefault(c => c.ColorBrush.Color == System.Windows.Media.Colors.Black);
+            SelectedColor = System.Windows.Media.Colors.Black;
         }
 
         private void InitializeTransparencySizes()
@@ -106,17 +107,6 @@ namespace screenerWpf.ViewModels
         private void InitializeThicknesses()
         {
             Thicknesses = new ObservableCollection<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-        }
-
-        private void InitializeColors()
-        {
-            Colors = new ObservableCollection<ColorInfo>
-            {
-                new ColorInfo { Name = "Czarny", ColorBrush = new SolidColorBrush(System.Windows.Media.Colors.Black) },
-                new ColorInfo { Name = "Czerwony", ColorBrush = new SolidColorBrush(System.Windows.Media.Colors.Red) },
-                new ColorInfo { Name = "Zielony", ColorBrush = new SolidColorBrush(System.Windows.Media.Colors.Green) },
-                new ColorInfo { Name = "Niebieski", ColorBrush = new SolidColorBrush(System.Windows.Media.Colors.Blue) },
-            };
         }
 
         private void InitializeCommands()
@@ -295,16 +285,19 @@ namespace screenerWpf.ViewModels
         }
 
         private ColorInfo selectedColor;
-        public ColorInfo SelectedColor
+        public Color SelectedColor
         {
-            get => selectedColor;
+            get => selectedColor?.ColorBrush.Color ?? System.Windows.Media.Colors.Black; // Zwróć Color z ColorInfo
             set
             {
-                if (selectedColor != value)
+                // Tworzenie nowego ColorInfo z podanego Color
+                var newColorInfo = new ColorInfo { ColorBrush = new SolidColorBrush(value) };
+
+                if (selectedColor?.ColorBrush.Color != value) // Porównanie Color, nie ColorInfo
                 {
-                    selectedColor = value;
+                    selectedColor = newColorInfo;
                     OnPropertyChanged(nameof(SelectedColor));
-                    inputHandler.ChangeColor(value?.ColorBrush.Color ?? System.Windows.Media.Colors.Transparent);
+                    inputHandler.ChangeColor(value); // Zachowaj logikę zmiany koloru
                 }
             }
         }
@@ -442,7 +435,6 @@ namespace screenerWpf.ViewModels
             var screenshot = new DrawableScreenshot(initialImage, screenshotPosition, screenshotSize);
             drawableCanvas.AddElement(screenshot); // Dodaj screenshot na wierzch tła
         }
-
 
         private void ScaleAndRepositionElements(double scale)
         {

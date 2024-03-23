@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:screenerWpf"
+        xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         mc:Ignorable="d"
         Title="Image Editor" Height="600" Width="920"
         Style="{DynamicResource WindowStyle}"
@@ -199,20 +200,13 @@
                 <Label Content="Color:" />
             </Border>
             <Border CornerRadius="0,5,5,0" 
-                    Style="{DynamicResource TitleBarStyleMain}" 
-                    Margin="0,5,5,5"
+                Style="{DynamicResource TitleBarStyleMain}" 
+                Margin="0,5,5,5"
                 Visibility="{Binding IsColorVisible, 
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ComboBox  
-                    BorderBrush="{x:Null}"
-                    BorderThickness="0"
-                    ItemsSource="{Binding Colors}"
-                    DisplayMemberPath="Name"
-                    SelectedItem="{Binding SelectedColor, Mode=TwoWay}" 
-                    Margin="0,0,5,0" 
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
-                </ComboBox>
+                Converter={StaticResource BooleanToVisibilityConverter}}">
+                <colorpicker:PortableColorPicker
+                    SelectedColor="{Binding SelectedColor, Mode=TwoWay}"
+                    Width="40" Height="40"/>
             </Border>
 
             <!-- Styl z ramką dla Label - Thickness -->
