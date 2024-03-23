@@ -178,7 +178,11 @@
                 ToolTip="Ponów (Ctrl+Y)"
                 Width="100" 
                 Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2" Command="{Binding AddNiceBackgroundCommand}" Content="Nice background"/>
+            <Button Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" 
+                Command="{Binding AddNiceBackgroundCommand}" 
+                Content="Nice background"
+                Width="100" 
+                Style="{DynamicResource RoundedButtonStyle}"/>
 
 
         </Grid>

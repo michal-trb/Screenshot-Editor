@@ -2,9 +2,6 @@
 using System.Linq;
 using System;
 using System.Windows;
-using System.Windows.Controls.Primitives;
-using System.Globalization;
-using System.Windows.Data;
 
 namespace screenerWpf.Views
 {

@@ -205,6 +205,11 @@ namespace screenerWpf
             }
 
             string screenshotsDirectory = Settings.Default.ScreenshorsLibrary;
+            if (!Directory.Exists(screenshotsDirectory))
+            {
+                return;
+            }
+
             DirectoryInfo di = new DirectoryInfo(screenshotsDirectory);
             var screenshotFiles = di.GetFiles("*.png").OrderByDescending(f => f.LastWriteTime).Take(5);
 
@@ -213,7 +218,8 @@ namespace screenerWpf
                 LastScreenshots.Add(new LastScreenshot(file.FullName));
             }
         }
-        
+
+
         private void LoadLastVideos()
         {
             ClosePopups();
@@ -223,6 +229,10 @@ namespace screenerWpf
             }
 
             string recordsDirectory = Settings.Default.RecordsSavePath;
+            if (!Directory.Exists(recordsDirectory))
+            {
+                return;
+            }
             DirectoryInfo di = new DirectoryInfo(recordsDirectory);
             var screenshotFiles = di.GetFiles("*.mp4").OrderByDescending(f => f.LastWriteTime).Take(5);
 
