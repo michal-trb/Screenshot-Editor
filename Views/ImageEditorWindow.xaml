@@ -206,7 +206,7 @@
                 Converter={StaticResource BooleanToVisibilityConverter}}">
                 <colorpicker:PortableColorPicker
                     SelectedColor="{Binding SelectedColor, Mode=TwoWay}"
-                    Width="40" Height="40"/>
+                    Width="20" Height="20"/>
             </Border>
 
             <!-- Styl z ramką dla Label - Thickness -->
