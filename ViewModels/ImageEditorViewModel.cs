@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using screenerWpf.Commands;
+﻿using screenerWpf.Commands;
 using screenerWpf.Controls;
+using screenerWpf.Helpers;
 using screenerWpf.Interfaces;
 using screenerWpf.Models;
 using screenerWpf.Models.DrawableElements;
 using screenerWpf.Views;
-using MahApps.Metro.Controls; // Add this line
-using ColorPicker.Models;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace screenerWpf.ViewModels
 {
@@ -405,7 +404,7 @@ namespace screenerWpf.ViewModels
                 int newWidth = resizeDialog.NewWidth;
                 int newHeight = resizeDialog.NewHeight;
 
-                drawableCanvas.Height = newHeight; 
+                drawableCanvas.Height = newHeight;
                 drawableCanvas.Width = newWidth;
             }
             drawableCanvas.InvalidateVisual();
@@ -422,32 +421,108 @@ namespace screenerWpf.ViewModels
             };
             drawableCanvas.AddElementAtBottom(background); // Dodaje tło na samym dole
 
-            // 2. Przeskaluj i wyśrodkuj istniejące elementy (oprócz tła)
-            ScaleAndRepositionElements(0.7); // Skalowanie do 70% i wyśrodkowanie
-
-            // 3. Dodaj screenshot na wierzch tła
+            // 2. Dodaj screenshot na wierzch tła
             var screenshotSize = new Size(initialImage.PixelWidth * 0.7, initialImage.PixelHeight * 0.7);
             var screenshotPosition = new Point(
                 (backgroundSize.Width - screenshotSize.Width) / 2, // Wyśrodkuj w poziomie
                 (backgroundSize.Height - screenshotSize.Height) / 2 // Wyśrodkuj w pionie
             );
 
+            // 3. Przeskaluj i wyśrodkuj istniejące elementy (oprócz tła)
+
             var screenshot = new DrawableScreenshot(initialImage, screenshotPosition, screenshotSize);
-            drawableCanvas.AddElement(screenshot); // Dodaj screenshot na wierzch tła
+            drawableCanvas.AddElement(screenshot); // Dodaj screenshot na wierzch tła4
+
+            ScaleAndRepositionElements(0.7, screenshotPosition); // Skalowanie do 70% i wyśrodkowanie
+
         }
 
-        private void ScaleAndRepositionElements(double scale)
+        private void ScaleAndRepositionElements(double scale, Point screenshotPosition)
         {
-            foreach (var element in drawableCanvas.elementManager.Elements
-                     .Where(e => !(e is DrawableBackground) && !(e is DrawableScreenshot)).ToList())
+            List<DrawableElement> scaledElements = new List<DrawableElement>();
+
+            foreach (var element in drawableCanvas.elementManager.Elements)
             {
-                // Przeskalowanie i wyśrodkowanie jak wcześniej opisano
-                element.Size = new Size(element.Size.Width * scale, element.Size.Height * scale);
-                double offsetX = (drawableCanvas.ActualWidth - element.Size.Width) / 2;
-                double offsetY = (drawableCanvas.ActualHeight - element.Size.Height) / 2;
-                element.Position = new Point(offsetX, offsetY);
+                if (element is DrawableScreenshot
+                    || element is DrawableBackground)
+                {
+                    continue;
+                }
+
+                if (element is DrawableRectangle rectangle)
+                {
+                    rectangle.Size = new Size(rectangle.Size.Width * scale, rectangle.Size.Height * scale);
+                    double offsetX = screenshotPosition.X + rectangle.Position.X * scale;
+                    double offsetY = screenshotPosition.Y + rectangle.Position.Y* scale;
+
+                    rectangle.Position = new Point(offsetX, offsetY);
+                }
+                if (element is DrawableBlur blur)
+                {   
+                    blur.Size = new Size(blur.Size.Width * scale, blur.Size.Height * scale);
+                    double offsetX = screenshotPosition.X + blur.Position.X * scale;
+                    double offsetY = screenshotPosition.Y + blur.Position.Y * scale;
+
+                    blur.Position = new Point(offsetX, offsetY);
+                }
+                if (element is DrawableSpeechBubble bubble)
+                {
+                    bubble.Size = new Size(bubble.Size.Width * scale, bubble.Size.Height * scale);
+                    double offsetX = screenshotPosition.X + bubble.Position.X * scale;
+                    double offsetY = screenshotPosition.Y + bubble.Position.Y * scale;
+                    bubble.Position = new Point(offsetX, offsetY);
+
+                    double offsetXtail = screenshotPosition.X + bubble.EndTailPoint.X * scale;
+                    double offsetYtail = screenshotPosition.Y + bubble.EndTailPoint.Y * scale;
+                    bubble.EndTailPoint = new Point(offsetXtail, offsetYtail);
+                }
+                if (element is DrawableArrow arrow)
+                {
+                    arrow.Size = new Size(arrow.Size.Width * scale, arrow.Size.Height * scale);
+                    double offsetX = screenshotPosition.X + arrow.Position.X * scale;
+                    double offsetY = screenshotPosition.Y + arrow.Position.Y * scale;
+                    arrow.Position = new Point(offsetX, offsetY);
+
+                    double offsetXend = screenshotPosition.X + arrow.EndPoint.X * scale;
+                    double offsetYend = screenshotPosition.Y + arrow.EndPoint.Y * scale;
+                    arrow.EndPoint = new Point(offsetXend, offsetYend);
+                }
+                if (element is DrawableBrush brush)
+                {
+                    for (int i = 0; i < brush.points.Count; i++)
+                    {
+                        Point originalPoint = brush.points[i];
+                        double scaledX = screenshotPosition.X + originalPoint.X * scale;
+                        double scaledY = screenshotPosition.Y + originalPoint.Y * scale;
+                        brush.points[i] = new Point(scaledX, scaledY);
+                    }
+                    brush.needsRedraw = true; 
+                }
+                if (element is DrawableText text)
+                {
+                    double offsetX = screenshotPosition.X + text.Position.X * scale;
+                    double offsetY = screenshotPosition.Y + text.Position.Y * scale;
+                    text.Position = new Point(offsetX, offsetY);
+                }
+                else
+                {
+                    var newSize = new Size(element.Size.Width * scale, element.Size.Height * scale);
+
+                    double offsetX = screenshotPosition.X + element.Position.X * scale;
+                    double offsetY = screenshotPosition.Y + element.Position.Y * scale; 
+
+                    element.Size = newSize;
+                    element.Position = new Point(offsetX, offsetY);
+
+                }
+                scaledElements.Add(element);
             }
-            // Nie trzeba wywoływać BringToFront, ponieważ elementy są dodawane w określonej kolejności
+
+            // Przesuń każdy przeskalowany element na pierwszy plan
+            foreach (var scaledElement in scaledElements)
+            {
+                drawableCanvas.elementManager.BringToFront(scaledElement);
+            }
             drawableCanvas.InvalidateVisual(); // Odśwież widok, aby zobaczyć zmiany
         }
     }

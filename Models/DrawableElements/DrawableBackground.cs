@@ -56,7 +56,7 @@ namespace screenerWpf.Models.DrawableElements
         {
             // Clone nie jest potrzebne w przypadku tła, ale jeśli potrzebujesz, dostosuj według potrzeb.
             return null;
-        
-    }
+
+        }
     }
 }

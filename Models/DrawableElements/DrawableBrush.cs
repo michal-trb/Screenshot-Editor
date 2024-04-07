@@ -6,12 +6,12 @@ namespace screenerWpf.Models.DrawableElements
 {
     internal class DrawableBrush : DrawableElement
     {
-        private List<Point> points = new List<Point>();
+        public List<Point> points = new List<Point>();
         public double thickness;
         public double transparency;
         public Color color;
         private StreamGeometry geometry;
-        private bool needsRedraw = true;
+        public bool needsRedraw = true;
 
         public DrawableBrush(Color color, double thickness, double transparency)
         {
@@ -28,7 +28,7 @@ namespace screenerWpf.Models.DrawableElements
             needsRedraw = true;
         }
 
-        private void Redraw()
+        public void Redraw()
         {
             if (needsRedraw && points.Count >= 4)
             {
