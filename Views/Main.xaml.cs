@@ -8,23 +8,86 @@ using System.Windows.Controls.Primitives;
 using System.IO;
 using screenerWpf.Helpers;
 using screenerWpf.Sevices;
+using screenerWpf.Resources;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
 
 namespace screenerWpf
 {
 
     public partial class Main : Window
     {
+        [DllImport("user32.dll")]
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
+        [DllImport("user32.dll")]
+        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+
+        private IntPtr _windowHandle;
+        private const int HOTKEY_ID = 9000;
+        private HwndSource _source;
         private readonly IOptionsWindowFactory optionsWindowFactory;
+        MainViewModel viewModel;
 
         public Main(MainViewModel viewModel, IOptionsWindowFactory optionsWindowFactory)
         {
             InitializeComponent();
+            InitializeHotKey();
 
             this.optionsWindowFactory = optionsWindowFactory;
-
+            this.viewModel = viewModel;
             DataContext = viewModel;
 
         }
+
+        private void InitializeHotKey()
+        {
+            if (Application.Current.MainWindow != null)
+            {
+                Application.Current.MainWindow.Loaded += (s, e) =>
+                {
+                    var helper = new WindowInteropHelper(Application.Current.MainWindow);
+                    _windowHandle = helper.Handle;
+                    _source = HwndSource.FromHwnd(_windowHandle);
+                    _source.AddHook(HwndHook);
+
+                    // Rejestracja Print Screen (0x2C) bez modyfikatorów
+                    RegisterHotKey(_windowHandle, HOTKEY_ID, 0, 0x2C);
+                    // Rejestracja Shift + Print Screen
+                    // Shift - 0x0004, Print Screen - 0x2C
+                    RegisterHotKey(_windowHandle, HOTKEY_ID + 1, 0x0004, 0x2C);
+                };
+
+                Application.Current.MainWindow.Closing += (s, e) =>
+                {
+                    UnregisterHotKey(_windowHandle, HOTKEY_ID);
+                    UnregisterHotKey(_windowHandle, HOTKEY_ID + 1);
+                    _source.RemoveHook(HwndHook);
+                };
+            }
+        }
+
+
+        private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        {
+            const int WM_HOTKEY = 0x0312;
+            if (msg == WM_HOTKEY)
+            {
+                switch (wParam.ToInt32())
+                {
+                    case HOTKEY_ID:
+                        Application.Current.Dispatcher.Invoke(() => viewModel.ExecuteCaptureArea(null));
+                        handled = true;
+                        break;
+                    case HOTKEY_ID + 1:
+                        Application.Current.Dispatcher.Invoke(() => viewModel.ExecuteCaptureFull(null));
+                        handled = true;
+                        break;
+                }
+            }
+
+            return IntPtr.Zero;
+        }
+
 
         protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
         {

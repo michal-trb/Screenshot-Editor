@@ -1,18 +1,20 @@
-﻿using System.Windows.Input;
-using System.Drawing; // dla operacji na Bitmap
-using System.Windows.Media.Imaging; // dla BitmapSource
-using screenerWpf.Commands;
-using System;
-using screenerWpf.Interfaces;
-using System.IO;
-using screenerWpf.Models;
-using System.Collections.ObjectModel;
-using System.Windows;
-using System.Linq;
-using screenerWpf.Views;
-using screenerWpf.Properties;
-using System.ComponentModel;
+﻿using screenerWpf.Commands;
 using screenerWpf.Helpers;
+using screenerWpf.Interfaces;
+using screenerWpf.Models;
+using screenerWpf.Properties;
+using screenerWpf.Views;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Drawing; // dla operacji na Bitmap
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging; // dla BitmapSource
 
 namespace screenerWpf
 {
@@ -42,7 +44,7 @@ namespace screenerWpf
             set
             {
                 _isRecordPopupOpen = value;
-                OnPropertyChanged(nameof(IsRecordPopupOpen)); 
+                OnPropertyChanged(nameof(IsRecordPopupOpen));
             }
         }
 
