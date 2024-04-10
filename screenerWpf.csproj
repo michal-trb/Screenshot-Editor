@@ -6,6 +6,7 @@
     <UseWPF>true</UseWPF>
     <Platforms>x64</Platforms>
     <OutputType>WinExe</OutputType>
+    <ApplicationIcon>Icons\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
 
@@ -87,6 +88,7 @@
     <Content Include="Icons\folder-vi-wh-16.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\icon.ico" />
     <Content Include="Icons\pdf-file-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
