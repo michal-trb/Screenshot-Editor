@@ -59,9 +59,6 @@ namespace screenerWpf
             // Task for screenshot
             AddJumpTask(jumpList, "Take Screenshot", "Create a new screenshot", "screenshot");
 
-            // Task for scrolling screenshot
-            AddJumpTask(jumpList, "Scrolling Screenshot", "Create a scrolling screenshot", "captureScroll");
-
             // Task for area screenshot
             AddJumpTask(jumpList, "Area Screenshot", "Create a screenshot of a selected area", "captureArea");
 

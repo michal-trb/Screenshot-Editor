@@ -149,16 +149,20 @@
                     Style="{DynamicResource RoundedButtonStyle}"
                     Width="100" FontSize="{DynamicResource StandardFontSize}">
             </Button>
-
             <Button Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" 
+                Command="{Binding AddNiceBackgroundCommand}" 
+                Content="Nice background"
+                Width="100" 
+                Style="{DynamicResource RoundedButtonStyle}"/>
+
+            <Button Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" 
                     Content="Upload to Dropbox"
                     Command="{Binding UploadToDropboxCommand}" 
                     Style="{DynamicResource RoundedButtonStyle}"
                     Width="100" FontSize="{DynamicResource StandardFontSize}">
             </Button>
-
             <Button 
-                Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2"
+                Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
                 Content="Resize"
                 Command="{Binding ResizeCommand}"
                 ToolTip="Resize image"
@@ -166,26 +170,19 @@
                 Style="{DynamicResource RoundedButtonStyle}"/>
 
             <Button 
-                Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"
+                Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
                 Content="Undo"
                 Command="{Binding UndoCommand}"
                 ToolTip="Cofnij (Ctrl+Z)"
                 Width="100" 
                 Style="{DynamicResource RoundedButtonStyle}"/>
             <Button
-                Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+                Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2"
                 Content="Redo"
                 Command="{Binding RedoCommand}"
                 ToolTip="Ponów (Ctrl+Y)"
                 Width="100" 
                 Style="{DynamicResource RoundedButtonStyle}"/>
-            <Button Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="2" 
-                Command="{Binding AddNiceBackgroundCommand}" 
-                Content="Nice background"
-                Width="100" 
-                Style="{DynamicResource RoundedButtonStyle}"/>
-
-
         </Grid>
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" 
