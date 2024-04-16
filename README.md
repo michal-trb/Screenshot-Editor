@@ -36,4 +36,4 @@ A dark theme is also available, which is set from the options window
 ![4](https://github.com/michal-trb/screenerWpf/assets/85738518/ef3334b8-5797-4152-b8b8-ee0d0525c70f)
 (link to gif for users from Gitfront.io - https://imgur.com/yfIsvcG)
 
-
+Author Michał Trybulec
