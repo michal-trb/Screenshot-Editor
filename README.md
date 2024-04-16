@@ -18,7 +18,8 @@ Editing screenshots allows you to :
 - adding text
 - adding a bubble with text
 - blurring the selected area
-  ![c](https://github.com/michal-trb/screenerWpf/assets/85738518/625a0485-94b7-4579-8157-cfc1db3c0502)
+  
+![2](https://github.com/michal-trb/screenerWpf/assets/85738518/625a0485-94b7-4579-8157-cfc1db3c0502)
 (link to gif for users from Gitfront.io - https://imgur.com/ZCKsqvM)
 
 in addition, the editor allows you to recognize the text on the screenshot, 
