@@ -26,6 +26,7 @@ image resizing
 ![3](https://github.com/michal-trb/screenerWpf/assets/85738518/360beb25-b60b-4c2a-8b4c-d4c119015bb5)
 
 A dark theme is also available, which is set from the options window 
+
 ![image](https://github.com/michal-trb/screenerWpf/assets/85738518/ef3334b8-5797-4152-b8b8-ee0d0525c70f)
 
 
