@@ -18,6 +18,7 @@ Editing screenshots allows you to :
 - adding text
 - adding a bubble with text
 - blurring the selected area
+  
 it is possible to edit elements that have already been placed, to change the text, move objects or change their size 
   
 ![2](https://github.com/michal-trb/screenerWpf/assets/85738518/625a0485-94b7-4579-8157-cfc1db3c0502)
