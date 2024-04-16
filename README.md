@@ -1,9 +1,9 @@
-It is a desktop application for taking and editing screenshots and recording the screen.
+It is a windows desktop application for taking and editing screenshots and recording the screen.
 Possible screenshot options to:
 - Full screen
 - Selected area
 - Window capture
-- 
+  
 Possible screen recording options are:
 - Full screen
 - Selected area
@@ -18,6 +18,7 @@ Editing screenshots allows you to :
 - adding text
 - adding a bubble with text
 - blurring the selected area
+it is possible to edit elements that have already been placed, to change the text, move objects or change their size 
   
 ![2](https://github.com/michal-trb/screenerWpf/assets/85738518/625a0485-94b7-4579-8157-cfc1db3c0502)
 (link to gif for users from Gitfront.io - https://imgur.com/ZCKsqvM)
@@ -31,7 +32,7 @@ image resizing
 
 A dark theme is also available, which is set from the options window 
 
-![image](https://github.com/michal-trb/screenerWpf/assets/85738518/ef3334b8-5797-4152-b8b8-ee0d0525c70f)
+![4](https://github.com/michal-trb/screenerWpf/assets/85738518/ef3334b8-5797-4152-b8b8-ee0d0525c70f)
 (link to gif for users from Gitfront.io - https://imgur.com/yfIsvcG)
 
 
