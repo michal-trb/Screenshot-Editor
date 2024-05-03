@@ -14,7 +14,6 @@ using System.Runtime.InteropServices;
 
 namespace screenerWpf
 {
-
     public partial class Main : Window
     {
         [DllImport("user32.dll")]
@@ -65,7 +64,6 @@ namespace screenerWpf
                 };
             }
         }
-
 
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -150,7 +148,7 @@ namespace screenerWpf
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                this.DragMove();
+                DragMove();
             }
         }
 
@@ -229,7 +227,7 @@ namespace screenerWpf
         private void OpenScreenshotsFolder(object sender, RoutedEventArgs e)
         {
             PopupManager.CloseAllPopups();
-            string folderPath = Properties.Settings.Default.ScreenshorsLibrary;
+            string folderPath = Properties.Settings.Default.ScreenshotsLibrary;
             if (!string.IsNullOrWhiteSpace(folderPath) && Directory.Exists(folderPath))
             {
                 System.Diagnostics.Process.Start("explorer.exe", folderPath);

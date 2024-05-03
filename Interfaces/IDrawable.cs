@@ -7,7 +7,7 @@ namespace screenerWpf.Interfaces
     {
         void Draw(WriteableBitmap bitmap);
         void Remove();
-        void Select(); // Define the method for selecting the element
+        void Select();
         bool ContainsPoint(Point point);
         bool Contains(Point point);
         void Move(Vector delta);

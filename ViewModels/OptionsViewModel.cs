@@ -69,7 +69,7 @@ namespace screenerWpf.ViewModels
         private void LoadSettings()
         {
             ScreenshotsSavePath = Properties.Settings.Default.ScreenshotsSavePath;
-            ScreenshotsLibraryPath = Properties.Settings.Default.ScreenshorsLibrary;
+            ScreenshotsLibraryPath = Properties.Settings.Default.ScreenshotsLibrary;
             RecordsSavePath = Properties.Settings.Default.RecordsSavePath;
             DropboxAppKey = Properties.Settings.Default.DropboxAppKey;
             DropboxAppSecret = Properties.Settings.Default.DropboxAppSecret;
@@ -78,7 +78,7 @@ namespace screenerWpf.ViewModels
         public void SaveSettings()
         {
             Properties.Settings.Default.ScreenshotsSavePath = ScreenshotsSavePath;
-            Properties.Settings.Default.ScreenshorsLibrary = ScreenshotsLibraryPath;
+            Properties.Settings.Default.ScreenshotsLibrary = ScreenshotsLibraryPath;
             Properties.Settings.Default.RecordsSavePath = RecordsSavePath;
             Properties.Settings.Default.DropboxAppKey = DropboxAppKey;
             Properties.Settings.Default.DropboxAppSecret= DropboxAppSecret;

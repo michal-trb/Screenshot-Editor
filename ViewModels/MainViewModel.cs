@@ -201,12 +201,12 @@ namespace screenerWpf
         private void LoadLastScreenshots()
         {
             ClosePopups();
-            if (string.IsNullOrEmpty(Settings.Default.ScreenshorsLibrary))
+            if (string.IsNullOrEmpty(Settings.Default.ScreenshotsLibrary))
             {
                 return;
             }
 
-            string screenshotsDirectory = Settings.Default.ScreenshorsLibrary;
+            string screenshotsDirectory = Settings.Default.ScreenshotsLibrary;
             if (!Directory.Exists(screenshotsDirectory))
             {
                 return;

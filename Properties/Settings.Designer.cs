@@ -25,7 +25,7 @@ namespace screenerWpf.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\xmich\\Desktop\\screenshots")]
         public string RecordsSavePath {
             get {
                 return ((string)(this["RecordsSavePath"]));
@@ -37,7 +37,7 @@ namespace screenerWpf.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\xmich\\Desktop\\screenshots")]
         public string ScreenshotsSavePath {
             get {
                 return ((string)(this["ScreenshotsSavePath"]));
@@ -49,13 +49,13 @@ namespace screenerWpf.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ScreenshorsLibrary {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\xmich\\Desktop\\screenshots")]
+        public string ScreenshotsLibrary {
             get {
-                return ((string)(this["ScreenshorsLibrary"]));
+                return ((string)(this["ScreenshotsLibrary"]));
             }
             set {
-                this["ScreenshorsLibrary"] = value;
+                this["ScreenshotsLibrary"] = value;
             }
         }
         

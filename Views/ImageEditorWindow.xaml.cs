@@ -24,8 +24,8 @@ namespace screenerWpf
         public ImageEditorWindow(BitmapSource initialBitmap)
         {
             InitializeComponent();
-            this.initialImage = initialBitmap;
-            this.inputHandler = new CanvasInputHandler(drawableCanvas);
+            initialImage = initialBitmap;
+            inputHandler = new CanvasInputHandler(drawableCanvas);
 
             drawableCanvas.Width = initialBitmap.PixelWidth;
             drawableCanvas.Height = initialBitmap.PixelHeight;
@@ -34,14 +34,14 @@ namespace screenerWpf
             {
                 drawableCanvas.Focus();
                 AdjustWindowSize();
-                this.Activate();
+                Activate();
             };
             
             CreateCanvasBitmap();
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
 
-            var viewModel = new ImageEditorViewModel(this.inputHandler, this.drawableCanvas, initialBitmap);
+            var viewModel = new ImageEditorViewModel(inputHandler, drawableCanvas, initialBitmap);
 
             DataContext = viewModel;
 
@@ -59,8 +59,8 @@ namespace screenerWpf
             targetHeight = Math.Max(targetHeight, 600);
 
             // Ustaw nowe wymiary okna
-            this.Width = targetWidth;
-            this.Height = targetHeight;
+            Width = targetWidth;
+            Height = targetHeight;
 
             // Opcjonalnie, możesz chcieć dostosować położenie okna, aby było wyśrodkowane
             CenterWindowOnScreen();
@@ -68,8 +68,8 @@ namespace screenerWpf
 
         private void CenterWindowOnScreen()
         {
-            this.Left = (SystemParameters.WorkArea.Width - this.Width) / 2;
-            this.Top = (SystemParameters.WorkArea.Height - this.Height) / 2;
+            Left = (SystemParameters.WorkArea.Width - Width) / 2;
+            Top = (SystemParameters.WorkArea.Height - Height) / 2;
         }
 
         private void CreateCanvasBitmap()
@@ -122,7 +122,7 @@ namespace screenerWpf
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                this.DragMove();
+                DragMove();
             }
         }
 

@@ -1,6 +1,5 @@
 ﻿using screenerWpf.Commands;
 using screenerWpf.Controls;
-using screenerWpf.Helpers;
 using screenerWpf.Interfaces;
 using screenerWpf.Models;
 using screenerWpf.Models.DrawableElements;
@@ -18,7 +17,7 @@ namespace screenerWpf.ViewModels
 {
     internal class ImageEditorViewModel : INotifyPropertyChanged
     {
-        private BitmapSource initialImage; // Dodano właściwość dla obrazu inicjalnego
+        private BitmapSource initialImage;
 
         private IDrawable copiedElement;
 
@@ -373,7 +372,6 @@ namespace screenerWpf.ViewModels
         {
             if (drawableCanvas.selectedElement != null)
             {
-                // Zakładając, że masz metodę Clone() w klasach elementów rysowalnych
                 copiedElement = drawableCanvas.selectedElement.Clone();
             }
             if (inputHandler != null)
