@@ -37,17 +37,14 @@ namespace screenerWpf.Controls
             this.ContextMenu = contextMenu;
             this.MouseWheel += DrawableCanvas_MouseWheel;
 
-            // Ustaw transformacje
             var transformGroup = new TransformGroup();
             transformGroup.Children.Add(scaleTransform);
             transformGroup.Children.Add(moveTransform);
 
             this.MouseWheel += DrawableCanvas_MouseWheel;
-            // Ustawienie transformacji
             this.RenderTransform = scaleTransform;
             this.ClipToBounds = true;
 
-            // Ustawienie Clip
             this.Loaded += (sender, e) => UpdateClip();
             this.SizeChanged += (sender, e) => UpdateClip();
         }
@@ -63,7 +60,6 @@ namespace screenerWpf.Controls
 
             if (e.ClickCount == 2)
             {
-                // Podnoszenie zdarzenia MouseDoubleClick
                 var newEventArgs = new MouseButtonEventArgs(e.MouseDevice, e.Timestamp, e.ChangedButton);
                 newEventArgs.RoutedEvent = MouseDoubleClickEvent;
                 RaiseEvent(newEventArgs);
@@ -75,7 +71,7 @@ namespace screenerWpf.Controls
             if (Keyboard.Modifiers == ModifierKeys.Control)
             {
                 const double scaleFactor = 1.1;
-                const double minScale = 0.2; // Minimalna skala
+                const double minScale = 0.2;
 
                 double zoom = e.Delta > 0 ? scaleFactor : 1 / scaleFactor;
                 double newScaleX = scaleTransform.ScaleX * zoom;
@@ -87,12 +83,10 @@ namespace screenerWpf.Controls
 
                     if (newScaleX < 1 && newScaleY < 1)
                     {
-                        // Gdy skala jest mniejsza niż 1, wyśrodkuj zawartość
                         CenterContent();
                     }
                     else
                     {
-                        // W przeciwnym przypadku stosuj standardowe skalowanie
                         scaleTransform.CenterX = mousePosition.X;
                         scaleTransform.CenterY = mousePosition.Y;
                     }
@@ -107,7 +101,6 @@ namespace screenerWpf.Controls
 
         private void CenterContent()
         {
-            // Centrowanie zawartości canvasa
             double offsetX = (this.ActualWidth - (this.ActualWidth * scaleTransform.ScaleX)) / 2;
             double offsetY = (this.ActualHeight - (this.ActualHeight * scaleTransform.ScaleY)) / 2;
 
@@ -122,7 +115,7 @@ namespace screenerWpf.Controls
 
         private void CopyCanvasToClipboard()
         {
-            RenderTargetBitmap bitmap = GetRenderTargetBitmap(); // Metoda, którą już zdefiniowałeś
+            RenderTargetBitmap bitmap = GetRenderTargetBitmap();
             Clipboard.SetImage(bitmap);
         }
 
@@ -264,9 +257,8 @@ namespace screenerWpf.Controls
         }
         public void AddElementAtBottom(DrawableElement element)
         {
-            // Zakładamy, że elementManager to miejsce, gdzie przechowywane są wszystkie elementy
-            elementManager.Elements.Insert(0, element); // Dodaje element na początku listy
-            InvalidateVisual(); // Odświeża płótno
+            elementManager.Elements.Insert(0, element); 
+            InvalidateVisual(); 
         }
 
     }

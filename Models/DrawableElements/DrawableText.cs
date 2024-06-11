@@ -16,26 +16,20 @@ namespace screenerWpf.Models.DrawableElements
             if (context == null)
                 throw new ArgumentNullException("context");
 
-            // Create the FormattedText object
             FormattedText formattedText = new FormattedText(
                 Text,
                 System.Globalization.CultureInfo.CurrentCulture,
                 FlowDirection.LeftToRight,
                 Typeface,
                 FontSize,
-                new SolidColorBrush(Color)); // Use the Color property of DrawableElement
+                new SolidColorBrush(Color));
 
-            // Draw the text
             context.DrawText(formattedText, Position);
 
-            // If the text is selected, draw a red outline
             if (IsSelected)
             {
-                // Create a red pen for the selection outline
                 Pen selectionPen = new Pen(Brushes.Red, 2);
-                // Get the bounds for the selection outline
                 Rect bounds = GetBounds();
-                // Draw the red outline around the text
                 context.DrawRectangle(null, selectionPen, bounds);
             }
         }
@@ -55,7 +49,7 @@ namespace screenerWpf.Models.DrawableElements
             Geometry textGeometry = formattedText.BuildGeometry(Position);
 
             // Powiększ geometrię o określoną wartość "buforową" dla łatwiejszego kliknięcia
-            double hitTestBuffer = 3.0; // Możesz dostosować tę wartość do potrzeb
+            double hitTestBuffer = 3.0;
             Geometry inflatedGeometry = textGeometry.GetWidenedPathGeometry(new Pen(Brushes.Black, hitTestBuffer));
 
             // Zwróć, czy rozszerzona geometria zawiera punkt kliknięcia
@@ -70,7 +64,7 @@ namespace screenerWpf.Models.DrawableElements
                 FlowDirection.LeftToRight,
                 Typeface,
                 FontSize,
-                Brushes.Black); // Use a placeholder brush for measurements
+                Brushes.Black);
 
             Size textSize = new Size(formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
 

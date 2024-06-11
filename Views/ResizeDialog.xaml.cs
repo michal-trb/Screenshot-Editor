@@ -76,8 +76,6 @@ namespace screenerWpf.Views
                 int newWidth = (int)(originalWidth * (percentage / 100.0));
                 int newHeight = (int)(originalHeight * (percentage / 100.0));
 
-                // Aktualizacja TextBoxów może nie być najlepszym rozwiązaniem UX
-                // Rozważ użycie etykiet do pokazania przeliczonych nowych rozmiarów
                 WidthTextBox.Text = newWidth.ToString();
                 HeightTextBox.Text = newHeight.ToString();
             }

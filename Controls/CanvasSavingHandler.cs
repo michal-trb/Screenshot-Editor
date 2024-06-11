@@ -26,9 +26,9 @@ namespace screenerWpf.Controls
             string fileName = $"Image_{timestamp}";
             var saveFileDialog = new SaveFileDialog
             {
-                FileName = fileName, // Domyślna nazwa pliku
-                DefaultExt = ".png", // Domyślne rozszerzenie pliku
-                Filter = "PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|BMP Files (*.bmp)|*.bmp", // Filtr plików,
+                FileName = fileName,
+                DefaultExt = ".png", 
+                Filter = "PNG Files (*.png)|*.png|JPEG Files (*.jpeg)|*.jpeg|BMP Files (*.bmp)|*.bmp", 
                 InitialDirectory = Settings.Default.ScreenshotsSavePath
             };
 
@@ -42,9 +42,9 @@ namespace screenerWpf.Controls
         public string SaveCanvasToFileFast()
         {
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-            string fileName = $"Image_{timestamp}.png"; // Ustawienie nazwy pliku z rozszerzeniem
-            string defaultPath = Settings.Default.ScreenshotsSavePath; // Ścieżka domyślna
-            string fullPath = Path.Combine(defaultPath, fileName); // Pełna ścieżka do zapisu pliku
+            string fileName = $"Image_{timestamp}.png"; 
+            string defaultPath = Settings.Default.ScreenshotsSavePath; 
+            string fullPath = Path.Combine(defaultPath, fileName); 
 
             WriteableBitmap editedImage = GetEditedImageBitmap();
             SaveImageToFile(editedImage, fullPath);
@@ -94,9 +94,9 @@ namespace screenerWpf.Controls
             string fileName = $"Image_{timestamp}";
             var saveFileDialog = new SaveFileDialog
             {
-                FileName = fileName, // Domyślna nazwa pliku
-                DefaultExt = ".pdf", // Domyślne rozszerzenie pliku
-                Filter = "PDF Files (*.pdf)|*.pdf", // Filtr plików
+                FileName = fileName, 
+                DefaultExt = ".pdf", 
+                Filter = "PDF Files (*.pdf)|*.pdf",
                 InitialDirectory = Settings.Default.ScreenshotsSavePath
             };
 
@@ -111,16 +111,13 @@ namespace screenerWpf.Controls
         {
             using (var stream = new FileStream(filename, FileMode.Create))
             {
-                // Oblicz rozmiar strony PDF na podstawie rozmiaru obrazu
                 var pageSize = new Rectangle(0, 0, editedImage.PixelWidth, editedImage.PixelHeight);
 
-                // Utwórz dokument PDF z określonym rozmiarem strony
                 Document document = new Document(pageSize, 0, 0, 0, 0);
                 PdfWriter.GetInstance(document, stream);
                 document.Open();
 
                 var image = WriteableBitmapToPdfImage(editedImage);
-                // Dopasuj rozmiar obrazu do rozmiaru strony
                 image.ScaleToFit(pageSize.Width, pageSize.Height);
 
                 document.Add(image);
@@ -131,7 +128,6 @@ namespace screenerWpf.Controls
 
         private Image WriteableBitmapToPdfImage(WriteableBitmap writeableBitmap)
         {
-            // Konwersja WriteableBitmap na Image iTextSharp
             using (var stream = new MemoryStream())
             {
                 var encoder = new PngBitmapEncoder();

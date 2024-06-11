@@ -20,11 +20,10 @@ namespace screenerWpf.CanvasHandler.Drawers
         {
             Point location = e.GetPosition(DrawableCanvas);
 
-            // Create a TextBox for user to enter text
             editableTextBox = new TextBox
             {
-                Width = 200, // Adjust as needed
-                Height = 30, // Adjust as needed
+                Width = 200, 
+                Height = 30, 
                 Text = "New Text",
                 FontFamily = CanvasInputHandler.GetCurrentFontFamily(),
                 FontSize = CanvasInputHandler.GetCurrentFontSize(),
@@ -40,7 +39,6 @@ namespace screenerWpf.CanvasHandler.Drawers
             DrawableCanvas.Children.Add(editableTextBox);
             editableTextBox.Focus();
 
-            // Event when focus is lost
             editableTextBox.LostFocus += EditableTextBox_LostFocus;
         }
 
@@ -49,7 +47,6 @@ namespace screenerWpf.CanvasHandler.Drawers
             TextBox textBox = (TextBox)sender;
             Point textLocation = new Point(Canvas.GetLeft(textBox), Canvas.GetTop(textBox));
 
-            // Create a DrawableText from the input
             var drawableText = new DrawableText
             {
                 Position = textLocation,
@@ -59,7 +56,6 @@ namespace screenerWpf.CanvasHandler.Drawers
                 Color = CanvasInputHandler.GetCurrentColor(),
             };
 
-            // Add DrawableText to the list of drawable elements and remove the TextBox
             DrawableCanvas.AddElement(drawableText);
             DrawableCanvas.Children.Remove(textBox);
             editableTextBox = null; // Clear the temporary TextBox
@@ -67,12 +63,11 @@ namespace screenerWpf.CanvasHandler.Drawers
 
         public override void UpdateDrawing(MouseEventArgs e)
         {
-            // This method can be used to update text dynamically, if needed
+
         }
 
         public override void FinishDrawing()
         {
-            // Finish drawing logic, if needed
         }
     }
 }

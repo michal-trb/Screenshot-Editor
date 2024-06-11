@@ -14,7 +14,7 @@ namespace screenerWpf.Helpers
 
             if (width == 0 || height == 0)
             {
-                return null; // Zwróć null, jeśli wymiary płótna są zerowe
+                return null;
             }
 
             RenderTargetBitmap renderBitmap = new RenderTargetBitmap(

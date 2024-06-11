@@ -25,11 +25,8 @@ namespace screenerWpf.Models.DrawableElements
             // Ramka
             Pen borderPen = new Pen(Brushes.DarkSlateGray, 3);
             context.DrawRectangle(null, borderPen, new Rect(Position, Size));
-
-            // Cień
-            // Można dodać cień jako efekt wizualny dla całego DrawableCanvas
-            // lub jako dodatkowy DrawableElement reprezentujący cień.
         }
+
         public override void Select()
         {
             // Pusta implementacja, aby zapobiec zaznaczaniu.

@@ -7,8 +7,6 @@ using System;
 using System.Windows.Controls.Primitives;
 using System.IO;
 using screenerWpf.Helpers;
-using screenerWpf.Sevices;
-using screenerWpf.Resources;
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
 
@@ -170,13 +168,13 @@ namespace screenerWpf
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
-            this.Height += 105; // Zwiększ wysokość okna
+            this.Height += 105; 
             UpdateWindowWidth();
         }
 
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
-            this.Height -= 105; // Zmniejsz wysokość okna
+            this.Height -= 105; 
             UpdateWindowWidth();
         }
 
@@ -217,7 +215,6 @@ namespace screenerWpf
         {
             if (popup.IsOpen)
             {
-                // Force update of the Popup's position
                 var offset = popup.HorizontalOffset;
                 popup.HorizontalOffset = offset + 1;
                 popup.HorizontalOffset = offset;

@@ -10,7 +10,6 @@ namespace screenerWpf.Controls
     public class CanvasEditingHandler : ICanvasEditingHandler
     {
         private DrawableCanvas drawableCanvas;
-        private TextBox editableTextBox;
         private IDrawable editableElement;
 
         public CanvasEditingHandler(DrawableCanvas canvas)
@@ -49,7 +48,6 @@ namespace screenerWpf.Controls
             if (dialog.ShowDialog() == true)
             {
                 drawableText.Text = dialog.EditedText;
-                // Tutaj możesz odświeżyć Canvas lub zrobić inne potrzebne akcje
             }
         }
 

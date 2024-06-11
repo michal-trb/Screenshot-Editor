@@ -66,13 +66,11 @@ namespace screenerWpf.Views
 
             if (targetWindowHandle == desktopWindowHandle)
             {
-                // Możesz usunąć tę część lub zostawić ją niewidoczną, jeśli nie chcesz używać highlightBorder
                 highlightBorder.Visibility = Visibility.Hidden;
                 return;
             }
             else
             {
-                // Możesz usunąć tę część lub zostawić ją niewidoczną, jeśli nie chcesz używać highlightBorder
                 highlightBorder.Visibility = Visibility.Visible;
             }
 

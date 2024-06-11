@@ -144,8 +144,6 @@ namespace screenerWpf.Models.DrawableElements
                 Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
 
                 // Aktualizacja pozycji ogonka względem przesunięcia całego dymku
-                // Jeśli ogonek ma zachować swoją pozycję względem ekranu, a nie dymku, 
-                // ta linia powinna być zakomentowana lub usunięta.
                 EndTailPoint = new Point(EndTailPoint.X + delta.X, EndTailPoint.Y + delta.Y);
             }
         }

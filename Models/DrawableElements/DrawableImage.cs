@@ -53,7 +53,7 @@ namespace screenerWpf.Models.DrawableElements
         private bool IsNearCorner(Point point, Point corner)
         {
             // Metoda sprawdzająca, czy punkt znajduje się blisko narożnika
-            double tolerance = 10; // Możesz dostosować tolerancję
+            double tolerance = 10;
             return Math.Abs(point.X - corner.X) <= tolerance && Math.Abs(point.Y - corner.Y) <= tolerance;
         }
 

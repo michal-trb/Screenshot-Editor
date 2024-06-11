@@ -21,7 +21,6 @@ namespace screenerWpf.Controls
         private IDrawable currentDrawable;
         private EditAction currentAction = EditAction.None;
 
-        // Dodanie obiektów Drawer
         private ArrowDrawer arrowDrawer;
         private RectangleDrawer rectangleDrawer;
         private SpeechBubbleDrawer speechBubbleDrawer;
@@ -32,8 +31,6 @@ namespace screenerWpf.Controls
         public CanvasActionHandler(DrawableCanvas canvas)
         {
             drawableCanvas = canvas;
-
-            // Inicjalizacja obiektów Drawer
             arrowDrawer = new ArrowDrawer(currentDrawable, canvas);
             rectangleDrawer = new RectangleDrawer(canvas);
             speechBubbleDrawer = new SpeechBubbleDrawer(canvas);
@@ -123,7 +120,7 @@ namespace screenerWpf.Controls
             if (Clipboard.ContainsImage())
             {
                 var imageSource = Clipboard.GetImage();
-                Point canvasPosition = new Point(10, 10); // Przykładowa pozycja na płótnie
+                Point canvasPosition = new Point(10, 10);
                 var drawableImage = new DrawableImage(imageSource, canvasPosition);
                 drawableCanvas.AddElement(drawableImage);
             }

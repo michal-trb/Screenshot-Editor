@@ -40,7 +40,6 @@ namespace screenerWpf.Helpers
                 throw new System.ArgumentNullException(nameof(element));
             }
 
-            // Usuń i dodaj ponownie, aby umieścić na wierzchu listy
             Elements.Remove(element);
             Elements.Add(element);
         }

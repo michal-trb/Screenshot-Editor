@@ -32,7 +32,7 @@ namespace screenerWpf.Models.DrawableElements
                 throw new ArgumentNullException("context");
 
             // Obliczenie długości i szerokości główki strzałki
-            double headLength = Thickness + 10; // Możesz dostosować te wartości
+            double headLength = Thickness + 10; 
             double headWidth = Thickness + 5;
 
             // Kierunek strzałki
@@ -94,8 +94,6 @@ namespace screenerWpf.Models.DrawableElements
 
         public override bool HitTest(Point point)
         {
-            // Implement hit testing logic for arrow
-            // This is a simple example and doesn't account for line thickness, etc.
             double buffer = 15.0; // Hit test buffer
             LineGeometry geometry = new LineGeometry(Position, EndPoint);
             return geometry.StrokeContains(new Pen(Brushes.Black, buffer), point);
@@ -104,7 +102,7 @@ namespace screenerWpf.Models.DrawableElements
         public override Rect GetBounds()
         {
             // Pobierz szerokość główki strzałki, załóżmy że to stała wartość
-            double arrowHeadWidth = 10.0; // przykładowa szerokość główki strzałki
+            double arrowHeadWidth = 10.0;
 
             // Oblicz minimalne i maksymalne X i Y dla lini strzałki
             double minX = Math.Min(Position.X, EndPoint.X) - arrowHeadWidth;
@@ -118,7 +116,7 @@ namespace screenerWpf.Models.DrawableElements
 
         public override bool Contains(Point point)
         {
-            double buffer = 5.0; // Możesz dostosować bufor do grubości strzałki
+            double buffer = 5.0;
             LineGeometry lineGeometry = new LineGeometry(Position, EndPoint);
             return lineGeometry.StrokeContains(new Pen(Brushes.Black, buffer), point);
         }

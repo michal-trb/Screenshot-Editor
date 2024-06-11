@@ -9,7 +9,6 @@ public abstract class DrawableWithHandles : DrawableElement
     protected double handleSize = 6; // Rozmiar uchwytu
     protected Point[] HandlePoints { get; set; }
 
-    // Konstruktor, który pozwala na ustawienie liczby uchwytów
     protected DrawableWithHandles(int handleCount)
     {
         HandlePoints = new Point[handleCount];
@@ -33,17 +32,17 @@ public abstract class DrawableWithHandles : DrawableElement
         context.DrawRectangle(brush, null, new Rect(position, new Size(size, size)));
     }
 
-    protected abstract void UpdateHandlePoints(); // Abstrakcyjna metoda do aktualizacji pozycji uchwytów
+    protected abstract void UpdateHandlePoints();
 
     protected bool IsNearCorner(Point point, Point corner)
     {
-        double tolerance = 10; // Możesz dostosować tolerancję
+        double tolerance = 10; 
         return (Math.Abs(point.X - corner.X) <= tolerance && Math.Abs(point.Y - corner.Y) <= tolerance);
     }
 
     public override void Move(Vector delta)
     {
         base.Move(delta);
-        UpdateHandlePoints(); // Aktualizacja pozycji uchwytów po przesunięciu
+        UpdateHandlePoints();
     }
 }

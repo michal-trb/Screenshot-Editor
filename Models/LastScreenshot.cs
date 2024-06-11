@@ -23,7 +23,7 @@ namespace screenerWpf.Models
             BitmapImage thumb = new BitmapImage();
             thumb.BeginInit();
             thumb.UriSource = new Uri(filePath);
-            thumb.DecodePixelWidth = 50; // Zmień szerokość według potrzeb
+            thumb.DecodePixelWidth = 50;
             thumb.EndInit();
             return thumb;
         }

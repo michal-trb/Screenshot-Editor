@@ -37,14 +37,12 @@ namespace screenerWpf.Sevices
 
             if (result == true)
             {
-                // Get the DPI scale of the screen
                 double dpiX, dpiY;
                 using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
                 {
                     dpiX = graphics.DpiX / 96.0;
                     dpiY = graphics.DpiY / 96.0;
                 }
-
 
                 var scaledRect = new Rectangle(
                     (int)((selector.SelectedRectangle.X) * dpiX),
@@ -57,8 +55,6 @@ namespace screenerWpf.Sevices
 
             return Rectangle.Empty;
         }
-
-
 
         public void ShowVideoPlayerWindow(string videoPath)
         {

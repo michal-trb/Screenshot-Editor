@@ -58,7 +58,7 @@ namespace screenerWpf.ViewModels
         {
             this.inputHandler = inputHandler ?? throw new ArgumentNullException(nameof(inputHandler));
             this.drawableCanvas = drawableCanvas;
-            this.initialImage = initialBitmap; // Przypisanie obrazu inicjalnego
+            this.initialImage = initialBitmap;
 
             InitializeCommands();
             InitializeThicknesses();
@@ -285,17 +285,16 @@ namespace screenerWpf.ViewModels
         private ColorInfo selectedColor;
         public Color SelectedColor
         {
-            get => selectedColor?.ColorBrush.Color ?? System.Windows.Media.Colors.Black; // Zwróć Color z ColorInfo
+            get => selectedColor?.ColorBrush.Color ?? System.Windows.Media.Colors.Black;
             set
             {
-                // Tworzenie nowego ColorInfo z podanego Color
                 var newColorInfo = new ColorInfo { ColorBrush = new SolidColorBrush(value) };
 
-                if (selectedColor?.ColorBrush.Color != value) // Porównanie Color, nie ColorInfo
+                if (selectedColor?.ColorBrush.Color != value) 
                 {
                     selectedColor = newColorInfo;
                     OnPropertyChanged(nameof(SelectedColor));
-                    inputHandler.ChangeColor(value); // Zachowaj logikę zmiany koloru
+                    inputHandler.ChangeColor(value);
                 }
             }
         }
@@ -417,16 +416,16 @@ namespace screenerWpf.ViewModels
                 Position = new Point(0, 0),
                 Size = backgroundSize
             };
-            drawableCanvas.AddElementAtBottom(background); // Dodaje tło na samym dole
+            drawableCanvas.AddElementAtBottom(background);
 
-            // 2. Dodaj screenshot na wierzch tła
+            // Dodaj screenshot na wierzch tła
             var screenshotSize = new Size(initialImage.PixelWidth * 0.7, initialImage.PixelHeight * 0.7);
             var screenshotPosition = new Point(
                 (backgroundSize.Width - screenshotSize.Width) / 2, // Wyśrodkuj w poziomie
                 (backgroundSize.Height - screenshotSize.Height) / 2 // Wyśrodkuj w pionie
             );
 
-            // 3. Przeskaluj i wyśrodkuj istniejące elementy (oprócz tła)
+            // Przeskaluj i wyśrodkuj istniejące elementy (oprócz tła)
 
             var screenshot = new DrawableScreenshot(initialImage, screenshotPosition, screenshotSize);
             drawableCanvas.AddElement(screenshot); // Dodaj screenshot na wierzch tła4
@@ -521,7 +520,7 @@ namespace screenerWpf.ViewModels
             {
                 drawableCanvas.elementManager.BringToFront(scaledElement);
             }
-            drawableCanvas.InvalidateVisual(); // Odśwież widok, aby zobaczyć zmiany
+            drawableCanvas.InvalidateVisual();
         }
     }
 }

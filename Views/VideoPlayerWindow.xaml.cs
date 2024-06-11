@@ -16,7 +16,6 @@ namespace screenerWpf.Views
             InitializeComponent();
             videoFilePath = filePath;
             mediaPlayer.Source = new Uri(videoFilePath);
-            // Inicjalizacja timera
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromMilliseconds(10);
             timer.Tick += DispatcherTimer_Tick;

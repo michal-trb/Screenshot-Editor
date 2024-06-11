@@ -18,9 +18,9 @@ namespace screenerWpf.Models.DrawableElements
         public DrawableRectangle() : base(4)
         {
             Position = new Point(0, 0);
-            Size = new Size(100, 50); // Domyślny rozmiar
-            Color = Colors.Black; // Domyślny kolor obrysu
-            Thickness = 1.0; // Domyślna grubość obrysu
+            Size = new Size(100, 50);
+            Color = Colors.Black;
+            Thickness = 1.0; 
             Transparency = 100;
         }
 
@@ -36,8 +36,8 @@ namespace screenerWpf.Models.DrawableElements
 
             if (IsSelected)
             {
-                UpdateHandlePoints(); // Aktualizuj pozycje uchwytów
-                DrawSelectionHandles(context); // Narysuj uchwyty
+                UpdateHandlePoints(); 
+                DrawSelectionHandles(context);
             }
         }
 
@@ -66,7 +66,7 @@ namespace screenerWpf.Models.DrawableElements
         private bool IsNearCorner(Point point, Point corner)
         {
             // Metoda sprawdzająca, czy punkt znajduje się blisko narożnika
-            double tolerance = 10; // Możesz dostosować tolerancję
+            double tolerance = 10; 
             return Math.Abs(point.X - corner.X) <= tolerance && Math.Abs(point.Y - corner.Y) <= tolerance;
         }
 

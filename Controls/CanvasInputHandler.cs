@@ -150,12 +150,12 @@ namespace screenerWpf.Controls
                 if (selectedElement is DrawableText text)
                 {
                     text.FontSize = SelectedFontSize;
-                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    drawableCanvas.InvalidateVisual(); 
                 }
                 if (selectedElement is DrawableSpeechBubble speechBubble)
                 {
                     speechBubble.FontSize = SelectedFontSize;
-                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    drawableCanvas.InvalidateVisual(); 
                 }
             }
         }
@@ -169,27 +169,27 @@ namespace screenerWpf.Controls
                 if (selectedElement is DrawableText text)
                 {
                     text.Color = SelectedColor;
-                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    drawableCanvas.InvalidateVisual(); 
                 }
                 if (selectedElement is DrawableSpeechBubble speechBubble)
                 {
                     speechBubble.Brush = new SolidColorBrush(SelectedColor);
-                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    drawableCanvas.InvalidateVisual(); 
                 }
                 if (selectedElement is DrawableRectangle rectangle)
                 {
                     rectangle.Color = SelectedColor;
-                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    drawableCanvas.InvalidateVisual();
                 }
                 if (selectedElement is DrawableBrush brush)
                 {
                     brush.Color = SelectedColor;
-                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    drawableCanvas.InvalidateVisual();
                 }
                 if (selectedElement is DrawableArrow arrow)
                 {
                     arrow.Color = SelectedColor;
-                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                    drawableCanvas.InvalidateVisual();
                 }
             }
         }
@@ -205,17 +205,17 @@ namespace screenerWpf.Controls
                     if (selectedElement is DrawableArrow arrow)
                     {
                         arrow.Thickness = ArrowThickness;
-                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                        drawableCanvas.InvalidateVisual(); 
                     }
                     if (selectedElement is DrawableRectangle rectangle)
                     {
                         rectangle.Thickness = ArrowThickness;
-                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                        drawableCanvas.InvalidateVisual(); 
                     }
                     if (selectedElement is DrawableBrush brush)
                     {
                         brush.thickness = ArrowThickness;
-                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                        drawableCanvas.InvalidateVisual();
                     }
                 }
             }
@@ -232,12 +232,12 @@ namespace screenerWpf.Controls
                     if (selectedElement is DrawableBrush brush)
                     {
                         brush.transparency = Transparency;
-                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                        drawableCanvas.InvalidateVisual();
                     }
                     if (selectedElement is DrawableRectangle rectangle)
                     {
                         rectangle.Transparency = Transparency;
-                        drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
+                        drawableCanvas.InvalidateVisual();
                     }
                 }
             }
@@ -250,19 +250,16 @@ namespace screenerWpf.Controls
 
         public static Typeface GetCurrentTypeface()
         {
-            // Zwróć aktualny rodzaj czcionki
             return new Typeface(SelectedFontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
         }
 
         public static FontFamily GetCurrentFontFamily()
         {
-            // Zwróć aktualny rodzaj czcionki
             return SelectedFontFamily;
         }
 
         public static double GetCurrentFontSize()
         {
-            // Zwróć aktualny rozmiar czcionki
             return SelectedFontSize;
         }
 

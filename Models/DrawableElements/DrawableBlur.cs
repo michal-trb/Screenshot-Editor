@@ -35,7 +35,6 @@ namespace screenerWpf.Models.DrawableElements
         public override void Draw(DrawingContext context)
         {
             UpdateVisual();
-            Rect rect = new Rect(Position, Size);
 
             if (Visual != null)
             {
@@ -78,7 +77,7 @@ namespace screenerWpf.Models.DrawableElements
         private bool IsNearCorner(Point point, Point corner)
         {
             // Metoda sprawdzająca, czy punkt znajduje się blisko narożnika
-            double tolerance = 10; // Możesz dostosować tolerancję
+            double tolerance = 10; 
             return Math.Abs(point.X - corner.X) <= tolerance && Math.Abs(point.Y - corner.Y) <= tolerance;
         }
 
@@ -156,7 +155,7 @@ namespace screenerWpf.Models.DrawableElements
 
             if (Size.Width <= 1 || Size.Height <= 1)
             {
-                return; // Nie aktualizuj, jeśli originalBitmap jest null lub szerokość/wysokość jest zerowa lub ujemna
+                return;
             }
 
             // Definiowanie nowego wycinka z oryginalnego obrazu

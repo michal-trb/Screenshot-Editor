@@ -8,25 +8,22 @@ namespace screenerWpf.Models.DrawableElements
     {
         private ImageSource imageSource;
 
-        // Zmieniamy konstruktor, aby nie wymagał base(4), ponieważ nie będziemy rysować uchwytów
+        // Zmieniam konstruktor, aby nie wymagał base(4), ponieważ nie będziemy rysować uchwytów
         public DrawableScreenshot(ImageSource source, Point position, Size size)
         {
             this.imageSource = source;
             this.Position = position;
             this.Size = size;
             this.CanBeSelected = false;
-            // Rozmiar można skalować już w konstruktorze
         }
 
         public override DrawableElement Clone()
         {
-            // Implementacja klonowania, jeśli potrzebujesz. Może rzucać wyjątek, jeśli klonowanie nie jest wspierane.
             throw new NotImplementedException();
         }
 
         public override void Draw(DrawingContext context)
         {
-            // Rysowanie obrazu
             if (imageSource != null)
             {
                 context.DrawImage(imageSource, new Rect(Position, Size));

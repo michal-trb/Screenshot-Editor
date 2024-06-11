@@ -12,13 +12,13 @@ namespace screenerWpf.Controls
         private DrawableCanvas drawableCanvas;
         private IDrawable selectedElement;
         private Point lastMousePosition;
-        private ICanvasEditingHandler editingHandler; // Dodano zmienną
-        private const double SpeechBubbleTailTolerance = 40; // Tolerance in pixels
-        private const double ArrowTolerance = 30; // Tolerance in pixels
+        private ICanvasEditingHandler editingHandler;
+        private const double SpeechBubbleTailTolerance = 40;
+        private const double ArrowTolerance = 30; 
         public CanvasSelectionHandler(DrawableCanvas canvas, ICanvasEditingHandler editingHandler)
         {
             drawableCanvas = canvas;
-            this.editingHandler = editingHandler; // Przypisanie do zmiennej
+            this.editingHandler = editingHandler;
         }
 
         public void HandleLeftButtonDown(MouseButtonEventArgs e)
@@ -64,7 +64,6 @@ namespace screenerWpf.Controls
             {
                 selectedElement = element;
 
-                // Sprawdzanie, czy element jest tekstowy i uruchamianie edycji
                 if (element is DrawableText drawableText)
                 {
                     editingHandler.StartEditing(drawableText, clickPosition);
@@ -150,7 +149,7 @@ namespace screenerWpf.Controls
         private void DeselectCurrentElement()
         {
             selectedElement = null;
-            drawableCanvas.InvalidateVisual(); // Odświeżenie płótna
+            drawableCanvas.InvalidateVisual();
         }
 
         public void DeleteSelectedElement()
@@ -159,17 +158,15 @@ namespace screenerWpf.Controls
             {
                 drawableCanvas.RemoveElement(selectedElement);
                 DeselectCurrentElement();
-                drawableCanvas.InvalidateVisual(); // Odświeżenie płótna
+                drawableCanvas.InvalidateVisual();
             }
         }
 
-        // Metoda sprawdzająca, czy jakikolwiek element jest zaznaczony
         public bool HasSelectedElement()
         {
             return selectedElement != null;
         }
 
-        // Metoda zwracająca zaznaczony element
         public IDrawable GetSelectedElement()
         {
             return selectedElement;

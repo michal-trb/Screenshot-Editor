@@ -23,7 +23,6 @@ public class DropboxUploader : ICloudStorageUploader
         this.appSecret = Settings.Default.DropboxAppSecret;
     }
 
-
     public async Task AuthorizeAsync()
     {
         var authorizeUri = DropboxOAuth2Helper.GetAuthorizeUri(OAuthResponseType.Code, appKey, "http://localhost:12345/auth");

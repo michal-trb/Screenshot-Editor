@@ -15,7 +15,7 @@ namespace screenerWpf.Helpers
         public void AddAction(IUndoableAction action)
         {
             undoStack.Push(action);
-            redoStack.Clear(); // Czyścić redoStack, gdy wykonujemy nową akcję
+            redoStack.Clear();
         }
 
         public bool CanUndo => undoStack.Any();

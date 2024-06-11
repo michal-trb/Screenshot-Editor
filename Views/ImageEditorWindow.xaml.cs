@@ -49,20 +49,18 @@ namespace screenerWpf
             viewModel.MaximizeRestoreRequest += MaximizeRestoreWindow;
             viewModel.CloseRequest += CloseWindow;
         }
+
         private void AdjustWindowSize()
         {
             double targetWidth = initialImage.PixelWidth * 0.7;
             double targetHeight = initialImage.PixelHeight * 0.7;
 
-            // Sprawdź, czy obliczone wymiary są mniejsze niż minimalne
             targetWidth = Math.Max(targetWidth, 920);
             targetHeight = Math.Max(targetHeight, 600);
 
-            // Ustaw nowe wymiary okna
             Width = targetWidth;
             Height = targetHeight;
 
-            // Opcjonalnie, możesz chcieć dostosować położenie okna, aby było wyśrodkowane
             CenterWindowOnScreen();
         }
 
@@ -97,7 +95,7 @@ namespace screenerWpf
                 bitmap.BackBufferStride * bitmap.PixelHeight,
                 bitmap.BackBufferStride);
 
-            bitmap.Freeze(); // Freeze the bitmap for performance benefits.
+            bitmap.Freeze(); // Zamrożenie bitmapy w celu zwiększenia wydajności.
             return bitmap;
         }
 
@@ -113,7 +111,6 @@ namespace screenerWpf
 
         private void CloseWindow()
         {
-            // Wywołanie zdarzenia przed zamknięciem okna
             WindowClosed?.Invoke();
             Close();
         }
@@ -130,7 +127,7 @@ namespace screenerWpf
         {
             ImageBrush brush = new ImageBrush(canvasBitmap)
             {
-                Stretch = Stretch.Uniform // This will ensure the image is scaled properly.
+                Stretch = Stretch.Uniform 
             };
             drawableCanvas.Background = brush;
         }

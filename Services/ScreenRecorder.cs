@@ -83,13 +83,13 @@ class ScreenRecorder
 
     private void OnRecordingComplete(object sender, RecordingCompleteEventArgs e)
     {
-        RecordingCompleted?.Invoke(e.FilePath); // Użyj e.FilePath zamiast videoPath, aby upewnić się, że mamy ścieżkę do gotowego pliku
-        DeinitializeRecorder(); // Możesz także tutaj zdezaktywować recorder, jeśli jest to potrzebne
+        RecordingCompleted?.Invoke(e.FilePath); 
+        DeinitializeRecorder();
     }
 
     private void OnRecordingFailed(object sender, RecordingFailedEventArgs e)
     {
-        DeinitializeRecorder(); // Możesz także tutaj zdezaktywować recorder, jeśli jest to potrzebne
+        DeinitializeRecorder();
     }
 
     private void OnStatusChanged(object sender, RecordingStatusEventArgs e)
