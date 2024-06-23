@@ -10,6 +10,7 @@ namespace screenerWpf.Controls
     public class CanvasEditingHandler : ICanvasEditingHandler
     {
         private DrawableCanvas drawableCanvas;
+        private TextBox editableTextBox;
         private IDrawable editableElement;
 
         public CanvasEditingHandler(DrawableCanvas canvas)

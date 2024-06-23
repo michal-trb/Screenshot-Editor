@@ -10,24 +10,17 @@ namespace screenerWpf.Sevices
 {
     public class WindowService : IWindowService
     {
-        private readonly IImageEditorWindowFactory imageEditorWindowFactory;
+        private readonly IImageEditorControlFactory ImageEditorControlFactory;
         public MainViewModel MainViewModel { get; set; }
 
-        public WindowService(IImageEditorWindowFactory imageEditorWindowFactory)
+        public WindowService(IImageEditorControlFactory imageEditorWindowFactory)
         {
-            this.imageEditorWindowFactory = imageEditorWindowFactory;
+            this.ImageEditorControlFactory = imageEditorWindowFactory;
         }
 
-        public void ShowImageEditorWindow(BitmapSource image)
+        public void ShowImageEditorControl(BitmapSource image)
         {
-            var editor = imageEditorWindowFactory.Create(image);
-            editor.WindowClosed += OnImageEditorWindowClosed;
-            editor.ShowDialog();
-        }
-
-        private void OnImageEditorWindowClosed()
-        {
-            MainViewModel?.BringMainWindowToFront();
+            var editor = ImageEditorControlFactory.Create(image);
         }
 
         public Rectangle SelectArea()

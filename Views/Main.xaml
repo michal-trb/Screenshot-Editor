@@ -1,120 +1,170 @@
-﻿<Window x:Class="screenerWpf.Main"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:screenerWpf.Resources"
-        mc:Ignorable="d"
-        Style="{DynamicResource WindowStyle}"
-        Title="{x:Static local:Resource.MainTitle}"
-        Height="133" Width="304"
-        WindowStyle="None"    
-        LocationChanged="Window_LocationChanged"
-        MouseLeftButtonDown="MainWindow_MouseLeftButtonDown"
-        Deactivated="Window_Deactivated">
+﻿<Window
+    x:Class="screenerWpf.Main"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:screenerWpf.Resources"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Width="304"
+    Height="145"
+    mc:Ignorable="d"
+    Deactivated="Window_Deactivated"
+    MouseLeftButtonDown="MainWindow_MouseLeftButtonDown"
+    Style="{DynamicResource WindowStyle}"
+    Title="{x:Static local:Resource.MainTitle}"
+    WindowStyle="None">
     <Window.Resources>
-        <ResourceDictionary>
-        </ResourceDictionary>
+        <ResourceDictionary />
     </Window.Resources>
 
-    <Grid x:Name="MainGrid"
-        Margin="5"
-        Grid.Row="1">
+    <Grid
+        x:Name="MainGrid"
+        Grid.Row="1"
+        Margin="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <!-- Pasek tytułu -->
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <!-- Przyciski -->
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <!-- Last Screenshots -->
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
             <!-- Last Videos -->
         </Grid.RowDefinitions>
 
         <!-- Niestandardowy pasek tytułu -->
-        <Border Grid.Row="0"
-                Style="{DynamicResource TitleBarStyleMain}"
-                MouseDown="TitleBar_MouseDown">
+        <Border
+            Grid.Row="0"
+            MouseDown="TitleBar_MouseDown"
+            Style="{DynamicResource TitleBarStyleMain}">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!-- Przycisk Options po lewej stronie -->
-                <Button Grid.Column="0"
-                        Content="Options"
-                        Click="OptionsButton_Click"
-                        Style="{DynamicResource TitleBarButtonStyle}"
-                        HorizontalAlignment="Left"
-                        Grid.ColumnSpan="2"
-                        Margin="2,2,0,2"
-                        Width="71"/>
+                <Button
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="2,2,0,2"
+                    HorizontalAlignment="Left"
+                    Click="OptionsButton_Click"
+                    Style="{DynamicResource TitleBarButtonStyle}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Margin="0,0,5,0" Source="{DynamicResource Options}" />
+                    </StackPanel>
+                </Button>
 
                 <!-- StackPanel z przyciskami po prawej stronie -->
-                <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
-                    <Button Content="_" Click="MinimizeWindow" Style="{DynamicResource TitleBarButtonStyle}"/>
-                    <Button Content="[]" Click="MaximizeRestoreWindow" Style="{DynamicResource TitleBarButtonStyle}"/>
-                    <Button Content="X" Click="CloseWindow" Style="{DynamicResource TitleBarButtonStyle}"/>
+                <StackPanel
+                    Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+                    <Button Click="MinimizeWindow" Style="{DynamicResource TitleBarButtonStyle}">
+                        <Image Source="{DynamicResource Minimalize}" />
+                    </Button>
+                    <Button Click="MaximizeRestoreWindow" Style="{DynamicResource TitleBarButtonStyle}">
+                        <Image Source="{DynamicResource Resize}" />
+                    </Button>
+                    <Button Click="CloseWindow" Style="{DynamicResource TitleBarButtonStyle}">
+                        <Image Source="{DynamicResource Exit}" />
+                    </Button>
                 </StackPanel>
             </Grid>
-        </Border>
 
-        <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+        </Border>
+        <Grid
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-
             <StackPanel Grid.Column="0" Orientation="Horizontal">
-                <Button Content="{x:Static local:Resource.ScreenshotButton}" 
-                        Command="{Binding CaptureFullCommand}" 
-                        Style="{DynamicResource RoundedButtonStyle}"
-                        Margin="3,3,0,3" FontFamily="Segoe UI Semibold" />
-                <Button x:Name="OpenScreenshotPopupButton"
-                        Content="▼" Style="{DynamicResource DropdownButtonStyle}" 
-                        Command="{Binding ToggleScreenshotPopupCommand}"
-                        Margin="-10,3,3,3" />
-                <Popup x:Name="ScreenshotPopup" IsOpen="{Binding IsScreenshotPopupOpen}" AllowsTransparency="True">
-                    <ContentControl Style="{DynamicResource PopupContentScreenshotStyle}"/>
-                </Popup>
+                <Button
+                    Margin="3,3,0,3"
+                    Command="{Binding CaptureFullCommand}"
+                    FontFamily="Segoe UI Semibold"
+                    Style="{DynamicResource RoundedButtonStyle}"
+                    ToolTip="{x:Static local:Resource.ScreenshotButton}">
+                    <Image Source="{DynamicResource ScreenshotFullscreen}" />
+                </Button>
             </StackPanel>
-
-            <!-- Record Button with Dropdown Arrow -->
             <StackPanel Grid.Column="1" Orientation="Horizontal">
-                <Button x:Name="RecordButton" 
-                        Content="{x:Static local:Resource.RecordButton}"
-                        Command="{Binding RecordVideoCommand}"
-                        Style="{DynamicResource RoundedButtonStyle}"
-                        Margin="3,3,0,3" FontFamily="Segoe UI Semibold" />
-                <Button Content="▼" Style="{DynamicResource DropdownButtonStyle}"
-                        x:Name="OpenRecordPopupButton"
-                        Command="{Binding ToggleRecordPopupCommand}"
-                        Margin="-10,3,3,3"/>
-                <Popup x:Name="RecordPopup" IsOpen="{Binding IsRecordPopupOpen}" AllowsTransparency="True">
-                    <ContentControl Style="{DynamicResource PopupContentRecordStyle}"/>
-                </Popup>
+                <Button
+                    Margin="3,3,0,3"
+                    Command="{Binding CaptureAreaCommand}"
+                    FontFamily="Segoe UI Semibold"
+                    Style="{DynamicResource RoundedButtonStyle}"
+                    ToolTip="{x:Static local:Resource.SelectArea}">
+                    <Image Source="{DynamicResource ScreenshotArea}" />
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Orientation="Horizontal">
+                <Button
+                    Margin="3,3,0,3"
+                    Command="{Binding CaptureWindowCommand}"
+                    FontFamily="Segoe UI Semibold"
+                    Style="{DynamicResource RoundedButtonStyle}"
+                    ToolTip="{x:Static local:Resource.CaptureWindow}">
+                    <Image Source="{DynamicResource ScreenshotWindow}" />
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="4" Orientation="Horizontal">
+                <Button
+                    Margin="3,3,0,3"
+                    Command="{Binding RecordVideoCommand}"
+                    FontFamily="Segoe UI Semibold"
+                    Style="{DynamicResource RoundedButtonStyle}"
+                    ToolTip="{x:Static local:Resource.RecordButton}">
+                    <Image Source="{DynamicResource RecordFullscreen}" />
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="5" Orientation="Horizontal">
+                <Button
+                    Margin="3,3,0,3"
+                    Command="{Binding RecordAreaVideoCommand}"
+                    FontFamily="Segoe UI Semibold"
+                    Style="{DynamicResource RoundedButtonStyle}"
+                    ToolTip="{x:Static local:Resource.RecordAreaVideo}">
+                    <Image Source="{DynamicResource RecordArea}" />
+                </Button>
             </StackPanel>
         </Grid>
 
 
-        <Grid Grid.Row="2" Margin="0,0,0,3">
+        <Grid
+            x:Name="ScreenshotEditorGrid"
+            Grid.Row="2"
+            Margin="0,0,0,3">
             <!-- TextBlock dla tytułu "Last Screenshots" -->
-            <Expander x:Name="ExpanderScreenshots" 
-                      FontSize="9"
-                      Header="{x:Static local:Resource.LastScreenshots}" 
-                      Foreground="{DynamicResource ForegroundBrush}" 
-                      IsExpanded="False"  
-                      Expanded="Expander_Expanded" 
-                      Collapsed="Expander_Collapsed" 
-                      >
+            <TextBlock
+                x:Name="ScreenshotEditorPlaceholder"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Text="Screenshot Editor will appear here"
+                Visibility="Collapsed" />
+            <Expander
+                x:Name="ExpanderScreenshots"
+                Collapsed="Expander_Collapsed"
+                Expanded="Expander_Expanded"
+                FontSize="9"
+                Foreground="{DynamicResource ForegroundBrush}"
+                Header="{x:Static local:Resource.LastScreenshots}"
+                IsExpanded="False">
                 <!-- ItemsControl dla wyświetlania ostatnich zrzutów ekranu -->
-                <Viewbox Stretch="Uniform" Margin="0,5,0,5">
+                <Viewbox Margin="0,5,0,5" Stretch="Uniform">
                     <ItemsControl ItemsSource="{Binding LastScreenshots}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="5" Rows="1"/>
+                                <UniformGrid Columns="5" Rows="1" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
@@ -122,17 +172,20 @@
                                 <Border Style="{DynamicResource ThumbnailBorderStyle}">
                                     <Grid Width="150" Height="150">
                                         <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
-                                        <StackPanel Orientation="Vertical" 
-                                                    HorizontalAlignment="Center" 
-                                                    VerticalAlignment="Center">
-                                            <Image Source="{Binding Thumbnail}"
-                                                   Height="90" 
-                                                   MouseDown="Screenshot_MouseDown"/>
-                                            <TextBlock Text="{Binding FileName}" 
-                                                       FontSize="13"
-                                                       TextWrapping="Wrap" 
-                                                       TextAlignment="Center"
-                                                       Foreground="{DynamicResource ForegroundBrush}"/>
+                                        <StackPanel
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Vertical">
+                                            <Image
+                                                Height="90"
+                                                MouseDown="Screenshot_MouseDown"
+                                                Source="{Binding Thumbnail}" />
+                                            <TextBlock
+                                                FontSize="13"
+                                                Foreground="{DynamicResource ForegroundBrush}"
+                                                Text="{Binding FileName}"
+                                                TextAlignment="Center"
+                                                TextWrapping="Wrap" />
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -141,31 +194,34 @@
                     </ItemsControl>
                 </Viewbox>
             </Expander>
-            <Button HorizontalAlignment="Right" 
-                    VerticalAlignment="Top" 
-                    Margin="0,0,5,0" 
-                    Click="OpenScreenshotsFolder"
-                    Background="Transparent" 
-                    BorderThickness="0">
-                <Image Source="{DynamicResource FolderScIcon}"
-                       Width="16"
-                       Height="16"
-                       ToolTip="{x:Static local:Resource.OpenScreenshots}" />
+            <Button
+                Margin="0,0,5,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="OpenScreenshotsFolder">
+                <Image
+                    Width="16"
+                    Height="16"
+                    Source="{DynamicResource FolderScIcon}"
+                    ToolTip="{x:Static local:Resource.OpenScreenshots}" />
             </Button>
         </Grid>
         <Grid Grid.Row="3">
-            <Expander x:Name="ExpanderVideos" 
-                      FontSize="9"
-                      Header="{x:Static local:Resource.LastVideos}" 
-                      Foreground="{DynamicResource ForegroundBrush}" 
-                      IsExpanded="False"  
-                      Expanded="Expander_Expanded" 
-                      Collapsed="Expander_Collapsed">
-                <Viewbox Stretch="Uniform" Margin="0,5,0,5">
+            <Expander
+                x:Name="ExpanderVideos"
+                Collapsed="Expander_Collapsed"
+                Expanded="Expander_Expanded"
+                FontSize="9"
+                Foreground="{DynamicResource ForegroundBrush}"
+                Header="{x:Static local:Resource.LastVideos}"
+                IsExpanded="False">
+                <Viewbox Margin="0,5,0,5" Stretch="Uniform">
                     <ItemsControl ItemsSource="{Binding LastVideos}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <UniformGrid Columns="5" Rows="1"/>
+                                <UniformGrid Columns="5" Rows="1" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
@@ -173,17 +229,20 @@
                                 <Border Style="{DynamicResource ThumbnailBorderStyle}">
                                     <Grid Width="150" Height="150">
                                         <!-- Tutaj ustaw stałą szerokość i wysokość dla każdego elementu -->
-                                        <StackPanel Orientation="Vertical" 
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center">
-                                            <Image Source="{Binding Thumbnail}"
-                                                   Height="90" 
-                                                   MouseDown="Video_MouseDown"/>
-                                            <TextBlock Text="{Binding FileName}"
-                                                       FontSize="13"
-                                                       TextWrapping="Wrap"
-                                                       TextAlignment="Center" 
-                                                       Foreground="{DynamicResource ForegroundBrush}"/>
+                                        <StackPanel
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Orientation="Vertical">
+                                            <Image
+                                                Height="90"
+                                                MouseDown="Video_MouseDown"
+                                                Source="{Binding Thumbnail}" />
+                                            <TextBlock
+                                                FontSize="13"
+                                                Foreground="{DynamicResource ForegroundBrush}"
+                                                Text="{Binding FileName}"
+                                                TextAlignment="Center"
+                                                TextWrapping="Wrap" />
                                         </StackPanel>
                                     </Grid>
                                 </Border>
@@ -192,18 +251,19 @@
                     </ItemsControl>
                 </Viewbox>
             </Expander>
-            <Button HorizontalAlignment="Right"
-                    VerticalAlignment="Top" 
-                    Margin="0,0,5,0"  
-                    Click="OpenVideosFolder"
-                    Background="Transparent" 
-                    BorderThickness="0">
-                <Image Source="{DynamicResource FolderViIcon}"
-                       Width="16" 
-                       Height="16"
-                       ToolTip="{x:Static local:Resource.OpenVideos}" />
+            <Button
+                Margin="0,0,5,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Background="Transparent"
+                BorderThickness="0"
+                Click="OpenVideosFolder">
+                <Image
+                    Width="16"
+                    Height="16"
+                    Source="{DynamicResource FolderViIcon}"
+                    ToolTip="{x:Static local:Resource.OpenVideos}" />
             </Button>
         </Grid>
     </Grid>
 </Window>
-    

@@ -1,22 +1,21 @@
-﻿using System.Windows;
-using System.Windows.Input;
-using screenerWpf.Factories;
-using screenerWpf.Models;
-using System.Windows.Controls;
-using System;
-using System.Windows.Controls.Primitives;
+﻿using System;
 using System.IO;
-using screenerWpf.Helpers;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Interop;
-using System.Runtime.InteropServices;
+using System.Windows.Media.Imaging;
+using screenerWpf.Factories;
+using screenerWpf.Helpers;
+using screenerWpf.Models;
 
 namespace screenerWpf
 {
     public partial class Main : Window
     {
-        [DllImport("user32.dll")]
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
-        [DllImport("user32.dll")]
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
         public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         private IntPtr _windowHandle;
@@ -33,7 +32,6 @@ namespace screenerWpf
             this.optionsWindowFactory = optionsWindowFactory;
             this.viewModel = viewModel;
             DataContext = viewModel;
-
         }
 
         private void InitializeHotKey()
@@ -84,48 +82,12 @@ namespace screenerWpf
             return IntPtr.Zero;
         }
 
-
-        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
-        {
-            base.OnPreviewMouseDown(e);
-
-            if (!IsMouseOverPopup() 
-                && !IsClickOnPopupButton(e))
-            {
-                CloseAllPopups();
-            }
-        }
-
-        private bool IsMouseOverPopup()
-        {
-            // Sprawdź, czy kursor myszy znajduje się nad jednym z popupów
-            return ScreenshotPopup.IsMouseOver || RecordPopup.IsMouseOver;
-        }
-
-        private bool IsClickOnPopupButton(MouseButtonEventArgs e)
-        {
-            // Sprawdź, czy kliknięto na jednym z przycisków otwierających popupy
-            var source = e.Source as FrameworkElement;
-            return source == OpenScreenshotPopupButton || source == OpenRecordPopupButton;
-        }
-
-        private void CloseAllPopups()
-        {
-            var viewModel = DataContext as MainViewModel;
-            if (viewModel != null)
-            {
-                viewModel.IsScreenshotPopupOpen = false;
-                viewModel.IsRecordPopupOpen = false;
-            }
-        }
-
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
             PopupManager.CloseAllPopups();
             var optionsWindow = optionsWindowFactory.Create();
             optionsWindow.ShowDialog();
         }
-
 
         private void MinimizeWindow(object sender, RoutedEventArgs e)
         {
@@ -168,13 +130,13 @@ namespace screenerWpf
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
-            this.Height += 105; 
+            this.Height += 105;
             UpdateWindowWidth();
         }
 
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
-            this.Height -= 105; 
+            this.Height -= 105;
             UpdateWindowWidth();
         }
 
@@ -203,22 +165,6 @@ namespace screenerWpf
         private bool IsAnyExpanderExpanded()
         {
             return ExpanderScreenshots.IsExpanded || ExpanderVideos.IsExpanded;
-        }
-
-        private void Window_LocationChanged(object sender, EventArgs e)
-        {
-            UpdatePopupPosition(ScreenshotPopup);
-            UpdatePopupPosition(RecordPopup);
-        }
-
-        private void UpdatePopupPosition(Popup popup)
-        {
-            if (popup.IsOpen)
-            {
-                var offset = popup.HorizontalOffset;
-                popup.HorizontalOffset = offset + 1;
-                popup.HorizontalOffset = offset;
-            }
         }
 
         private void OpenScreenshotsFolder(object sender, RoutedEventArgs e)
@@ -252,6 +198,30 @@ namespace screenerWpf
         private void MainWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             PopupManager.CloseAllPopups();
+        }
+
+        public void DisplayScreenshotEditor(BitmapSource screenshot)
+        {
+            ScreenshotEditorPlaceholder.Visibility = Visibility.Collapsed;
+
+            var screenshotEditor = new ImageEditorControl(screenshot);
+            screenshotEditor.LoadedAndSizeUpdated += ScreenshotEditor_LoadedAndSizeUpdated;
+            ScreenshotEditorGrid.Children.Clear();
+            ScreenshotEditorGrid.Children.Add(screenshotEditor);
+        }
+
+        private void ScreenshotEditor_LoadedAndSizeUpdated(ImageEditorControl element)
+        {
+            AdjustWindowSize(element);
+        }
+
+        private void AdjustWindowSize(ImageEditorControl element)
+        {
+            double newWidth = element.Width + 40;  
+            double newHeight = element.Height + 40;  
+
+            this.Width = Math.Max(this.Width, newWidth);
+            this.Height = Math.Max(this.Height, newHeight);
         }
     }
 }

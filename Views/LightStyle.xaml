@@ -63,5 +63,14 @@
     <BitmapImage x:Key="BlurIcon" UriSource="/Icons/blur-64.png"/>
     <BitmapImage x:Key="BubbleIcon" UriSource="/Icons/bubble-64.png"/>
     <BitmapImage x:Key="BrushIcon" UriSource="/Icons/brush-64.png"/>
+    <BitmapImage x:Key="ScreenshotWindow" UriSource="/Icons/screenshot-window-64.png"/>
+    <BitmapImage x:Key="ScreenshotFullscreen" UriSource="/Icons/screenshot-fullscreen-64.png"/>
+    <BitmapImage x:Key="ScreenshotArea" UriSource="/Icons/screenshot-area-64.png"/>
+    <BitmapImage x:Key="RecordFullscreen" UriSource="/Icons/record-fullscreen-64.png"/>
+    <BitmapImage x:Key="RecordArea" UriSource="/Icons/record-area-64.png"/>
+    <BitmapImage x:Key="Exit" UriSource="/Icons/exit-32.png"/>
+    <BitmapImage x:Key="Minimalize" UriSource="/Icons/minimalize-32.png"/>
+    <BitmapImage x:Key="Resize" UriSource="/Icons/resize-32.png"/>
+    <BitmapImage x:Key="Options" UriSource="/Icons/options-32.png"/>
 
 </ResourceDictionary>

@@ -128,6 +128,8 @@ namespace screenerWpf
 
             Bitmap bitmap = screenCaptureService.CaptureScreen();
             ShowEditorWindow(bitmap);
+
+            ReturnMainWindow();
         }
 
         public void ExecuteCaptureFullJumpTask()
@@ -157,6 +159,8 @@ namespace screenerWpf
             {
                 ShowEditorWindow(bitmap);
             }
+
+            ReturnMainWindow();
         }
 
         public void ExecuteCaptureArea(object parameter)
@@ -169,6 +173,8 @@ namespace screenerWpf
                 Bitmap bitmap = screenCaptureService.CaptureArea(area);
                 ShowEditorWindow(bitmap);
             }
+
+            ReturnMainWindow();
         }
 
         public void ShowEditorWindow(Bitmap bitmap)
@@ -180,7 +186,8 @@ namespace screenerWpf
 
             BitmapSource bitmapSource = ConvertBitmapToBitmapSource(bitmap);
 
-            this.windowService.ShowImageEditorWindow(bitmapSource);
+            var mainWindow = Application.Current.MainWindow as Main;
+            mainWindow?.DisplayScreenshotEditor(bitmapSource);
         }
 
         private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
@@ -249,7 +256,7 @@ namespace screenerWpf
             try
             {
                 var bitmapImage = new BitmapImage(new Uri(filePath));
-                this.windowService.ShowImageEditorWindow(bitmapImage);
+                this.windowService.ShowImageEditorControl(bitmapImage);
             }
             catch (Exception ex)
             {
@@ -320,6 +327,15 @@ namespace screenerWpf
             if (mainWindow != null)
             {
                 mainWindow.WindowState = WindowState.Minimized;
+            }
+        }
+
+        private void ReturnMainWindow()
+        {
+            var mainWindow = Application.Current.MainWindow;
+            if (mainWindow != null)
+            {
+                mainWindow.WindowState = WindowState.Normal;
             }
         }
     }

@@ -14,14 +14,15 @@ using screenerWpf.ViewModels;
 
 namespace screenerWpf
 {
-    public partial class ImageEditorWindow : Window
+    public partial class ImageEditorControl : UserControl
     {
         private WriteableBitmap canvasBitmap;
         private BitmapSource initialImage;
         private readonly ICanvasInputHandler inputHandler;
         public event Action WindowClosed;
+        public event Action<ImageEditorControl> LoadedAndSizeUpdated;
 
-        public ImageEditorWindow(BitmapSource initialBitmap)
+        public ImageEditorControl(BitmapSource initialBitmap)
         {
             InitializeComponent();
             initialImage = initialBitmap;
@@ -33,10 +34,9 @@ namespace screenerWpf
             Loaded += (sender, e) =>
             {
                 drawableCanvas.Focus();
-                AdjustWindowSize();
-                Activate();
+                AdjustControlSize();
+                OnLoadedAndSizeUpdated();
             };
-            
             CreateCanvasBitmap();
 
             drawableCanvas.SizeChanged += DrawableCanvas_SizeChanged;
@@ -44,13 +44,9 @@ namespace screenerWpf
             var viewModel = new ImageEditorViewModel(inputHandler, drawableCanvas, initialBitmap);
 
             DataContext = viewModel;
-
-            viewModel.MinimizeRequest += MinimizeWindow;
-            viewModel.MaximizeRestoreRequest += MaximizeRestoreWindow;
-            viewModel.CloseRequest += CloseWindow;
         }
 
-        private void AdjustWindowSize()
+        private void AdjustControlSize()
         {
             double targetWidth = initialImage.PixelWidth * 0.7;
             double targetHeight = initialImage.PixelHeight * 0.7;
@@ -60,14 +56,11 @@ namespace screenerWpf
 
             Width = targetWidth;
             Height = targetHeight;
-
-            CenterWindowOnScreen();
         }
 
-        private void CenterWindowOnScreen()
+        private void OnLoadedAndSizeUpdated()
         {
-            Left = (SystemParameters.WorkArea.Width - Width) / 2;
-            Top = (SystemParameters.WorkArea.Height - Height) / 2;
+            LoadedAndSizeUpdated?.Invoke(this);
         }
 
         private void CreateCanvasBitmap()
@@ -97,30 +90,6 @@ namespace screenerWpf
 
             bitmap.Freeze(); // Zamrożenie bitmapy w celu zwiększenia wydajności.
             return bitmap;
-        }
-
-        private void MinimizeWindow()
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void MaximizeRestoreWindow()
-        {
-            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-        }
-
-        private void CloseWindow()
-        {
-            WindowClosed?.Invoke();
-            Close();
-        }
-
-        private void TitleBar_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                DragMove();
-            }
         }
 
         private void UpdateCanvasBackground()

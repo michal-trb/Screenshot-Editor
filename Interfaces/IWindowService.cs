@@ -7,7 +7,7 @@ namespace screenerWpf.Interfaces
     public interface IWindowService
     {
         Rectangle SelectArea();
-        void ShowImageEditorWindow(BitmapSource image);
+        void ShowImageEditorControl(BitmapSource image);
         void ShowVideoPlayerWindow(string videoPath);
 
     }

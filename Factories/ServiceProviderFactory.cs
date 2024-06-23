@@ -15,7 +15,7 @@ public static class ServiceProviderFactory
         services.AddSingleton<Main>();
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<IScreenCaptureService, ScreenCaptureService>();
-        services.AddSingleton<IImageEditorWindowFactory, ImageEditorWindowFactory>();
+        services.AddSingleton<IImageEditorControlFactory, ImageEditorControlFactory>();
         services.AddSingleton<IWindowService, WindowService>();
         services.AddSingleton<ICanvasActionHandler, CanvasActionHandler>();
         services.AddSingleton<ICanvasSelectionHandler, CanvasSelectionHandler>();

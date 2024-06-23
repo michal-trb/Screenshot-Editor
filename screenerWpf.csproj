@@ -19,6 +19,7 @@
     <None Remove="Icons\brush-wh-64.png" />
     <None Remove="Icons\bubble-64.png" />
     <None Remove="Icons\bubble-wh-64.png" />
+    <None Remove="Icons\exit-32.png" />
     <None Remove="Icons\file-64.png" />
     <None Remove="Icons\file-wh-64.png" />
     <None Remove="Icons\folder-16.png" />
@@ -26,17 +27,44 @@
     <None Remove="Icons\folder-sc-wh-16.png" />
     <None Remove="Icons\folder-vi-16.png" />
     <None Remove="Icons\folder-vi-wh-16.png" />
+    <None Remove="Icons\minimalize-32.png" />
+    <None Remove="Icons\options-32.png" />
     <None Remove="Icons\pdf-file-64.png" />
     <None Remove="Icons\pdf-file-wh-64.png" />
+    <None Remove="Icons\record-area-64.png" />
+    <None Remove="Icons\record-fullscreen-64.png" />
     <None Remove="Icons\rect-64.png" />
     <None Remove="Icons\rect-wh-64.png" />
+    <None Remove="Icons\resize-32.png" />
     <None Remove="Icons\save-64.png" />
     <None Remove="Icons\save-wh-64.png" />
+    <None Remove="Icons\screenshot-area-64.png" />
+    <None Remove="Icons\screenshot-fullscreen-64.png" />
+    <None Remove="Icons\screenshot-window-64.png" />
     <None Remove="Icons\text-64.png" />
     <None Remove="Icons\text-wh-64.png" />
     <None Remove="Properties\Settings.settings" />
     <None Remove="tessdata\eng.traineddata" />
     <None Remove="tessdata\pol.traineddata" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Content Include="Icons\exit-32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\minimalize-32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\options-32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\resize-32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\screenshot-window-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -95,6 +123,12 @@
     <Content Include="Icons\pdf-file-wh-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\record-area-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\record-fullscreen-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\rect-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -105,6 +139,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\save-wh-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\screenshot-area-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\screenshot-fullscreen-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\text-64.png">

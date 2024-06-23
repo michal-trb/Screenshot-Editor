@@ -23,7 +23,6 @@
     <Thickness x:Key="StandardMargin">5</Thickness>
     <sys:Double x:Key="StandardWidth">35</sys:Double>
     <sys:Double x:Key="StandardHeight">35</sys:Double>
-    <sys:Double x:Key="StandardIconHeight">21</sys:Double>
     <sys:Double x:Key="StandardFontSize">10</sys:Double>
     <CornerRadius x:Key="StandardCornerRadius">10</CornerRadius>
 
