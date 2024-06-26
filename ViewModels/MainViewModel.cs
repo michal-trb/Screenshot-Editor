@@ -10,6 +10,7 @@ using System.ComponentModel;
 using System.Drawing; // dla operacji na Bitmap
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
@@ -255,14 +256,30 @@ namespace screenerWpf
         {
             try
             {
-                var bitmapImage = new BitmapImage(new Uri(filePath));
-                this.windowService.ShowImageEditorControl(bitmapImage);
+                Bitmap bitmap = GetBitmapFromUri(new Uri(filePath));
+                if (bitmap != null)
+                {
+                    ShowEditorWindow(bitmap);
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd");
             }
         }
+
+        public static Bitmap GetBitmapFromUri(Uri uri)
+        {
+            using (WebClient webClient = new WebClient())
+            {
+                byte[] data = webClient.DownloadData(uri);
+                using (MemoryStream mem = new MemoryStream(data))
+                {
+                    return new Bitmap(mem);
+                }
+            }
+        }
+
         public void OpenVideo(string filePath)
         {
             try

@@ -35,7 +35,9 @@
     <None Remove="Icons\record-fullscreen-64.png" />
     <None Remove="Icons\rect-64.png" />
     <None Remove="Icons\rect-wh-64.png" />
+    <None Remove="Icons\redo-64.png" />
     <None Remove="Icons\resize-32.png" />
+    <None Remove="Icons\resize-64.png" />
     <None Remove="Icons\save-64.png" />
     <None Remove="Icons\save-wh-64.png" />
     <None Remove="Icons\screenshot-area-64.png" />
@@ -43,6 +45,7 @@
     <None Remove="Icons\screenshot-window-64.png" />
     <None Remove="Icons\text-64.png" />
     <None Remove="Icons\text-wh-64.png" />
+    <None Remove="Icons\undo-64.png" />
     <None Remove="Properties\Settings.settings" />
     <None Remove="tessdata\eng.traineddata" />
     <None Remove="tessdata\pol.traineddata" />
@@ -59,7 +62,13 @@
     <Content Include="Icons\options-32.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\redo-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\resize-32.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\resize-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\screenshot-window-64.png">
@@ -151,6 +160,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\text-wh-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\undo-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Properties\Settings.settings">
