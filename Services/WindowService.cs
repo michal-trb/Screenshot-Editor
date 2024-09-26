@@ -2,25 +2,13 @@
 using screenerWpf.Views;
 using System;
 using System.Drawing;
-using System.Windows.Input;
-using System.Windows.Media.Imaging;
-using System.Xml.Schema;
 
 namespace screenerWpf.Sevices
 {
     public class WindowService : IWindowService
     {
-        private readonly IImageEditorControlFactory ImageEditorControlFactory;
-        public MainViewModel MainViewModel { get; set; }
-
-        public WindowService(IImageEditorControlFactory imageEditorWindowFactory)
+        public WindowService()
         {
-            this.ImageEditorControlFactory = imageEditorWindowFactory;
-        }
-
-        public void ShowImageEditorControl(BitmapSource image)
-        {
-            var editor = ImageEditorControlFactory.Create(image);
         }
 
         public Rectangle SelectArea()
@@ -38,8 +26,8 @@ namespace screenerWpf.Sevices
                 }
 
                 var scaledRect = new Rectangle(
-                    (int)((selector.SelectedRectangle.X) * dpiX),
-                    (int)((selector.SelectedRectangle.Y) * dpiY),
+                    (int)(selector.SelectedRectangle.X * dpiX),
+                    (int)(selector.SelectedRectangle.Y * dpiY),
                     (int)(selector.SelectedRectangle.Width * dpiX),
                     (int)(selector.SelectedRectangle.Height * dpiY));
 

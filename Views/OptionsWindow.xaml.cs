@@ -12,10 +12,11 @@ namespace screenerWpf.Views
             InitializeComponent();
             DataContext = optionsViewModel;
             var savedTheme = Properties.Settings.Default.Theme;
-            if (!string.IsNullOrEmpty(savedTheme))
-            {
-                themeToggleButton.IsChecked = savedTheme == "Dark";
-            }
+            
+            //if (!string.IsNullOrEmpty(savedTheme))
+            //{
+            //    themeToggleButton.IsChecked = savedTheme == "Dark";
+            //}
 
             if (!string.IsNullOrEmpty(savedTheme))
             {

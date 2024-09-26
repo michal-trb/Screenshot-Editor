@@ -202,12 +202,24 @@ namespace screenerWpf
 
         public void DisplayScreenshotEditor(BitmapSource screenshot)
         {
-            ScreenshotEditorPlaceholder.Visibility = Visibility.Collapsed;
-
             var screenshotEditor = new ImageEditorControl(screenshot);
             screenshotEditor.LoadedAndSizeUpdated += ScreenshotEditor_LoadedAndSizeUpdated;
             ScreenshotEditorGrid.Children.Clear();
             ScreenshotEditorGrid.Children.Add(screenshotEditor);
+
+            // Hide other grids
+            GridScreenshots.Visibility = Visibility.Collapsed;
+            GridVideos.Visibility = Visibility.Collapsed;
+        }
+
+        public void HideScreenshotEditor()
+        {
+            ScreenshotEditorGrid.Visibility = Visibility.Visible;
+            ScreenshotEditorGrid.Children.Clear();
+
+            // Show other grids
+            GridScreenshots.Visibility = Visibility.Visible;
+            GridVideos.Visibility = Visibility.Visible;
         }
 
         private void ScreenshotEditor_LoadedAndSizeUpdated(ImageEditorControl element)

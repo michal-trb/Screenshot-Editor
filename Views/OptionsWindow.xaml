@@ -36,10 +36,11 @@
                 <!-- Kolumna dla tekstu "Dark Mode" -->
             </Grid.ColumnDefinitions>
 
-            <!-- Etykieta Light Mode -->
+
+            <!-- Etykieta Light Mode --><!--
             <TextBlock Text="Light Mode" Grid.Column="0" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
 
-            <!-- ToggleButton -->
+            --><!-- ToggleButton --><!--
             <ToggleButton x:Name="themeToggleButton" Grid.Column="1" Width="40" Height="20" Margin="10,0" VerticalAlignment="Center" HorizontalAlignment="Center" Checked="ThemeToggleButton_Checked" Unchecked="ThemeToggleButton_Unchecked">
                 <ToggleButton.Template>
                     <ControlTemplate TargetType="ToggleButton">
@@ -62,8 +63,10 @@
                 </ToggleButton.Template>
             </ToggleButton>
 
-            <!-- Etykieta Dark Mode -->
-            <TextBlock Text="Dark Mode" Grid.Column="2" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+            --><!-- Etykieta Dark Mode --><!--
+            <TextBlock Text="Dark Mode" Grid.Column="2" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>-->
+            
+
         </Grid>
 
 
@@ -82,15 +85,15 @@
         <TextBox x:Name="recordsSavePath" Style="{DynamicResource TextBoxStyle}" Grid.Row="3" Grid.Column="1" Margin="0,5" 
                  Text="{Binding RecordsSavePath, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <!-- Dropbox App Key -->
+        <!-- Dropbox App Key --><!--
         <TextBlock Text="Dropbox App Key" Grid.Row="4" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
         <TextBox x:Name="dropboxAppKey" Style="{DynamicResource TextBoxStyle}" Grid.Row="4" Grid.Column="1" Margin="0,5" 
                  Text="{Binding DropboxAppKey, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <!-- Dropbox App Secret -->
+        --><!-- Dropbox App Secret --><!--
         <TextBlock Text="Dropbox App Secret" Grid.Row="5" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
         <TextBox x:Name="dropboxAppSecret" Style="{DynamicResource TextBoxStyle}" Grid.Row="5" Grid.Column="1" Margin="0,5" 
-                 Text="{Binding DropboxAppSecret, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding DropboxAppSecret, UpdateSourceTrigger=PropertyChanged}"/>-->
 
         <!-- Save Button -->
         <Button Content="Save" Style="{DynamicResource RoundedButtonStyle}" Grid.Row="6" Grid.Column="1" Margin="0,10,10,10" HorizontalAlignment="Right"/>

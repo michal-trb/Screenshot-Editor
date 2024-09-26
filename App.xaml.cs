@@ -26,11 +26,6 @@ namespace screenerWpf
             var windowService = serviceProvider.GetRequiredService<IWindowService>() as WindowService;
             var mainViewModel = serviceProvider.GetRequiredService<MainViewModel>();
 
-            if (windowService != null)
-            {
-                windowService.MainViewModel = mainViewModel;
-            }
-
             MainViewModelService = mainViewModel;
         }
 
