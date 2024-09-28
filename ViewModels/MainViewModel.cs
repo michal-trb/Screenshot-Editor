@@ -7,25 +7,27 @@ using screenerWpf.Views;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Drawing; // dla operacji na Bitmap
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Runtime.InteropServices;
+using System.Threading.Tasks; // Dodane dla asynchroniczności
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Interop;
-using System.Windows.Media.Imaging; // dla BitmapSource
+using System.Windows.Media.Imaging;
 
 namespace screenerWpf
 {
     public class MainViewModel : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+
         private readonly IScreenCaptureService screenCaptureService;
         private readonly IWindowService windowService;
+
         public ObservableCollection<LastScreenshot> LastScreenshots { get; private set; }
         public ObservableCollection<LastVideo> LastVideos { get; private set; }
+
         private bool _isScreenshotPopupOpen;
         public bool IsScreenshotPopupOpen
         {
@@ -38,7 +40,6 @@ namespace screenerWpf
         }
 
         private bool _isRecordPopupOpen;
-
         public bool IsRecordPopupOpen
         {
             get => _isRecordPopupOpen;
@@ -53,39 +54,41 @@ namespace screenerWpf
         public ICommand ToggleRecordPopupCommand { get; }
         public ICommand CaptureFullCommand { get; private set; }
         public ICommand CaptureAreaCommand { get; private set; }
-        public ICommand CaptureWindowScrollCommand { get; private set; }
         public ICommand CaptureWindowCommand { get; private set; }
         public ICommand RecordVideoCommand { get; private set; }
         public ICommand RecordAreaVideoCommand { get; private set; }
-        public StopRecordingWindow stopRecordingWindow { get; private set; }
 
+        private StopRecordingWindow stopRecordingWindow;
 
         public MainViewModel(IScreenCaptureService screenCaptureService, IWindowService windowService)
         {
-            this.screenCaptureService = screenCaptureService;
-            this.windowService = windowService;
-            ToggleScreenshotPopupCommand = new RelayCommand(param => ToggleScreenshotPopup());
-            ToggleRecordPopupCommand = new RelayCommand(param => ToggleRecordPopup());
-            CaptureFullCommand = new RelayCommand(ExecuteCaptureFull);
-            CaptureAreaCommand = new RelayCommand(ExecuteCaptureArea);
-            CaptureWindowCommand = new RelayCommand(ExecuteCaptureWindow);
-            RecordVideoCommand = new RelayCommand(ExecuteRecordVideo);
-            RecordAreaVideoCommand = new RelayCommand(ExecuteAreaRecordVideo);
+            this.screenCaptureService = screenCaptureService ?? throw new ArgumentNullException(nameof(screenCaptureService));
+            this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
+
+            ToggleScreenshotPopupCommand = new RelayCommand(param => TogglePopup(ref _isScreenshotPopupOpen, ref _isRecordPopupOpen));
+            ToggleRecordPopupCommand = new RelayCommand(param => TogglePopup(ref _isRecordPopupOpen, ref _isScreenshotPopupOpen));
+
+            CaptureFullCommand = new RelayCommand(async param => await ExecuteCaptureFullAsync());
+            CaptureAreaCommand = new RelayCommand(async param => await ExecuteCaptureAreaAsync());
+            CaptureWindowCommand = new RelayCommand(async param => await ExecuteCaptureWindowAsync());
+            RecordVideoCommand = new RelayCommand(async param => await ExecuteRecordVideoAsync());
+            RecordAreaVideoCommand = new RelayCommand(async param => await ExecuteAreaRecordVideoAsync());
+
             LastScreenshots = new ObservableCollection<LastScreenshot>();
             LastVideos = new ObservableCollection<LastVideo>();
-            PopupManager.PopupsClosed += (s, e) => ClosePopups();
 
             LoadLastScreenshots();
             LoadLastVideos();
         }
 
-        public void ToggleScreenshotPopup()
+        private void TogglePopup(ref bool popupToToggle, ref bool otherPopup)
         {
-            IsScreenshotPopupOpen = !IsScreenshotPopupOpen;
-            if (IsScreenshotPopupOpen)
+            popupToToggle = !popupToToggle;
+            if (popupToToggle)
             {
-                IsRecordPopupOpen = false;
+                otherPopup = false;
             }
+            OnPropertyChanged(null);
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -93,92 +96,64 @@ namespace screenerWpf
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public void BringMainWindowToFront()
+        public async Task ExecuteCaptureFullAsync()
         {
-            // Lokalizowanie głównego okna aplikacji
-            var mainWindow = Application.Current.MainWindow;
-            if (mainWindow != null)
+            await CaptureAsync(async () =>
             {
-                // Ustawienie okna jako aktywnego
-                mainWindow.Activate();
+                using var bitmap = screenCaptureService.CaptureScreen();
+                await ShowEditorWindowAsync(bitmap);
+            });
+        }
 
-                // Sprawdzenie, czy okno nie jest minimalizowane
-                if (mainWindow.WindowState == WindowState.Minimized)
+        public async Task ExecuteCaptureWindowAsync()
+        {
+            await CaptureAsync(async () =>
+            {
+                using var bitmap = screenCaptureService.CaptureWindow();
+                if (bitmap != null)
                 {
-                    mainWindow.WindowState = WindowState.Normal;
+                    await ShowEditorWindowAsync(bitmap);
                 }
-
-                // Przynoszenie okna na pierwszy plan
-                mainWindow.Topmost = true;  // Ustawienie okna jako najwyższego
-                mainWindow.Topmost = false; // Następnie odwołanie tej decyzji, aby uniknąć zachowania "zawsze na wierzchu"
-            }
+            });
         }
 
-        public void ToggleRecordPopup()
+        public async Task ExecuteCaptureAreaAsync()
         {
-            IsRecordPopupOpen = !IsRecordPopupOpen;
-            if (IsRecordPopupOpen)
+            await CaptureAsync(async () =>
             {
-                IsScreenshotPopupOpen = false;
-            }
+                var area = windowService.SelectArea();
+                if (!area.IsEmpty)
+                {
+                    var bitmap = screenCaptureService.CaptureArea(area);
+                    await ShowEditorWindowAsync(bitmap);
+                }
+                else
+                {
+                    RestoreMainWindow();
+                }
+            });
         }
 
-        public void ExecuteCaptureFull(object parameter)
-        {
-            MinimizeMainWindow();
-
-            Bitmap bitmap = screenCaptureService.CaptureScreen();
-            ShowEditorWindow(bitmap);
-
-            ReturnMainWindow();
-        }
-
-        public void ExecuteCaptureFullJumpTask()
-        {
-            MessageBox.Show("Przed Minimalize.", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
-            if (screenCaptureService == null)
-            {
-                MessageBox.Show("screenCaptureService jest null", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            if (screenCaptureService != null)
-            {
-                MessageBox.Show("screenCaptureService nie jest null", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            Bitmap bitmap = screenCaptureService.CaptureScreen();
-            MessageBox.Show("Po capture screen", "Informacja", MessageBoxButton.OK, MessageBoxImage.Information);
-
-            ShowEditorWindow(bitmap);
-        }
-
-        public void ExecuteCaptureWindow(object parameter)
+        private async Task CaptureAsync(Func<Task> captureAction)
         {
             MinimizeMainWindow();
-
-            var bitmap = screenCaptureService.CaptureWindow();
-            if (bitmap != null)
+            await Task.Delay(200); // Zapewnienie, że okno zostało zminimalizowane
+            try
             {
-                ShowEditorWindow(bitmap);
+                await captureAction();
             }
-
-            ReturnMainWindow();
+            catch (Exception ex)
+            {
+                // Logowanie błędu lub wyświetlenie komunikatu dla użytkownika
+                MessageBox.Show($"Wystąpił błąd podczas wykonywania zrzutu ekranu: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                RestoreMainWindow();
+            }
         }
 
-        public void ExecuteCaptureArea(object parameter)
-        {
-            MinimizeMainWindow();
-
-            Rectangle area = windowService.SelectArea();
-            if (!area.IsEmpty)
-            {
-                Bitmap bitmap = screenCaptureService.CaptureArea(area);
-                ShowEditorWindow(bitmap);
-            }
-
-            ReturnMainWindow();
-        }
-
-        public void ShowEditorWindow(Bitmap bitmap)
+        private async Task ShowEditorWindowAsync(Bitmap bitmap)
         {
             if (bitmap == null)
             {
@@ -186,69 +161,91 @@ namespace screenerWpf
             }
 
             BitmapSource bitmapSource = ConvertBitmapToBitmapSource(bitmap);
-
-            var mainWindow = Application.Current.MainWindow as Main;
-            mainWindow?.DisplayScreenshotEditor(bitmapSource);
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                var mainWindow = Application.Current.MainWindow as Main;
+                mainWindow?.DisplayScreenshotEditor(bitmapSource);
+            });
         }
 
         private BitmapSource ConvertBitmapToBitmapSource(Bitmap bitmap)
         {
-            using (MemoryStream memory = new MemoryStream())
+            BitmapSource bitmapSource;
+            using (var memory = new MemoryStream())
             {
                 bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Png);
                 memory.Position = 0;
-                BitmapImage bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-                return bitmapImage;
+                bitmapSource = BitmapFrame.Create(memory, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
             }
+
+            return bitmapSource;
         }
 
         private void LoadLastScreenshots()
         {
             ClosePopups();
+            LastScreenshots.Clear();
+
             if (string.IsNullOrEmpty(Settings.Default.ScreenshotsLibrary))
             {
                 return;
             }
 
-            string screenshotsDirectory = Settings.Default.ScreenshotsLibrary;
-            if (!Directory.Exists(screenshotsDirectory))
+            try
             {
-                return;
+                string screenshotsDirectory = Settings.Default.ScreenshotsLibrary;
+                if (!Directory.Exists(screenshotsDirectory))
+                {
+                    return;
+                }
+
+                DirectoryInfo di = new DirectoryInfo(screenshotsDirectory);
+                var screenshotFiles = di.GetFiles("*.png")
+                    .OrderByDescending(f => f.LastWriteTime)
+                    .Take(5);
+
+                foreach (var file in screenshotFiles)
+                {
+                    LastScreenshots.Add(new LastScreenshot(file.FullName));
+                }
             }
-
-            DirectoryInfo di = new DirectoryInfo(screenshotsDirectory);
-            var screenshotFiles = di.GetFiles("*.png").OrderByDescending(f => f.LastWriteTime).Take(5);
-
-            foreach (var file in screenshotFiles)
+            catch (Exception ex)
             {
-                LastScreenshots.Add(new LastScreenshot(file.FullName));
+                MessageBox.Show($"Nie można załadować ostatnich zrzutów ekranu: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
 
         private void LoadLastVideos()
         {
             ClosePopups();
+            LastVideos.Clear();
+
             if (string.IsNullOrEmpty(Settings.Default.RecordsSavePath))
             {
                 return;
             }
 
-            string recordsDirectory = Settings.Default.RecordsSavePath;
-            if (!Directory.Exists(recordsDirectory))
+            try
             {
-                return;
-            }
-            DirectoryInfo di = new DirectoryInfo(recordsDirectory);
-            var screenshotFiles = di.GetFiles("*.mp4").OrderByDescending(f => f.LastWriteTime).Take(5);
+                string recordsDirectory = Settings.Default.RecordsSavePath;
+                if (!Directory.Exists(recordsDirectory))
+                {
+                    return;
+                }
 
-            foreach (var file in screenshotFiles)
+                DirectoryInfo di = new DirectoryInfo(recordsDirectory);
+                var videoFiles = di.GetFiles("*.mp4")
+                    .OrderByDescending(f => f.LastWriteTime)
+                    .Take(5);
+
+                foreach (var file in videoFiles)
+                {
+                    LastVideos.Add(new LastVideo(file.FullName));
+                }
+            }
+            catch (Exception ex)
             {
-                LastVideos.Add(new LastVideo(file.FullName));
+                MessageBox.Show($"Nie można załadować ostatnich nagrań wideo: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -256,27 +253,12 @@ namespace screenerWpf
         {
             try
             {
-                Bitmap bitmap = GetBitmapFromUri(new Uri(filePath));
-                if (bitmap != null)
-                {
-                    ShowEditorWindow(bitmap);
-                }
+                using var bitmap = new Bitmap(filePath);
+                ShowEditorWindowAsync(bitmap).Wait();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd");
-            }
-        }
-
-        public static Bitmap GetBitmapFromUri(Uri uri)
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                byte[] data = webClient.DownloadData(uri);
-                using (MemoryStream mem = new MemoryStream(data))
-                {
-                    return new Bitmap(mem);
-                }
+                MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -284,52 +266,92 @@ namespace screenerWpf
         {
             try
             {
-                this.windowService.ShowVideoPlayerWindow(filePath);
+                windowService.ShowVideoPlayerWindow(filePath);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd");
+                MessageBox.Show($"Nie można otworzyć pliku: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
-        public void ExecuteRecordVideo(object parameter)
+        public async Task ExecuteRecordVideoAsync()
         {
-            // Rozpoczęcie nagrywania
             MinimizeMainWindow();
-            screenCaptureService.StartRecording();
-            ShowStopRecordingButton();
+            await Task.Delay(200); // Zapewnienie, że okno zostało zminimalizowane
+
+            try
+            {
+                screenCaptureService.StartRecording();
+                ShowStopRecordingButton();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nie można rozpocząć nagrywania: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                RestoreMainWindow();
+            }
         }
 
-        public void ExecuteAreaRecordVideo(object parameter)
+        public async Task ExecuteAreaRecordVideoAsync()
         {
             MinimizeMainWindow();
-            var area = windowService.SelectArea();
-            if (!area.IsEmpty)
+            await Task.Delay(200); // Zapewnienie, że okno zostało zminimalizowane
+
+            try
             {
-                screenCaptureService.StartAreaRecording(area);
-                ShowStopRecordingButton();
+                var area = windowService.SelectArea();
+                if (!area.IsEmpty)
+                {
+                    screenCaptureService.StartAreaRecording(area);
+                    ShowStopRecordingButton();
+                }
+                else
+                {
+                    RestoreMainWindow();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nie można rozpocząć nagrywania obszaru: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                RestoreMainWindow();
             }
         }
 
         public void StopRecording()
         {
-            screenCaptureService.StopRecording();
-            HideStopRecordingButton();
+            try
+            {
+                screenCaptureService.StopRecording();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nie można zatrzymać nagrywania: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                HideStopRecordingButton();
+                RestoreMainWindow();
+            }
         }
 
         private void ShowStopRecordingButton()
         {
-            stopRecordingWindow = new StopRecordingWindow();
-            stopRecordingWindow.Show();
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                stopRecordingWindow = new StopRecordingWindow();
+                stopRecordingWindow.Show();
+            });
         }
 
         private void HideStopRecordingButton()
         {
-            if (stopRecordingWindow != null)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                stopRecordingWindow.Close();
-                stopRecordingWindow = null;
-            }
+                if (stopRecordingWindow != null)
+                {
+                    stopRecordingWindow.Close();
+                    stopRecordingWindow = null;
+                }
+            });
         }
 
         private void ClosePopups()
@@ -347,12 +369,13 @@ namespace screenerWpf
             }
         }
 
-        private void ReturnMainWindow()
+        private void RestoreMainWindow()
         {
             var mainWindow = Application.Current.MainWindow;
             if (mainWindow != null)
             {
                 mainWindow.WindowState = WindowState.Normal;
+                mainWindow.Activate();
             }
         }
     }

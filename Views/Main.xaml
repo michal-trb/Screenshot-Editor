@@ -9,7 +9,6 @@
     Height="145"
     mc:Ignorable="d"
     Deactivated="Window_Deactivated"
-    MouseLeftButtonDown="MainWindow_MouseLeftButtonDown"
     Style="{DynamicResource WindowStyle}"
     Title="{x:Static local:Resource.MainTitle}"
     WindowStyle="None">
@@ -26,9 +25,10 @@
             <!-- Pasek tytułu -->
             <RowDefinition Height="Auto" />
             <!-- Przyciski -->
+            <RowDefinition Height="*" />
+            <!-- Wiersz 2: ScreenshotEditorGrid -->
             <RowDefinition Height="Auto" />
             <!-- Last Screenshots -->
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <!-- Last Videos -->
         </Grid.RowDefinitions>
@@ -142,7 +142,7 @@
         <Grid                  Grid.Row="2"
        x:Name="ScreenshotEditorGrid">
             
-            
+
         </Grid>
 
 

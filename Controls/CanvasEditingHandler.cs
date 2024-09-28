@@ -1,16 +1,13 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using screenerWpf.Interfaces;
+﻿using screenerWpf.Interfaces;
 using screenerWpf.Models.DrawableElements;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace screenerWpf.Controls
 {
     public class CanvasEditingHandler : ICanvasEditingHandler
     {
         private DrawableCanvas drawableCanvas;
-        private TextBox editableTextBox;
         private IDrawable editableElement;
 
         public CanvasEditingHandler(DrawableCanvas canvas)
@@ -49,23 +46,6 @@ namespace screenerWpf.Controls
             if (dialog.ShowDialog() == true)
             {
                 drawableText.Text = dialog.EditedText;
-            }
-        }
-
-        private void EditableTextBox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            if (sender is TextBox textBox && editableElement is DrawableText drawableText)
-            {
-                // Aktualizacja tekstu w DrawableText
-                drawableText.Text = textBox.Text;
-
-                // Usunięcie TextBox z płótna i odświeżenie
-                drawableCanvas.Children.Remove(textBox);
-                drawableCanvas.InvalidateVisual();
-
-                // Wyczyszczenie referencji
-                editableTextBox = null;
-                editableElement = null;
             }
         }
     }

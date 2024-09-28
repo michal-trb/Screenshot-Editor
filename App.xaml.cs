@@ -86,16 +86,16 @@ namespace screenerWpf
             switch (args)
             {
                 case "screenshot":
-                    MainViewModelService?.ExecuteCaptureFull(null);
+                    MainViewModelService?.ExecuteCaptureFullAsync();
                     break;
                 case "captureArea":
-                    MainViewModelService?.ExecuteCaptureArea(null);
+                    MainViewModelService?.ExecuteCaptureAreaAsync();
                     break;
                 case "recordVideo":
-                    MainViewModelService?.ExecuteRecordVideo(null);
+                    MainViewModelService?.ExecuteRecordVideoAsync();
                     break;
                 case "recordAreaVideo":
-                    MainViewModelService?.ExecuteAreaRecordVideo(null);
+                    MainViewModelService?.ExecuteAreaRecordVideoAsync();
                     break;
                 default:
                     // Handle unknown arguments or log them

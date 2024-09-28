@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using screenerWpf.Factories;
 using screenerWpf.Helpers;
@@ -69,11 +70,11 @@ namespace screenerWpf
                 switch (wParam.ToInt32())
                 {
                     case HOTKEY_ID:
-                        Application.Current.Dispatcher.Invoke(() => viewModel.ExecuteCaptureArea(null));
+                        Application.Current.Dispatcher.Invoke(() => viewModel.ExecuteCaptureAreaAsync());
                         handled = true;
                         break;
                     case HOTKEY_ID + 1:
-                        Application.Current.Dispatcher.Invoke(() => viewModel.ExecuteCaptureFull(null));
+                        Application.Current.Dispatcher.Invoke(() => viewModel.ExecuteCaptureFullAsync());
                         handled = true;
                         break;
                 }
@@ -84,7 +85,6 @@ namespace screenerWpf
 
         private void OptionsButton_Click(object sender, RoutedEventArgs e)
         {
-            PopupManager.CloseAllPopups();
             var optionsWindow = optionsWindowFactory.Create();
             optionsWindow.ShowDialog();
         }
@@ -169,7 +169,6 @@ namespace screenerWpf
 
         private void OpenScreenshotsFolder(object sender, RoutedEventArgs e)
         {
-            PopupManager.CloseAllPopups();
             string folderPath = Properties.Settings.Default.ScreenshotsLibrary;
             if (!string.IsNullOrWhiteSpace(folderPath) && Directory.Exists(folderPath))
             {
@@ -183,7 +182,6 @@ namespace screenerWpf
 
         private void OpenVideosFolder(object sender, RoutedEventArgs e)
         {
-            PopupManager.CloseAllPopups();
             string folderPath = Properties.Settings.Default.RecordsSavePath;
             if (!string.IsNullOrWhiteSpace(folderPath) && Directory.Exists(folderPath))
             {
@@ -195,11 +193,6 @@ namespace screenerWpf
             }
         }
 
-        private void MainWindow_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            PopupManager.CloseAllPopups();
-        }
-
         public void DisplayScreenshotEditor(BitmapSource screenshot)
         {
             var screenshotEditor = new ImageEditorControl(screenshot);
@@ -207,20 +200,11 @@ namespace screenerWpf
             ScreenshotEditorGrid.Children.Clear();
             ScreenshotEditorGrid.Children.Add(screenshotEditor);
 
-            // Hide other grids
+            // Ukryj inne gridy
             GridScreenshots.Visibility = Visibility.Collapsed;
             GridVideos.Visibility = Visibility.Collapsed;
         }
 
-        public void HideScreenshotEditor()
-        {
-            ScreenshotEditorGrid.Visibility = Visibility.Visible;
-            ScreenshotEditorGrid.Children.Clear();
-
-            // Show other grids
-            GridScreenshots.Visibility = Visibility.Visible;
-            GridVideos.Visibility = Visibility.Visible;
-        }
 
         private void ScreenshotEditor_LoadedAndSizeUpdated(ImageEditorControl element)
         {
