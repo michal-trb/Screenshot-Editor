@@ -53,7 +53,10 @@ namespace screenerWpf.Sevices
         public void StopRecording()
         {
             screenRecorder.StopRecording();
-            overlay.Close();
+            if (overlay != null)
+            {
+                overlay.Close();
+            }
         }
 
         public void StartAreaRecording(Rectangle area)

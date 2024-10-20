@@ -1,4 +1,5 @@
-﻿using iTextSharp.text;
+﻿using Helpers.DpiHelper;
+using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.Win32;
 using screenerWpf.Interfaces;
@@ -54,10 +55,14 @@ namespace screenerWpf.Controls
 
         private WriteableBitmap GetEditedImageBitmap()
         {
-            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+            var currentDpi = DpiHelper.CurrentDpi;
+
+            var renderBitmap = new RenderTargetBitmap(
                 (int)drawableCanvas.ActualWidth,
                 (int)drawableCanvas.ActualHeight,
-                96d, 96d, PixelFormats.Pbgra32);
+                currentDpi.DpiX,
+                currentDpi.DpiY, 
+                PixelFormats.Pbgra32);
 
             renderBitmap.Render(drawableCanvas);
 

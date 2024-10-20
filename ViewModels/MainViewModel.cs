@@ -50,8 +50,6 @@ namespace screenerWpf
             }
         }
 
-        public ICommand ToggleScreenshotPopupCommand { get; }
-        public ICommand ToggleRecordPopupCommand { get; }
         public ICommand CaptureFullCommand { get; private set; }
         public ICommand CaptureAreaCommand { get; private set; }
         public ICommand CaptureWindowCommand { get; private set; }
@@ -65,9 +63,6 @@ namespace screenerWpf
             this.screenCaptureService = screenCaptureService ?? throw new ArgumentNullException(nameof(screenCaptureService));
             this.windowService = windowService ?? throw new ArgumentNullException(nameof(windowService));
 
-            ToggleScreenshotPopupCommand = new RelayCommand(param => TogglePopup(ref _isScreenshotPopupOpen, ref _isRecordPopupOpen));
-            ToggleRecordPopupCommand = new RelayCommand(param => TogglePopup(ref _isRecordPopupOpen, ref _isScreenshotPopupOpen));
-
             CaptureFullCommand = new RelayCommand(async param => await ExecuteCaptureFullAsync());
             CaptureAreaCommand = new RelayCommand(async param => await ExecuteCaptureAreaAsync());
             CaptureWindowCommand = new RelayCommand(async param => await ExecuteCaptureWindowAsync());
@@ -79,16 +74,6 @@ namespace screenerWpf
 
             LoadLastScreenshots();
             LoadLastVideos();
-        }
-
-        private void TogglePopup(ref bool popupToToggle, ref bool otherPopup)
-        {
-            popupToToggle = !popupToToggle;
-            if (popupToToggle)
-            {
-                otherPopup = false;
-            }
-            OnPropertyChanged(null);
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -183,7 +168,6 @@ namespace screenerWpf
 
         private void LoadLastScreenshots()
         {
-            ClosePopups();
             LastScreenshots.Clear();
 
             if (string.IsNullOrEmpty(Settings.Default.ScreenshotsLibrary))
@@ -217,7 +201,6 @@ namespace screenerWpf
 
         private void LoadLastVideos()
         {
-            ClosePopups();
             LastVideos.Clear();
 
             if (string.IsNullOrEmpty(Settings.Default.RecordsSavePath))
@@ -352,12 +335,6 @@ namespace screenerWpf
                     stopRecordingWindow = null;
                 }
             });
-        }
-
-        private void ClosePopups()
-        {
-            IsScreenshotPopupOpen = false;
-            IsRecordPopupOpen = false;
         }
 
         private void MinimizeMainWindow()

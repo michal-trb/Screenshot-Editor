@@ -1,4 +1,5 @@
-﻿using screenerWpf.Helpers;
+﻿using Helpers.DpiHelper;
+using screenerWpf.Helpers;
 using screenerWpf.Interfaces;
 using screenerWpf.Services;
 using System;
@@ -199,8 +200,14 @@ namespace screenerWpf.Controls
             int width = (int)Math.Ceiling(ActualWidth);
             int height = (int)Math.Ceiling(ActualHeight);
 
+            var currentDpi = DpiHelper.CurrentDpi;
             // Utworzenie bitmapy renderującej
-            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+            RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
+                width, 
+                height,
+                currentDpi.DpiX,
+                currentDpi.DpiY, 
+                PixelFormats.Pbgra32);
 
             // Utworzenie wizualizacji na podstawie płótna
             DrawingVisual visual = new DrawingVisual();

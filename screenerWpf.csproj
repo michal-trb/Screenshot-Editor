@@ -9,6 +9,13 @@
     <ApplicationIcon>Icons\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+    <Page Remove="obj\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <None Remove="Icons\arrow-left-64.png" />
@@ -192,11 +199,6 @@
     <PackageReference Include="Tesseract" Version="5.2.0" />
     <PackageReference Include="Tesseract.Drawing" Version="5.2.0" />
     <PackageReference Include="WriteableBitmapEx" Version="1.6.8" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="obj\" />
   </ItemGroup>
 
   <ItemGroup>

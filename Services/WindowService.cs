@@ -1,46 +1,44 @@
-﻿using screenerWpf.Interfaces;
+﻿namespace screenerWpf.Sevices;
+
+using global::Helpers.DpiHelper;
+using screenerWpf.Interfaces;
 using screenerWpf.Views;
-using System;
 using System.Drawing;
 
-namespace screenerWpf.Sevices
+public class WindowService : IWindowService
 {
-    public class WindowService : IWindowService
+    public WindowService()
     {
-        public WindowService()
-        {
-        }
+    }
 
         public Rectangle SelectArea()
+    {
+        AreaSelector selector = new AreaSelector();
+
+        bool? result = selector.ShowDialog();
+
+        if (result == true)
         {
-            AreaSelector selector = new AreaSelector();
-            bool? result = selector.ShowDialog();
+            DpiHelper.UpdateDpi();
+            var currentDpi = DpiHelper.CurrentDpi;
+            double dpiX = currentDpi.DpiX / 96.0;
+            double dpiY = currentDpi.DpiY / 96.0;
 
-            if (result == true)
-            {
-                double dpiX, dpiY;
-                using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
-                {
-                    dpiX = graphics.DpiX / 96.0;
-                    dpiY = graphics.DpiY / 96.0;
-                }
+            var scaledRect = new Rectangle(
+                (int)(selector.SelectedRectangle.X * dpiX),
+                (int)(selector.SelectedRectangle.Y * dpiY),
+                (int)(selector.SelectedRectangle.Width * dpiX),
+                (int)(selector.SelectedRectangle.Height * dpiY));
 
-                var scaledRect = new Rectangle(
-                    (int)(selector.SelectedRectangle.X * dpiX),
-                    (int)(selector.SelectedRectangle.Y * dpiY),
-                    (int)(selector.SelectedRectangle.Width * dpiX),
-                    (int)(selector.SelectedRectangle.Height * dpiY));
-
-                return scaledRect;
-            }
-
-            return Rectangle.Empty;
+            return scaledRect;
         }
 
-        public void ShowVideoPlayerWindow(string videoPath)
-        {
-            VideoPlayerWindow playerWindow = new VideoPlayerWindow(videoPath);
-            playerWindow.Show();
-        }
+        return Rectangle.Empty;
+    }
+
+    public void ShowVideoPlayerWindow(string videoPath)
+    {
+        VideoPlayerWindow playerWindow = new VideoPlayerWindow(videoPath);
+        playerWindow.Show();
     }
 }

@@ -25,7 +25,7 @@
             <!-- Pasek tytułu -->
             <RowDefinition Height="Auto" />
             <!-- Przyciski -->
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <!-- Wiersz 2: ScreenshotEditorGrid -->
             <RowDefinition Height="Auto" />
             <!-- Last Screenshots -->

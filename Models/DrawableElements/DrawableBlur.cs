@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
+using Helpers.DpiHelper;
 using screenerWpf.Controls;
 using screenerWpf.Interfaces;
 
@@ -182,13 +183,14 @@ namespace screenerWpf.Models.DrawableElements
                     tempDc.DrawImage(croppedBitmap, new Rect(0, 0, cropRect.Width, cropRect.Height));
                 }
                 tempVisual.Effect = blurEffect;
+                var currentDpi = DpiHelper.CurrentDpi;
 
                 // Renderowanie tempVisual do RenderTargetBitmap
                 RenderTargetBitmap blurredBitmap = new RenderTargetBitmap(
                     cropRect.Width,
                     cropRect.Height,
-                    96, // DpiX
-                    96, // DpiY
+                    currentDpi.DpiX,
+                    currentDpi.DpiY,
                     PixelFormats.Pbgra32);
                 blurredBitmap.Render(tempVisual);
 

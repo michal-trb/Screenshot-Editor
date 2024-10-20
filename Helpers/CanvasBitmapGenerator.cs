@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Helpers.DpiHelper;
 using screenerWpf.Controls;
 
 namespace screenerWpf.Helpers
@@ -16,12 +17,13 @@ namespace screenerWpf.Helpers
             {
                 return null;
             }
+            var currentDpi = DpiHelper.CurrentDpi;
 
             RenderTargetBitmap renderBitmap = new RenderTargetBitmap(
                 width,
                 height,
-                96, // DpiX
-                96, // DpiY
+                currentDpi.DpiX,
+                currentDpi.DpiY,
                 PixelFormats.Pbgra32);
 
             DrawingVisual visual = new DrawingVisual();
