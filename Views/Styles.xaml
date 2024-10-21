@@ -3,9 +3,11 @@
                     xmlns:local="clr-namespace:screenerWpf.Resources"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+    <!-- Style for general application windows -->
     <Style TargetType="Window" x:Key="WindowStyle">
         <Setter Property="Background">
             <Setter.Value>
+                <!-- Gradient background for the window -->
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="{DynamicResource Background950}" Offset="0"/>
                     <GradientStop Color="{DynamicResource Background900}" Offset="1"/>
@@ -13,287 +15,297 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!-- Style for the title bar of the window -->
     <Style x:Key="TitleBarStyle" TargetType="Border">
-    <Setter Property="Background">
-        <Setter.Value>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+        <Setter Property="Background">
+            <Setter.Value>
+                <!-- Gradient background for the title bar -->
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="{DynamicResource TitleBarMain950}" Offset="0"/>
                     <GradientStop Color="{DynamicResource TitleBarMain900}" Offset="1"/>
-            </LinearGradientBrush>
-        </Setter.Value>
-    </Setter>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushColorBrush}"/>
-    <Setter Property="BorderThickness" Value="0"/>
-    <Setter Property="CornerRadius" Value="5"/>
-    <Setter Property="Height" Value="35"/>
-    <Setter Property="Margin" Value="0"/>
-</Style>
-<Style x:Key="TitleBarStyleMain" TargetType="Border">
-    <Setter Property="Background">
-        <Setter.Value>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Margin" Value="0"/>
+    </Style>
+
+    <!-- Style for the main title bar -->
+    <Style x:Key="TitleBarStyleMain" TargetType="Border">
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="{DynamicResource TitleBarMain950}" Offset="0"/>
                     <GradientStop Color="{DynamicResource TitleBarMain900}" Offset="1"/>
-            </LinearGradientBrush>
-        </Setter.Value>
-    </Setter>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushColorBrush}"/>
-    <Setter Property="BorderThickness" Value="0"/>
-    <Setter Property="CornerRadius" Value="5"/>
-    <Setter Property="Height" Value="30"/>
-    <Setter Property="Margin" Value="0"/>
-</Style>
-<Style x:Key="ThumbnailBorderStyle" TargetType="Border">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Margin" Value="0"/>
+    </Style>
+
+    <!-- Style for the thumbnail borders -->
+    <Style x:Key="ThumbnailBorderStyle" TargetType="Border">
         <Setter Property="Background" Value="{DynamicResource Background950Color}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushColorBrush}"/>
-    <Setter Property="BorderThickness" Value="0"/>
-    <Setter Property="CornerRadius" Value="5"/>
-    <Setter Property="Margin" Value="5"/>
-    <Setter Property="Padding" Value="5"/>
-    <Style.Triggers>
-        <Trigger Property="IsMouseOver" Value="True">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Padding" Value="5"/>
+        <Style.Triggers>
+            <!-- Change background on mouse over -->
+            <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{DynamicResource Button600Color}"/>
-        </Trigger>
-    </Style.Triggers>
-</Style>
-<Style x:Key="LabelStyle" TargetType="Label">
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Style for Label controls -->
+    <Style x:Key="LabelStyle" TargetType="Label">
         <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
         <Setter Property="Background" Value="{DynamicResource Background900Color}"/>
-    <Setter Property="Padding" Value="5"/>
-    <Setter Property="HorizontalAlignment" Value="Center"/>
-    <Setter Property="VerticalAlignment" Value="Center"/>
-    <Setter Property="Margin" Value="5"/>
-</Style>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+    </Style>
 
-<Style x:Key="RoundedButtonStyle" TargetType="Button">
-    <Setter Property="Margin" Value="10"/>
-    <Setter Property="Background">
-        <Setter.Value>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.15,0">
+    <!-- Style for rounded buttons used in the application -->
+    <Style x:Key="RoundedButtonStyle" TargetType="Button">
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.15,0">
                     <GradientStop Color="{DynamicResource Button800}" Offset="0"/>
                     <GradientStop Color="{DynamicResource Button600}" Offset="1"/>
-            </LinearGradientBrush>
-        </Setter.Value>
-    </Setter>
-    <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushColorBrush}"/>
-    <Setter Property="BorderThickness" Value="0"/>
-    <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
-    <Setter Property="Height" Value="32"/>
-    <Setter Property="Width" Value="32"/>
-    <Setter Property="Template">
-        <Setter.Value>
-            <ControlTemplate TargetType="Button">
-                <Border x:Name="border"
-                         Background="{TemplateBinding Background}"
-                         BorderBrush="{TemplateBinding BorderBrush}"
-                         BorderThickness="0"
-                         CornerRadius="5">
-                    <ContentPresenter HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
-                </Border>
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" 
-                                 Value="True">
-                        <Setter TargetName="border"
-                                    Property="Background"
-                                    Value="{DynamicResource Button500Color}"/>
-                    </Trigger>
-                    <Trigger Property="IsPressed"
-                                 Value="True">
-                        <Setter TargetName="border"
-                                    Property="Background"
-                                    Value="{DynamicResource Button400Color}"/>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-        </Setter.Value>
-    </Setter>
-</Style>
-
-<Style x:Key="CustomComboBoxStyle"
-           TargetType="ComboBox">
-    <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
-    <Setter Property="BorderBrush" Value="Transparent"/>
-    <Setter Property="Padding" Value="5"/>
-    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-    <Setter Property="VerticalAlignment" Value="Center"/>
-    <Setter Property="Margin" Value="5"/>
-    <Setter Property="Template">
-        <Setter.Value>
-            <ControlTemplate TargetType="ComboBox">
-                <Grid>
-                    <ToggleButton Background="{TemplateBinding Background}"
-                              BorderBrush="{TemplateBinding BorderBrush}"
-                              IsChecked="{Binding IsDropDownOpen,
-                                Mode=TwoWay,
-                                RelativeSource={RelativeSource 
-                                TemplatedParent}}"/>
-                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                  Margin="{TemplateBinding Padding}"
-                                  Content="{TemplateBinding SelectionBoxItem}"
-                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                  IsHitTestVisible="False"/>
-                    <Popup IsOpen="{Binding IsDropDownOpen,
-                                RelativeSource={RelativeSource
-                                TemplatedParent}}"
-                           Placement="Bottom"
-                           AllowsTransparency="True"
-                           Focusable="False"
-                           PopupAnimation="Slide">
-                            <Border Background="{DynamicResource Button600Color}" Padding="5">
-                            <ScrollViewer>
-                                <ItemsPresenter/>
-                            </ScrollViewer>
-                        </Border>
-                    </Popup>
-                </Grid>
-            </ControlTemplate>
-        </Setter.Value>
-    </Setter>
-</Style>
-    <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
-    <Setter Property="Width" Value="18"/>
-    <Setter Property="Height" Value="18"/>
-    <Setter Property="Margin" Value="2"/>
-    <Setter Property="BorderThickness" Value="0"/>
-    <Setter Property="Background">
-        <Setter.Value>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.15,0">
-                    <GradientStop Color="{DynamicResource Button800}" Offset="0"/>
-                    <GradientStop Color="{DynamicResource Button600}" Offset="1"/>
-            </LinearGradientBrush>
-        </Setter.Value>
-    </Setter>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
         <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushColorBrush}"/>
-    <Setter Property="Template">
-        <Setter.Value>
-            <ControlTemplate TargetType="Button">
-                <Border x:Name="border"
-                       Background="{TemplateBinding Background}"
-                       BorderBrush="{TemplateBinding BorderBrush}"
-                       BorderThickness="0"
-                       CornerRadius="5">
-                    <ContentPresenter HorizontalAlignment="Center"
-                                     VerticalAlignment="Center"/>
-                </Border>
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" 
-                                 Value="True">
-                        <Setter TargetName="border" 
-                                    Property="Background" 
-                                    Value="{DynamicResource Button500Color}"/>
-                    </Trigger>
-                    <Trigger Property="IsPressed" 
-                                 Value="True">
-                        <Setter TargetName="border"
-                                    Property="Background" 
-                                    Value="{DynamicResource Button400Color}"/>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-        </Setter.Value>
-    </Setter>
-</Style>
-<Style x:Key="DropdownButtonStyle" TargetType="Button" >
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
-    <Setter Property="Width" Value="25"/>
-    <Setter Property="BorderThickness" Value="0"/>
-    <Setter Property="Background">
-        <Setter.Value>
-            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.15,0">
+        <Setter Property="Height" Value="32"/>
+        <Setter Property="Width" Value="32"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="0"
+                            CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Change background when mouse is over -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Button500Color}"/>
+                        </Trigger>
+                        <!-- Change background when button is pressed -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Button400Color}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Style for a ComboBox control -->
+    <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <!-- The dropdown button -->
+                        <ToggleButton Background="{TemplateBinding Background}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                          ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                          IsHitTestVisible="False"/>
+                        <!-- The dropdown popup -->
+                        <Popup IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                               Placement="Bottom"
+                               AllowsTransparency="True"
+                               Focusable="False"
+                               PopupAnimation="Slide">
+                            <Border Background="{DynamicResource Button600Color}" Padding="5">
+                                <ScrollViewer>
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Style for the title bar button, inheriting base properties from RoundedButtonStyle -->
+    <Style x:Key="TitleBarButtonStyle" TargetType="Button" BasedOn="{StaticResource RoundedButtonStyle}">
+        <Setter Property="Width" Value="18"/>
+        <Setter Property="Height" Value="18"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <!-- Gradient background for title bar button -->
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.15,0">
+                    <GradientStop Color="{DynamicResource Button800}" Offset="0"/>
+                    <GradientStop Color="{DynamicResource Button600}" Offset="1"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushColorBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                    </Border>
+                    <!-- Triggers for changing the background color when mouse hovers or button is pressed -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Button500Color}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Button400Color}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Style for dropdown button used in ComboBox or similar UI elements -->
+    <Style x:Key="DropdownButtonStyle" TargetType="Button">
+        <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
+        <Setter Property="Width" Value="25"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <!-- Gradient background for dropdown button -->
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.15,0">
                     <GradientStop Color="{DynamicResource ButtonDeep600}" Offset="0"/>
                     <GradientStop Color="{DynamicResource ButtonDeep800}" Offset="1"/>
-            </LinearGradientBrush>
-        </Setter.Value>
-    </Setter>
-    <Setter Property="Template">
-        <Setter.Value>
-            <ControlTemplate TargetType="Button">
-                <Border x:Name="border"
-                 Background="{TemplateBinding Background}"
-                 BorderBrush="{TemplateBinding BorderBrush}"
-                 BorderThickness="0"
-                 CornerRadius="5">
-                    <ContentPresenter HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-                </Border>
-                <ControlTemplate.Triggers>
-                    <Trigger Property="IsMouseOver" 
-                                 Value="True">
-                        <Setter TargetName="border" 
-                                    Property="Background" 
-                                    Value="{DynamicResource Button500Color}"/>
-                    </Trigger>
-                    <Trigger Property="IsPressed"
-                                 Value="True">
-                        <Setter TargetName="border"
-                                    Property="Background" 
-                                    Value="{DynamicResource Button400Color}"/>
-                    </Trigger>
-                </ControlTemplate.Triggers>
-            </ControlTemplate>
-        </Setter.Value>
-    </Setter>
-    <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushColorBrush}"/>
-</Style>
-<Style x:Key="PopupContentRecordStyle" TargetType="{x:Type ContentControl}">
-    <Setter Property="ContentTemplate">
-        <Setter.Value>
-            <DataTemplate>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                CornerRadius="5">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                    </Border>
+                    <!-- Triggers for changing the background color when mouse hovers or button is pressed -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Button500Color}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{DynamicResource Button400Color}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrushColorBrush}"/>
+    </Style>
+
+    <!-- Style for popup content used for recording options -->
+    <Style x:Key="PopupContentRecordStyle" TargetType="{x:Type ContentControl}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
                     <Border BorderBrush="{DynamicResource BorderBrushColorBrush}"
-                            BorderThickness="0"
-                            CornerRadius="10"
-                            Background="{DynamicResource Background900Color}">
-                    <StackPanel>
-                        <Button Content="{x:Static local:Resource.RecordVideo}" 
-                                    Command="{Binding Path=DataContext.RecordVideoCommand,
-                                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                    Style="{DynamicResource RoundedButtonStyle}"/>
-                        <Button Content="{x:Static local:Resource.RecordAreaVideo}" 
-                                    Command="{Binding Path=DataContext.RecordAreaVideoCommand,
-                                        RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                    Style="{DynamicResource RoundedButtonStyle}"/>
-                    </StackPanel>
+                                BorderThickness="0"
+                                CornerRadius="10"
+                                Background="{DynamicResource Background900Color}">
+                        <StackPanel>
+                            <!-- Button for recording video -->
+                            <Button Content="{x:Static local:Resource.RecordVideo}"
+                                        Command="{Binding Path=DataContext.RecordVideoCommand,
+                                                  RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                        Style="{DynamicResource RoundedButtonStyle}"/>
+                            <!-- Button for recording a selected area -->
+                            <Button Content="{x:Static local:Resource.RecordAreaVideo}"
+                                        Command="{Binding Path=DataContext.RecordAreaVideoCommand,
+                                                  RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                        Style="{DynamicResource RoundedButtonStyle}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-                </Border>
-            </DataTemplate>
-        </Setter.Value>
-    </Setter>
-</Style>
+    <!-- Style for popup content used for screenshot options -->
+    <Style x:Key="PopupContentScreenshotStyle" TargetType="{x:Type ContentControl}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Border BorderBrush="{DynamicResource BorderBrushColorBrush}"
+                                BorderThickness="0"
+                                CornerRadius="10"
+                                Background="{DynamicResource Background900Color}">
+                        <StackPanel>
+                            <!-- Button for capturing the full screen -->
+                            <Button Content="{x:Static local:Resource.FullScreen}"
+                                        Command="{Binding Path=DataContext.CaptureFullCommand,
+                                                  RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                        Style="{DynamicResource RoundedButtonStyle}"/>
+                            <!-- Button for selecting an area to capture -->
+                            <Button Content="{x:Static local:Resource.SelectArea}"
+                                        Command="{Binding Path=DataContext.CaptureAreaCommand,
+                                                  RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                        Style="{DynamicResource RoundedButtonStyle}"/>
+                            <!-- Button for capturing a specific window -->
+                            <Button Content="{x:Static local:Resource.CaptureWindow}"
+                                        Command="{Binding Path=DataContext.CaptureWindowCommand,
+                                                  RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                                        Style="{DynamicResource RoundedButtonStyle}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
-<Style x:Key="PopupContentScreenshotStyle" TargetType="{x:Type ContentControl}">
-    <Setter Property="ContentTemplate">
-        <Setter.Value>
-            <DataTemplate>
-                    <Border BorderBrush="{DynamicResource BorderBrushColorBrush}" 
-                            BorderThickness="0" 
-                            CornerRadius="10" 
-                            Background="{DynamicResource Background900Color}">
-                    <StackPanel>
-                        <Button Content="{x:Static local:Resource.FullScreen}" 
-                                Command="{Binding Path=DataContext.CaptureFullCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{DynamicResource RoundedButtonStyle}"/>
-                        <Button Content="{x:Static local:Resource.SelectArea}" 
-                                Command="{Binding Path=DataContext.CaptureAreaCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{DynamicResource RoundedButtonStyle}"/>
-                        <Button Content="{x:Static local:Resource.CaptureWindow}" 
-                                Command="{Binding Path=DataContext.CaptureWindowCommand,
-                                    RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
-                                Style="{DynamicResource RoundedButtonStyle}"/>
-                    </StackPanel>
-                </Border>
-            </DataTemplate>
-        </Setter.Value>
-    </Setter>
-</Style>
+    <!-- Style for TextBox controls -->
     <Style x:Key="TextBoxStyle" TargetType="TextBox">
         <Setter Property="Foreground" Value="{DynamicResource ForegroundBrush}"/>
         <Setter Property="Background">
             <Setter.Value>
+                <!-- Gradient background for the TextBox -->
                 <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
                     <GradientStop Color="{DynamicResource Background950}" Offset="0"/>
                     <GradientStop Color="{DynamicResource Background900}" Offset="1"/>
@@ -307,5 +319,4 @@
         <Setter Property="Height" Value="Auto"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
     </Style>
-   
 </ResourceDictionary>

@@ -45,24 +45,4 @@ public static class DpiHelper
             }
         }
     }
-
-    /// <summary>
-    /// Method to convert a size or value from device-independent units to pixels
-    /// </summary>
-    /// <param name="valueInDip">The value in device-independent units (DIP)</param>
-    /// <returns>The value converted to pixels</returns>
-    public static double ConvertToPixels(double valueInDip)
-    {
-        return valueInDip * (CurrentDpi.DpiX / 96.0);
-    }
-
-    /// <summary>
-    /// Method to convert from pixels to device-independent units (DIP)
-    /// </summary>
-    /// <param name="valueInPixels">The value in pixels</param>
-    /// <returns>The value converted to device-independent units (DIP)</returns>
-    public static double ConvertToDip(double valueInPixels)
-    {
-        return valueInPixels * (96.0 / CurrentDpi.DpiX);
-    }
 }

@@ -4,6 +4,7 @@ using screenerWpf.Commands;
 using screenerWpf.Controls;
 using screenerWpf.Interfaces;
 using screenerWpf.Models;
+using screenerWpf.Models.DrawableElement;
 using screenerWpf.Models.DrawableElements;
 using screenerWpf.Views;
 using System;
@@ -81,7 +82,6 @@ internal class ImageEditorViewModel : INotifyPropertyChanged
         MaximizeRestoreCommand = new RelayCommand(_ => OnMaximizeRestore());
         CloseCommand = new RelayCommand(_ => OnClose());
 
-        UploadToDropboxCommand = new RelayCommand(async _ => await new DropboxUploader().UploadFileAsync(ExecuteSaveFast()));
         this.drawableCanvas = drawableCanvas;
     }
 
@@ -178,9 +178,6 @@ internal class ImageEditorViewModel : INotifyPropertyChanged
     {
         CloseRequest?.Invoke();
     }
-
-    // Command Execution Methods (e.g., ExecuteDrawArrow, ExecuteAddText, etc.)
-    // These methods define the action for each command.
 
     /// <summary>
     /// Executes the Draw Arrow command.

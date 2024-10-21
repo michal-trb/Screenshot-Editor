@@ -9,7 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-
+/// <summary>
+/// Enumeration representing different types of edit actions that can be performed on the canvas.
+/// </summary>
 public enum EditAction
 {
     None, DrawArrow, AddText, Move, Delete, AddBubble, DrawRectangle,
@@ -17,6 +19,9 @@ public enum EditAction
     RecognizeText
 }
 
+/// <summary>
+/// Handles various canvas actions such as drawing, text addition, blurring, and other edit operations.
+/// </summary>
 public class CanvasActionHandler : ICanvasActionHandler
 {
     private DrawableCanvas drawableCanvas;
@@ -30,6 +35,10 @@ public class CanvasActionHandler : ICanvasActionHandler
     private BlurDrawer blurDrawer;
     private BrushDrawer brushDrawer;
 
+    /// <summary>
+    /// Initializes a new instance of the CanvasActionHandler class with the specified drawable canvas.
+    /// </summary>
+    /// <param name="canvas">The canvas on which actions will be performed.</param>
     public CanvasActionHandler(DrawableCanvas canvas)
     {
         drawableCanvas = canvas;
@@ -41,6 +50,10 @@ public class CanvasActionHandler : ICanvasActionHandler
         brushDrawer = new BrushDrawer(canvas);
     }
 
+    /// <summary>
+    /// Handles the mouse left button down event for different drawing actions.
+    /// </summary>
+    /// <param name="e">The mouse button event arguments.</param>
     public void HandleLeftButtonDown(MouseButtonEventArgs e)
     {
         switch (currentAction)
@@ -69,9 +82,12 @@ public class CanvasActionHandler : ICanvasActionHandler
         }
     }
 
+    /// <summary>
+    /// Handles the mouse left button up event to finish the current drawing action.
+    /// </summary>
+    /// <param name="e">The mouse button event arguments.</param>
     public void HandleLeftButtonUp(MouseButtonEventArgs e)
     {
-        // Zakończenie rysowania dla bieżącej akcji
         switch (currentAction)
         {
             case EditAction.DrawArrow:
@@ -97,9 +113,12 @@ public class CanvasActionHandler : ICanvasActionHandler
         currentAction = EditAction.None;
     }
 
+    /// <summary>
+    /// Handles the mouse move event to update the current drawing action as the mouse moves.
+    /// </summary>
+    /// <param name="e">The mouse event arguments.</param>
     public void HandleMouseMove(MouseEventArgs e)
     {
-        // Aktualizacja rysowania dla bieżącej akcji
         switch (currentAction)
         {
             case EditAction.DrawArrow:
@@ -117,6 +136,9 @@ public class CanvasActionHandler : ICanvasActionHandler
         }
     }
 
+    /// <summary>
+    /// Handles the paste operation, adding an image from the clipboard to the canvas.
+    /// </summary>
     public void HandlePaste()
     {
         if (Clipboard.ContainsImage())
@@ -128,6 +150,9 @@ public class CanvasActionHandler : ICanvasActionHandler
         }
     }
 
+    /// <summary>
+    /// Handles the copy operation, copying the current canvas to the clipboard as an image.
+    /// </summary>
     public void HandleCopy()
     {
         var currentDpi = DpiHelper.CurrentDpi;
@@ -150,11 +175,19 @@ public class CanvasActionHandler : ICanvasActionHandler
         Clipboard.SetImage(renderBitmap);
     }
 
+    /// <summary>
+    /// Sets the current edit action to be performed on the canvas.
+    /// </summary>
+    /// <param name="action">The action to be set as the current edit action.</param>
     public void SetCurrentAction(EditAction action)
     {
         currentAction = action;
     }
 
+    /// <summary>
+    /// Selects an element on the canvas at the current mouse position.
+    /// </summary>
+    /// <param name="e">The mouse button event arguments.</param>
     private void SelectElementAtMousePosition(MouseButtonEventArgs e)
     {
         drawableCanvas.SelectElementAtPoint(e.GetPosition(drawableCanvas));

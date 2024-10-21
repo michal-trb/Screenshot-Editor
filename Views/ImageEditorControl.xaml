@@ -8,13 +8,16 @@
     xmlns:local="clr-namespace:screenerWpf"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+
+    <!-- Define local resources for the UserControl -->
     <UserControl.Resources>
-        <!-- Correct styles targeting UserControl or its elements -->
+        <!-- Set default background style for UserControl to white -->
         <Style TargetType="UserControl">
             <Setter Property="Background" Value="White" />
         </Style>
     </UserControl.Resources>
 
+    <!-- Define key bindings for common operations like Copy, Paste, Save, Undo, Redo, and Delete -->
     <UserControl.InputBindings>
         <KeyBinding
             Key="C"
@@ -36,27 +39,29 @@
             Key="Z"
             Command="{Binding RedoCommand}"
             Modifiers="Control+Shift" />
-
         <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
     </UserControl.InputBindings>
 
+    <!-- Main Layout Grid for the UserControl -->
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <!-- Pasek tytułu -->
+            <!-- Title Bar -->
             <RowDefinition Height="20.933" />
             <RowDefinition Height="19.067" />
-            <!-- Przestrzeń dla StackPanel -->
+            <!-- Space for StackPanel -->
             <RowDefinition Height="*" />
-            <!-- Główna zawartość -->
+            <!-- Main Content -->
             <RowDefinition Height="Auto" />
-            <!-- Dolny pasek -->
+            <!-- Bottom Bar -->
         </Grid.RowDefinitions>
 
+        <!-- Tool Button Section, positioned at Row 3 -->
         <Grid
             Grid.Row="3"
             MaxWidth="120"
@@ -80,6 +85,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+            <!-- Save Button - Uses RoundedButtonStyle and an Image as its content -->
             <Button
                 Grid.Row="0"
                 Grid.Column="0"
@@ -92,6 +98,7 @@
                 </Button.Content>
             </Button>
 
+            <!-- Save as PDF Button -->
             <Button
                 Grid.Row="0"
                 Grid.Column="1"
@@ -104,6 +111,7 @@
                 </Button.Content>
             </Button>
 
+            <!-- Draw Arrow Button -->
             <Button
                 Grid.Row="1"
                 Grid.Column="0"
@@ -116,6 +124,7 @@
                 </Button.Content>
             </Button>
 
+            <!-- Add Text Button -->
             <Button
                 Grid.Row="1"
                 Grid.Column="1"
@@ -128,6 +137,7 @@
                 </Button.Content>
             </Button>
 
+            <!-- Draw Rectangle Button -->
             <Button
                 Grid.Row="2"
                 Grid.Column="0"
@@ -140,6 +150,7 @@
                 </Button.Content>
             </Button>
 
+            <!-- Blur Area Button -->
             <Button
                 Grid.Row="2"
                 Grid.Column="1"
@@ -152,6 +163,7 @@
                 </Button.Content>
             </Button>
 
+            <!-- Speech Bubble Button -->
             <Button
                 Grid.Row="3"
                 Grid.Column="0"
@@ -164,6 +176,7 @@
                 </Button.Content>
             </Button>
 
+            <!-- Brush Tool Button -->
             <Button
                 Grid.Row="3"
                 Grid.Column="1"
@@ -176,8 +189,7 @@
                 </Button.Content>
             </Button>
 
-
-            <!-- Przyciski bez ikon -->
+            <!-- Commented-out Buttons without icons, reserved for additional functionality -->
 
             <!--
             <Button
@@ -188,7 +200,8 @@
                 Command="{Binding RecognizeTextCommand}"
                 Content="Recognize Text"
                 FontSize="{DynamicResource StandardFontSize}"
-                Style="{DynamicResource RoundedButtonStyle}" />
+                Style="{DynamicResource RoundedButtonStyle}"/>
+
             <Button
                 Grid.Row="5"
                 Grid.Column="0"
@@ -196,7 +209,7 @@
                 Width="100"
                 Command="{Binding AddNiceBackgroundCommand}"
                 Content="Nice background"
-                Style="{DynamicResource RoundedButtonStyle}" />
+                Style="{DynamicResource RoundedButtonStyle}"/>
 
             <Button
                 Grid.Row="6"
@@ -206,9 +219,10 @@
                 Command="{Binding UploadToDropboxCommand}"
                 Content="Upload to Dropbox"
                 FontSize="{DynamicResource StandardFontSize}"
-                Style="{DynamicResource RoundedButtonStyle}" />
+                Style="{DynamicResource RoundedButtonStyle}"/>
             -->
 
+            <!-- Resize Image Button -->
             <Button
                 Grid.Row="7"
                 Grid.Column="0"
@@ -221,6 +235,7 @@
                 </Button.Content>
             </Button>
 
+            <!-- Undo Button -->
             <Button
                 Grid.Row="8"
                 Grid.Column="0"
@@ -231,6 +246,8 @@
                     <Image Source="{DynamicResource UndoIcon}" />
                 </Button.Content>
             </Button>
+
+            <!-- Redo Button -->
             <Button
                 Grid.Row="8"
                 Grid.Column="1"
@@ -243,6 +260,7 @@
             </Button>
         </Grid>
 
+        <!-- StackPanel for the editing properties (e.g., Color, Thickness, Font) -->
         <StackPanel
             Grid.Row="1"
             Grid.RowSpan="2"
@@ -251,42 +269,38 @@
             HorizontalAlignment="Left"
             Orientation="Horizontal">
 
-            <!-- Styl z ramką dla Label - Color -->
+            <!-- Label and Color Picker for selecting Color -->
             <Border
                 Margin="5,5,0,5"
                 CornerRadius="5,0,0,5"
                 Style="{DynamicResource TitleBarStyleMain}"
-                Visibility="{Binding IsColorVisible,
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="Color:" />
             </Border>
             <Border
                 Margin="0,5,5,5"
                 CornerRadius="0,5,5,0"
                 Style="{DynamicResource TitleBarStyleMain}"
-                Visibility="{Binding IsColorVisible, 
-                Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsColorVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <colorpicker:PortableColorPicker
                     Width="20"
                     Height="20"
                     SelectedColor="{Binding SelectedColor, Mode=TwoWay}" />
             </Border>
 
-            <!-- Styl z ramką dla Label - Thickness -->
+            <!-- Label and ComboBox for selecting Thickness -->
             <Border
                 Margin="5,5,0,5"
                 CornerRadius="5,0,0,5"
                 Style="{DynamicResource TitleBarStyleMain}"
-                Visibility="{Binding IsThicknessVisible, 
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsThicknessVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="Thickness:" />
             </Border>
             <Border
                 Margin="0,5,5,5"
                 CornerRadius="0,5,5,0"
                 Style="{DynamicResource TitleBarStyleMain}"
-                Visibility="{Binding IsThicknessVisible, 
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsThicknessVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBox
                     Margin="0,0,5,0"
                     HorizontalAlignment="Center"
@@ -294,26 +308,22 @@
                     BorderBrush="{x:Null}"
                     BorderThickness="0"
                     ItemsSource="{Binding Thicknesses}"
-                    SelectedItem="{Binding SelectedThickness, Mode=TwoWay}"
-                    Visibility="{Binding IsThicknessVisible, 
-                        Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    SelectedItem="{Binding SelectedThickness, Mode=TwoWay}" />
             </Border>
 
-            <!-- Styl z ramką dla Label - Font Family -->
+            <!-- Label and ComboBox for selecting Font Family -->
             <Border
                 Margin="5,5,0,5"
                 CornerRadius="5,0,0,5"
                 Style="{DynamicResource TitleBarStyleMain}"
-                Visibility="{Binding IsFontFamilyVisible,   
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsFontFamilyVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="Font Family:" />
             </Border>
             <Border
                 Margin="0,5,5,5"
                 CornerRadius="0,5,5,0"
                 Style="{DynamicResource TitleBarStyleMain}"
-                Visibility="{Binding IsFontFamilyVisible, 
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsFontFamilyVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBox
                     Margin="0,0,5,0"
                     HorizontalAlignment="Center"
@@ -321,12 +331,10 @@
                     BorderBrush="{x:Null}"
                     BorderThickness="0"
                     ItemsSource="{Binding FontFamilies}"
-                    SelectedItem="{Binding SelectedFontFamily, Mode=TwoWay}"
-                    Visibility="{Binding IsFontFamilyVisible,
-                        Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    SelectedItem="{Binding SelectedFontFamily, Mode=TwoWay}" />
             </Border>
 
-            <!-- Styl z ramką dla Label - Font Size -->
+            <!-- Label and ComboBox for selecting Font Size -->
             <Border
                 Margin="5,5,0,5"
                 CornerRadius="5,0,0,5"
@@ -338,8 +346,7 @@
                 Margin="0,5,5,5"
                 CornerRadius="0,5,5,0"
                 Style="{DynamicResource TitleBarStyleMain}"
-                Visibility="{Binding IsFontSizeVisible,
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsFontSizeVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBox
                     Margin="0,0,5,0"
                     HorizontalAlignment="Center"
@@ -349,21 +356,20 @@
                     ItemsSource="{Binding FontSizes}"
                     SelectedItem="{Binding SelectedFontSize, Mode=TwoWay}" />
             </Border>
-            <!-- Styl z ramką dla Label - Transparency -->
+
+            <!-- Label and ComboBox for selecting Transparency -->
             <Border
                 Margin="5,5,0,5"
                 CornerRadius="5,0,0,5"
                 Style="{DynamicResource TitleBarStyleMain}"
-                Visibility="{Binding IsTransparencyVisible, 
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsTransparencyVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Label Content="Transparency:" />
             </Border>
             <Border
                 Margin="0,5,5,5"
                 CornerRadius="0,5,5,0"
                 Style="{DynamicResource TitleBarStyleMain}"
-                Visibility="{Binding IsTransparencyVisible,
-                    Converter={StaticResource BooleanToVisibilityConverter}}">
+                Visibility="{Binding IsTransparencyVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ComboBox
                     Margin="0,0,5,0"
                     HorizontalAlignment="Center"
@@ -375,8 +381,7 @@
             </Border>
         </StackPanel>
 
-
-        <!-- ViewBox for DrawableCanvas -->
+        <!-- ViewBox for DrawableCanvas to enable drawing/editing elements -->
         <Border
             Grid.Row="3"
             Grid.Column="1"
@@ -393,10 +398,12 @@
                         MouseLeftButtonUp="Canvas_MouseLeftButtonUp"
                         MouseMove="Canvas_MouseMove">
 
+                        <!-- Setting the background image for the drawable canvas -->
                         <controls:DrawableCanvas.Background>
                             <ImageBrush ImageSource="{Binding InitialImage, RelativeSource={RelativeSource AncestorType={x:Type local:ImageEditorControl}}}" Stretch="Uniform" />
                         </controls:DrawableCanvas.Background>
 
+                        <!-- Displaying drawable elements on the canvas -->
                         <ItemsControl ItemsSource="{Binding Elements}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>

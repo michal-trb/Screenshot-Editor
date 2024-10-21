@@ -2,37 +2,40 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:screenerWpf.Resources"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <!-- This is Light style colors LightStyle.xaml-->
+    <!-- This is Light style colors: LightStyle.xaml -->
 
+    <!-- Converters -->
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
+    <!-- Color Definitions -->
     <Color x:Key="Background950">#FAFCFE</Color>
-    <!-- Bardzo jasny, prawie biały -->
+    <!-- Very light, almost white background -->
     <Color x:Key="Background900">#F4F6F8</Color>
-    <!-- Jasny szary -->
+    <!-- Light grey background -->
     <Color x:Key="TitleBarMain950">#FAFCFE</Color>
-    <!-- Bardzo jasny, dla paska tytułowego -->
+    <!-- Very light color for title bar -->
     <Color x:Key="TitleBarMain900">#F4F6F8</Color>
-    <!-- Jasny szary dla paska tytułowego -->
+    <!-- Light grey for title bar -->
     <Color x:Key="Button800">#DDE1E6</Color>
-    <!-- Jasny szary dla przycisków -->
+    <!-- Light grey for buttons -->
     <Color x:Key="Button600">#C5C9CF</Color>
-    <!-- Średnio jasny szary dla przycisków -->
+    <!-- Medium light grey for buttons -->
     <Color x:Key="Button500">#B2B6BC</Color>
-    <!-- Nieco ciemniejszy szary dla przycisków -->
+    <!-- Slightly darker grey for buttons -->
     <Color x:Key="Button400">#A0A4AA</Color>
-    <!-- Jeszcze ciemniejszy szary dla przycisków -->
+    <!-- Darker grey for buttons -->
     <Color x:Key="ButtonDeep800">#D1D5DB</Color>
-    <!-- Średnio jasny szary dla głębszych elementów przycisków -->
+    <!-- Medium light grey for deeper button elements -->
     <Color x:Key="ButtonDeep900">#BCC0C6</Color>
-    <!-- Jasny szary dla głębszych elementów przycisków -->
+    <!-- Light grey for deeper button elements -->
     <Color x:Key="ButtonDeep600">#AEB2B8</Color>
-    <!-- Szary dla głębszych elementów przycisków -->
+    <!-- Grey for deeper button elements -->
     <Color x:Key="BorderBrushColor">#9DA1A7</Color>
-    <!-- Szary dla obramowań -->
+    <!-- Grey for borders -->
     <Color x:Key="ForegroundColor">#333333</Color>
-    <!-- Ciemny dla tekstu, bez zmian -->
+    <!-- Dark color for text -->
 
+    <!-- Other Settings -->
     <Thickness x:Key="StandardMargin">5</Thickness>
     <sys:Double x:Key="StandardWidth">35</sys:Double>
     <sys:Double x:Key="StandardHeight">35</sys:Double>
@@ -40,6 +43,7 @@
     <sys:Double x:Key="StandardFontSize">10</sys:Double>
     <CornerRadius x:Key="StandardCornerRadius">10</CornerRadius>
 
+    <!-- SolidColorBrush Resources -->
     <SolidColorBrush x:Key="Background950Color" Color="{StaticResource Background950}"/>
     <SolidColorBrush x:Key="Background900Color" Color="{StaticResource Background900}"/>
     <SolidColorBrush x:Key="TitleBarMainColor" Color="{StaticResource TitleBarMain950}"/>
@@ -53,6 +57,8 @@
 
     <SolidColorBrush x:Key="ForegroundBrush" Color="{StaticResource ForegroundColor}"/>
     <SolidColorBrush x:Key="BorderBrushColorBrush" Color="{StaticResource BorderBrushColor}"/>
+
+    <!-- BitmapImage Resources for Icons -->
     <BitmapImage x:Key="FolderScIcon" UriSource="/Icons/folder-sc-16.png"/>
     <BitmapImage x:Key="FolderViIcon" UriSource="/Icons/folder-vi-16.png"/>
     <BitmapImage x:Key="FileIcon" UriSource="/Icons/file-64.png"/>

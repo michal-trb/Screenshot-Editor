@@ -5,26 +5,33 @@ using System.Drawing;
 using System.Windows;
 using Size = System.Drawing.Size;
 
+/// <summary>
+/// Provides functionality to capture a screenshot of the entire screen, considering the current DPI settings.
+/// </summary>
 public class FullScreenshot
 {
+    /// <summary>
+    /// Captures a full screenshot of the primary screen.
+    /// </summary>
+    /// <returns>A <see cref="Bitmap"/> containing the screenshot of the entire primary screen.</returns>
     public static Bitmap CaptureScreen()
     {
-        // Uzyskanie współczynnika DPI
+        // Get the DPI scaling factor
         var presentationSource = PresentationSource.FromVisual(Application.Current.MainWindow);
 
         DpiHelper.UpdateDpi();
         var currentDpi = DpiHelper.CurrentDpi;
 
+        // Calculate the width and height based on DPI
         int screenWidth = (int)(SystemParameters.PrimaryScreenWidth * currentDpi.DpiX / 96);
         int screenHeight = (int)(SystemParameters.PrimaryScreenHeight * currentDpi.DpiY / 96);
 
-        // Tworzenie bitmapy o tych rozmiarach
+        // Create a bitmap with the screen dimensions
         Bitmap bitmap = new Bitmap(screenWidth, screenHeight);
 
-        // Rysowanie zrzutu ekranu na bitmapie
+        // Capture the screen onto the bitmap
         using (Graphics g = Graphics.FromImage(bitmap))
         {
-
             g.CopyFromScreen(0, 0, 0, 0, new Size(screenWidth, screenHeight));
         }
 

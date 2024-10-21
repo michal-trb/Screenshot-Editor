@@ -1,291 +1,406 @@
-﻿using screenerWpf.Interfaces;
+﻿namespace screenerWpf.Controls;
+
+using screenerWpf.Interfaces;
 using screenerWpf.Models.DrawableElements;
 using screenerWpf.Sevices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace screenerWpf.Controls
+
+/// <summary>
+/// Handles the input events for the drawable canvas, including mouse interactions and user actions.
+/// This class is responsible for coordinating various input actions, such as drawing, selecting, and editing elements on the canvas.
+/// </summary>
+public class CanvasInputHandler : ICanvasInputHandler
 {
-    public class CanvasInputHandler : ICanvasInputHandler
+    private readonly DrawableCanvas drawableCanvas;
+    private readonly ICanvasActionHandler actionHandler;
+    private readonly ICanvasSelectionHandler selectionHandler;
+    private readonly ICanvasEditingHandler editingHandler;
+    private readonly ICanvasSavingHandler savingHandler;
+
+    public static FontFamily SelectedFontFamily { get; private set; } = new FontFamily("Arial");
+    public static double SelectedFontSize { get; private set; } = 12.0;
+    public static double ArrowThickness { get; private set; } = 2.0;
+    public static double Transparency { get; private set; } = 0;
+    public static Color SelectedColor { get; private set; } = Colors.Black;
+
+    /// <summary>
+    /// Initializes a new instance of the CanvasInputHandler class.
+    /// </summary>
+    /// <param name="canvas">The drawable canvas that will handle the user interactions.</param>
+    public CanvasInputHandler(
+        DrawableCanvas canvas)
     {
-        private readonly DrawableCanvas drawableCanvas;
-        private readonly ICanvasActionHandler actionHandler;
-        private readonly ICanvasSelectionHandler selectionHandler;
-        private readonly ICanvasEditingHandler editingHandler;
-        private readonly ICanvasSavingHandler savingHandler;
+        drawableCanvas = canvas;
 
-        public static FontFamily SelectedFontFamily { get; private set; } = new FontFamily("Arial");
-        public static double SelectedFontSize { get; private set; } = 12.0;
-        public static double ArrowThickness { get; private set; } = 2.0;
-        public static double Transparency { get; private set; } = 0;
-        public static Color SelectedColor { get; private set; } = Colors.Black;
+        actionHandler = new CanvasActionHandler(drawableCanvas);
+        editingHandler = new CanvasEditingHandler(drawableCanvas);
+        savingHandler = new CanvasSavingHandler(drawableCanvas);
+        selectionHandler = new CanvasSelectionHandler(drawableCanvas, editingHandler);
+    }
 
-        public CanvasInputHandler(
-            DrawableCanvas canvas)
+    /// <summary>
+    /// Handles the mouse left button down event for the canvas, delegating to selection and action handlers.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The mouse button event arguments.</param>
+    public void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        selectionHandler.HandleLeftButtonDown(e);
+        actionHandler.HandleLeftButtonDown(e);
+    }
+
+    /// <summary>
+    /// Handles the mouse double-click event for the canvas, delegating to the selection handler.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The mouse button event arguments.</param>
+    public void Canvas_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        selectionHandler.HandleDoubleClick(e);
+    }
+
+    /// <summary>
+    /// Handles the mouse left button up event for the canvas, delegating to selection and action handlers.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The mouse button event arguments.</param>
+    public void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        selectionHandler.HandleLeftButtonUp(e);
+        actionHandler.HandleLeftButtonUp(e);
+    }
+
+    /// <summary>
+    /// Handles the mouse move event for the canvas, delegating to selection and action handlers.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The mouse event arguments.</param>
+    public void Canvas_MouseMove(object sender, MouseEventArgs e)
+    {
+        selectionHandler.HandleMouseMove(e);
+        actionHandler.HandleMouseMove(e);
+    }
+
+    /// <summary>
+    /// Executes the delete command, deleting the selected element.
+    /// </summary>
+    public void CommandBinding_DeleteExecuted()
+    {
+        selectionHandler.DeleteSelectedElement();
+    }
+
+    /// <summary>
+    /// Sets the action to draw an arrow on the canvas.
+    /// </summary>
+    public void DrawArrow()
+    {
+        actionHandler.SetCurrentAction(EditAction.DrawArrow);
+        UpdateDrawingColorAndThickness();
+    }
+
+    /// <summary>
+    /// Sets the action to draw a rectangle on the canvas.
+    /// </summary>
+    public void DrawRect()
+    {
+        actionHandler.SetCurrentAction(EditAction.DrawRectangle);
+        UpdateDrawingColorAndThickness();
+    }
+
+    /// <summary>
+    /// Sets the action to add text to the canvas.
+    /// </summary>
+    public void AddText()
+    {
+        actionHandler.SetCurrentAction(EditAction.AddText);
+    }
+
+    /// <summary>
+    /// Saves the current canvas to a file.
+    /// </summary>
+    public void Save()
+    {
+        savingHandler.SaveCanvasToFile();
+    }
+
+    /// <summary>
+    /// Saves the current canvas to a PDF file.
+    /// </summary>
+    public void SavePdf()
+    {
+        savingHandler.SaveCanvasToPdfFile();
+    }
+
+    /// <summary>
+    /// Saves the current canvas quickly to a file and returns the file path.
+    /// </summary>
+    /// <returns>The file path of the saved canvas.</returns>
+    public string SaveFast()
+    {
+        return savingHandler.SaveCanvasToFileFast();
+    }
+
+    /// <summary>
+    /// Updates the drawing color and thickness settings.
+    /// </summary>
+    private void UpdateDrawingColorAndThickness()
+    {
+        // Updates the color and thickness of the arrow or rectangle to match the user's selections.
+    }
+
+    /// <summary>
+    /// Sets the action to add a speech bubble to the canvas.
+    /// </summary>
+    public void SpeechBubble()
+    {
+        actionHandler.SetCurrentAction(EditAction.AddBubble);
+    }
+
+    /// <summary>
+    /// Sets the action to blur an area on the canvas.
+    /// </summary>
+    public void Blur()
+    {
+        actionHandler.SetCurrentAction(EditAction.DrawBlur);
+    }
+
+    /// <summary>
+    /// Sets the action to paint on the canvas with a brush tool.
+    /// </summary>
+    public void Brush()
+    {
+        actionHandler.SetCurrentAction(EditAction.BrushPainting);
+    }
+
+    /// <summary>
+    /// Initiates text recognition on the current canvas.
+    /// </summary>
+    public void RecognizeText()
+    {
+        var textRecognitionHandler = new TextRecognitionHandler(drawableCanvas);
+        textRecognitionHandler.StartRecognizeFromImage();
+    }
+
+    /// <summary>
+    /// Changes the font family for the selected text or speech bubble element.
+    /// </summary>
+    /// <param name="selectedFontFamily">The new font family to apply.</param>
+    public void ChangeFontFamily(FontFamily selectedFontFamily)
+    {
+        SelectedFontFamily = selectedFontFamily;
+        var typeface = GetCurrentTypeface();
+        if (selectionHandler.HasSelectedElement())
         {
-            drawableCanvas = canvas;
-
-            actionHandler = new CanvasActionHandler(drawableCanvas);
-            editingHandler = new CanvasEditingHandler(drawableCanvas);
-            savingHandler = new CanvasSavingHandler(drawableCanvas);
-            selectionHandler = new CanvasSelectionHandler(drawableCanvas, editingHandler); // Zmodyfikowane przekazywanie
-        }
-
-        // Zdarzenia myszy przekierowane do odpowiednich handlerów
-        public void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            selectionHandler.HandleLeftButtonDown(e);
-            actionHandler.HandleLeftButtonDown(e);
-        }
-
-        public void Canvas_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            selectionHandler.HandleDoubleClick(e);
-        }
-
-        public void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            selectionHandler.HandleLeftButtonUp(e);
-            actionHandler.HandleLeftButtonUp(e);
-        }
-
-        public void Canvas_MouseMove(object sender, MouseEventArgs e)
-        {
-            selectionHandler.HandleMouseMove(e);
-            actionHandler.HandleMouseMove(e);
-        }
-
-        public void CommandBinding_DeleteExecuted()
-        {
-            selectionHandler.DeleteSelectedElement();
-        }
-
-        // Metody obsługi przycisków i innych akcji
-        public void DrawArrow()
-        {
-            actionHandler.SetCurrentAction(EditAction.DrawArrow);
-            UpdateDrawingColorAndThickness();
-        }
-
-        public void DrawRect()
-        {
-            actionHandler.SetCurrentAction(EditAction.DrawRectangle);
-            UpdateDrawingColorAndThickness();
-        }
-
-        public void AddText()
-        {
-            actionHandler.SetCurrentAction(EditAction.AddText);
-        }
-
-        public void Save()
-        {
-            savingHandler.SaveCanvasToFile();
-        }
-
-        public void SavePdf()
-        {
-            savingHandler.SaveCanvasToPdfFile();
-        }
-
-        public string SaveFast()
-        {
-            return savingHandler.SaveCanvasToFileFast();
-        }
-
-        private void UpdateDrawingColorAndThickness()
-        {
-            // Aktualizacja koloru i grubości strzałki
-            // Analogicznie do poprzedniej implementacji
-        }
-
-        public void SpeechBubble()
-        {
-            actionHandler.SetCurrentAction(EditAction.AddBubble);
-        }
-
-        public void Blur()
-        {
-            actionHandler.SetCurrentAction(EditAction.DrawBlur);
-        }
-
-        public void Brush()
-        {
-            actionHandler.SetCurrentAction(EditAction.BrushPainting);
-        }
-
-        public void RecognizeText()
-        {
-            var textRecognitionHandler = new TextRecognitionHandler(drawableCanvas);
-            textRecognitionHandler.StartRecognizeFromImage();
-        }
-
-        public void ChangeFontFamily(FontFamily selectedFontFamily)
-        {
-            SelectedFontFamily = selectedFontFamily;
-            var typeface = GetCurrentTypeface();
-            if (selectionHandler.HasSelectedElement())
+            var selectedElement = selectionHandler.GetSelectedElement();
+            if (selectedElement is DrawableText text)
             {
-                var selectedElement = selectionHandler.GetSelectedElement();
-                if (selectedElement is DrawableText text)
-                {
-                    text.Typeface = typeface;
-                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
-                }
-                if (selectedElement is DrawableSpeechBubble speechBubble)
-                {
-                    speechBubble.Typeface = typeface;
-                    drawableCanvas.InvalidateVisual(); // Odśwież płótno, aby zobaczyć zmiany
-                }
+                text.Typeface = typeface;
+                drawableCanvas.InvalidateVisual();
+            }
+            if (selectedElement is DrawableSpeechBubble speechBubble)
+            {
+                speechBubble.Typeface = typeface;
+                drawableCanvas.InvalidateVisual();
             }
         }
+    }
 
-        public void ChangeFontSize(double fontSize)
+    /// <summary>
+    /// Changes the font size for the selected text or speech bubble element.
+    /// </summary>
+    /// <param name="fontSize">The new font size to apply.</param>
+    public void ChangeFontSize(double fontSize)
+    {
+        SelectedFontSize = fontSize;
+        if (selectionHandler.HasSelectedElement())
         {
-            SelectedFontSize = fontSize;
-            if (selectionHandler.HasSelectedElement())
+            var selectedElement = selectionHandler.GetSelectedElement();
+            if (selectedElement is DrawableText text)
             {
-                var selectedElement = selectionHandler.GetSelectedElement();
-                if (selectedElement is DrawableText text)
-                {
-                    text.FontSize = SelectedFontSize;
-                    drawableCanvas.InvalidateVisual(); 
-                }
-                if (selectedElement is DrawableSpeechBubble speechBubble)
-                {
-                    speechBubble.FontSize = SelectedFontSize;
-                    drawableCanvas.InvalidateVisual(); 
-                }
+                text.FontSize = SelectedFontSize;
+                drawableCanvas.InvalidateVisual();
+            }
+            if (selectedElement is DrawableSpeechBubble speechBubble)
+            {
+                speechBubble.FontSize = SelectedFontSize;
+                drawableCanvas.InvalidateVisual();
             }
         }
+    }
 
-        public void ChangeColor(Color color)
+    /// <summary>
+    /// Changes the color for the selected element.
+    /// </summary>
+    /// <param name="color">The new color to apply.</param>
+    public void ChangeColor(Color color)
+    {
+        SelectedColor = color;
+        if (selectionHandler.HasSelectedElement())
         {
-            SelectedColor = color;
-            if (selectionHandler.HasSelectedElement())
+            var selectedElement = selectionHandler.GetSelectedElement();
+            if (selectedElement is DrawableText text)
             {
-                var selectedElement = selectionHandler.GetSelectedElement();
-                if (selectedElement is DrawableText text)
+                text.Color = SelectedColor;
+                drawableCanvas.InvalidateVisual();
+            }
+            if (selectedElement is DrawableSpeechBubble speechBubble)
+            {
+                speechBubble.Brush = new SolidColorBrush(SelectedColor);
+                drawableCanvas.InvalidateVisual();
+            }
+            if (selectedElement is DrawableRectangle rectangle)
+            {
+                rectangle.Color = SelectedColor;
+                drawableCanvas.InvalidateVisual();
+            }
+            if (selectedElement is DrawableBrush brush)
+            {
+                brush.Color = SelectedColor;
+                drawableCanvas.InvalidateVisual();
+            }
+            if (selectedElement is DrawableArrow arrow)
+            {
+                arrow.Color = SelectedColor;
+                drawableCanvas.InvalidateVisual();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Changes the thickness of the arrow or rectangle for the selected element.
+    /// </summary>
+    /// <param name="comboBoxArrowThickness">The new thickness value to apply.</param>
+    public void ChangeArrowThickness(double comboBoxArrowThickness)
+    {
+        ArrowThickness = comboBoxArrowThickness;
+        if (selectionHandler.HasSelectedElement())
+        {
+            var selectedElement = selectionHandler.GetSelectedElement();
+            if (selectedElement != null)
+            {
+                if (selectedElement is DrawableArrow arrow)
                 {
-                    text.Color = SelectedColor;
-                    drawableCanvas.InvalidateVisual(); 
-                }
-                if (selectedElement is DrawableSpeechBubble speechBubble)
-                {
-                    speechBubble.Brush = new SolidColorBrush(SelectedColor);
-                    drawableCanvas.InvalidateVisual(); 
+                    arrow.Thickness = ArrowThickness;
+                    drawableCanvas.InvalidateVisual();
                 }
                 if (selectedElement is DrawableRectangle rectangle)
                 {
-                    rectangle.Color = SelectedColor;
+                    rectangle.Thickness = ArrowThickness;
                     drawableCanvas.InvalidateVisual();
                 }
                 if (selectedElement is DrawableBrush brush)
                 {
-                    brush.Color = SelectedColor;
-                    drawableCanvas.InvalidateVisual();
-                }
-                if (selectedElement is DrawableArrow arrow)
-                {
-                    arrow.Color = SelectedColor;
+                    brush.thickness = ArrowThickness;
                     drawableCanvas.InvalidateVisual();
                 }
             }
         }
+    }
 
-        public void ChangeArrowThickness(double comboBoxArrowThickness)
+    /// <summary>
+    /// Changes the transparency level of the selected element.
+    /// </summary>
+    /// <param name="transparency">The new transparency level to apply.</param>
+    public void ChangeTransparency(double transparency)
+    {
+        Transparency = transparency;
+        if (selectionHandler.HasSelectedElement())
         {
-            ArrowThickness = comboBoxArrowThickness;
-            if (selectionHandler.HasSelectedElement())
+            var selectedElement = selectionHandler.GetSelectedElement();
+            if (selectedElement != null)
             {
-                var selectedElement = selectionHandler.GetSelectedElement();
-                if (selectedElement != null)
+                if (selectedElement is DrawableBrush brush)
                 {
-                    if (selectedElement is DrawableArrow arrow)
-                    {
-                        arrow.Thickness = ArrowThickness;
-                        drawableCanvas.InvalidateVisual(); 
-                    }
-                    if (selectedElement is DrawableRectangle rectangle)
-                    {
-                        rectangle.Thickness = ArrowThickness;
-                        drawableCanvas.InvalidateVisual(); 
-                    }
-                    if (selectedElement is DrawableBrush brush)
-                    {
-                        brush.thickness = ArrowThickness;
-                        drawableCanvas.InvalidateVisual();
-                    }
+                    brush.transparency = Transparency;
+                    drawableCanvas.InvalidateVisual();
+                }
+                if (selectedElement is DrawableRectangle rectangle)
+                {
+                    rectangle.Transparency = Transparency;
+                    drawableCanvas.InvalidateVisual();
                 }
             }
         }
+    }
 
-        public void ChangeTransparency(double transparency)
-        {
-            Transparency = transparency;
-            if (selectionHandler.HasSelectedElement())
-            {
-                var selectedElement = selectionHandler.GetSelectedElement();
-                if (selectedElement != null)
-                {
-                    if (selectedElement is DrawableBrush brush)
-                    {
-                        brush.transparency = Transparency;
-                        drawableCanvas.InvalidateVisual();
-                    }
-                    if (selectedElement is DrawableRectangle rectangle)
-                    {
-                        rectangle.Transparency = Transparency;
-                        drawableCanvas.InvalidateVisual();
-                    }
-                }
-            }
-        }
+    /// <summary>
+    /// Gets the current selected color.
+    /// </summary>
+    /// <returns>The currently selected color.</returns>
+    public static Color GetCurrentColor()
+    {
+        return SelectedColor;
+    }
 
-        public static Color GetCurrentColor()
-        {
-            return SelectedColor;
-        }
+    /// <summary>
+    /// Gets the current typeface based on the selected font family.
+    /// </summary>
+    /// <returns>The current typeface.</returns>
+    public static Typeface GetCurrentTypeface()
+    {
+        return new Typeface(SelectedFontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
+    }
 
-        public static Typeface GetCurrentTypeface()
-        {
-            return new Typeface(SelectedFontFamily, FontStyles.Normal, FontWeights.Normal, FontStretches.Normal);
-        }
+    /// <summary>
+    /// Gets the current selected font family.
+    /// </summary>
+    /// <returns>The current font family.</returns>
+    public static FontFamily GetCurrentFontFamily()
+    {
+        return SelectedFontFamily;
+    }
 
-        public static FontFamily GetCurrentFontFamily()
-        {
-            return SelectedFontFamily;
-        }
+    /// <summary>
+    /// Gets the current selected font size.
+    /// </summary>
+    /// <returns>The current font size.</returns>
+    public static double GetCurrentFontSize()
+    {
+        return SelectedFontSize;
+    }
 
-        public static double GetCurrentFontSize()
-        {
-            return SelectedFontSize;
-        }
+    /// <summary>
+    /// Gets the current thickness for drawing arrows or rectangles.
+    /// </summary>
+    /// <returns>The current thickness.</returns>
+    public static double GetCurrentThickness()
+    {
+        return ArrowThickness;
+    }
 
-        public static double GetCurrentThickness()
-        {
-            return ArrowThickness;
-        }
+    /// <summary>
+    /// Gets the current transparency level.
+    /// </summary>
+    /// <returns>The current transparency level.</returns>
+    public static double GetCurrentTransparency()
+    {
+        return Transparency;
+    }
 
-        public static double GetCurrentTransparency()
-        {
-            return Transparency;
-        }
+    /// <summary>
+    /// Placeholder for editing text functionality.
+    /// </summary>
+    public void EditText()
+    {
+        throw new System.NotImplementedException();
+    }
 
-        public void EditText()
-        {
-            throw new System.NotImplementedException();
-        }
+    /// <summary>
+    /// Executes the copy command, copying the current selection.
+    /// </summary>
+    public void CommandBinding_CopyExecuted()
+    {
+        actionHandler.HandleCopy();
+    }
 
-        public void CommandBinding_CopyExecuted()
-        {
-            actionHandler.HandleCopy();
-        }
-
-        public void CommandBinding_PasteExecuted()
-        {
-            actionHandler.HandlePaste();
-        }
+    /// <summary>
+    /// Executes the paste command, pasting the last copied selection onto the canvas.
+    /// </summary>
+    public void CommandBinding_PasteExecuted()
+    {
+        actionHandler.HandlePaste();
     }
 }

@@ -10,10 +10,18 @@
         Background="Transparent"
         Title="AreaSelector">
 
+    <!-- Main Grid to handle user interactions for selecting an area -->
     <Grid MouseDown="Grid_MouseDown" 
           MouseMove="Grid_MouseMove" 
           MouseUp="Grid_MouseUp" 
           Background="#22FFFFFF">
-        <!-- Lekko białe tło -->
+        <!-- 
+            MouseDown: Initiates the selection
+            MouseMove: Updates the selection rectangle as the mouse moves
+            MouseUp: Finalizes the selected area
+
+            Background: The translucent white (#22FFFFFF) provides a visible effect
+            to indicate the grid that the user is interacting with.
+          -->
     </Grid>
 </Window>

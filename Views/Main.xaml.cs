@@ -198,19 +198,6 @@ public partial class Main : Window
     }
 
     /// <summary>
-    /// Closes the popups for recording and screenshot if the window is deactivated.
-    /// </summary>
-    private void Window_Deactivated(object sender, EventArgs e)
-    {
-        var viewModel = DataContext as MainViewModel;
-        if (viewModel != null)
-        {
-            viewModel.IsRecordPopupOpen = false;
-            viewModel.IsScreenshotPopupOpen = false;
-        }
-    }
-
-    /// <summary>
     /// Checks if any Expander control is expanded.
     /// </summary>
     /// <returns>True if any Expander is expanded, otherwise false.</returns>

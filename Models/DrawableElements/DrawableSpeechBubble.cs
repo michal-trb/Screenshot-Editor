@@ -1,179 +1,234 @@
-﻿using System;
+﻿namespace screenerWpf.Models.DrawableElements;
+
+using System;
 using System.Windows;
 using System.Windows.Media;
 
-namespace screenerWpf.Models.DrawableElements
+/// <summary>
+/// Represents a speech bubble drawable element with a resizable bubble and tail.
+/// </summary>
+public class DrawableSpeechBubble : DrawableWithHandles
 {
-    public class DrawableSpeechBubble : DrawableWithHandles
+    /// <summary>
+    /// Gets or sets the position of the speech bubble.
+    /// </summary>
+    public Point Position { get; set; }
+
+    /// <summary>
+    /// Gets or sets the size of the speech bubble.
+    /// </summary>
+    public Size Size { get; set; }
+
+    /// <summary>
+    /// Gets or sets the text displayed within the speech bubble.
+    /// </summary>
+    public string Text { get; set; }
+
+    /// <summary>
+    /// Gets or sets the position of the tail end point.
+    /// </summary>
+    public Point EndTailPoint { get; set; }
+
+    /// <summary>
+    /// Gets or sets the font size used in the speech bubble.
+    /// </summary>
+    public double FontSize { get; set; }
+
+    /// <summary>
+    /// Gets or sets the typeface used for the text in the speech bubble.
+    /// </summary>
+    public Typeface Typeface { get; set; }
+
+    /// <summary>
+    /// Gets or sets the brush used to paint the text and bubble.
+    /// </summary>
+    public Brush Brush { get; set; }
+
+    private bool isTailBeingDragged = false;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DrawableSpeechBubble"/> class.
+    /// </summary>
+    public DrawableSpeechBubble() : base(1)
     {
-        public Point Position { get; set; }
-        public Size Size { get; set; }
-        public string Text { get; set; }
-        public Point EndTailPoint { get; set; } // Pozycja końca ogonka
-        public double FontSize { get; set; }
-        public Typeface Typeface { get; set; }
-        public Brush Brush { get; set; }
+    }
 
-        public bool isTailBeingDragged = false;
+    /// <summary>
+    /// Draws the speech bubble, including its body and tail, as well as the contained text.
+    /// </summary>
+    /// <param name="context">The drawing context used for rendering the speech bubble.</param>
+    public override void Draw(DrawingContext context)
+    {
+        // Setting minimum size constraints
+        double minWidth = 100.0;
+        double minHeight = 50.0;
 
-        public DrawableSpeechBubble() : base(1)
+        // Formatting the text
+        FormattedText formattedText = new FormattedText(
+            Text,
+            System.Globalization.CultureInfo.CurrentCulture,
+            FlowDirection.LeftToRight,
+            Typeface,
+            FontSize,
+            Brush);
+
+        Size textSize = new Size(formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
+
+        // Adjusting bubble size based on text
+        double bubbleWidth = Math.Max(minWidth, textSize.Width + 20);
+        double bubbleHeight = Math.Max(minHeight, textSize.Height + 20);
+
+        Size = new Size(bubbleWidth, bubbleHeight);
+        Rect rect = new Rect(Position, Size);
+
+        // Draw bubble tail
+        DrawSpeechBubbleTail(context, rect, EndTailPoint);
+
+        // Draw bubble body
+        double cornerRadius = 10.0;
+        context.DrawRoundedRectangle(Brushes.White, new Pen(Brushes.Black, 1), rect, cornerRadius, cornerRadius);
+
+        // Draw text
+        Point textPosition = new Point(Position.X + 10, Position.Y + 10);
+        context.DrawText(formattedText, textPosition);
+
+        // Draw selection handles if selected
+        if (IsSelected)
         {
+            UpdateHandlePoints();
+            DrawSelectionHandles(context);
+        }
+    }
 
+    /// <summary>
+    /// Draws the tail of the speech bubble.
+    /// </summary>
+    /// <param name="context">The drawing context used for rendering the tail.</param>
+    /// <param name="bubbleRect">The bubble rectangle dimensions.</param>
+    /// <param name="endPoint">The end point of the tail.</param>
+    private void DrawSpeechBubbleTail(DrawingContext context, Rect bubbleRect, Point endPoint)
+    {
+        Point tailStart = new Point(bubbleRect.Left + bubbleRect.Width / 2, bubbleRect.Bottom - bubbleRect.Height / 2);
+
+        Vector direction = endPoint - tailStart;
+        direction.Normalize();
+
+        Vector orthogonal = new Vector(-direction.Y, direction.X) * (20 / 2);
+
+        Point leftPoint = tailStart + orthogonal;
+        Point rightPoint = tailStart - orthogonal;
+
+        StreamGeometry tailGeometry = new StreamGeometry();
+        using (StreamGeometryContext geometryContext = tailGeometry.Open())
+        {
+            geometryContext.BeginFigure(leftPoint, true, true);
+            geometryContext.LineTo(endPoint, true, false);
+            geometryContext.LineTo(rightPoint, true, false);
+            geometryContext.LineTo(leftPoint, true, false);
         }
 
-        public override void Draw(DrawingContext context)
+        context.DrawGeometry(Brushes.White, new Pen(Brushes.Black, 1), tailGeometry);
+    }
+
+    /// <summary>
+    /// Updates the handle points used for resizing or dragging the speech bubble.
+    /// </summary>
+    protected override void UpdateHandlePoints()
+    {
+        HandlePoints[0] = EndTailPoint;
+    }
+
+    /// <summary>
+    /// Performs a hit test to determine whether the point is within the speech bubble bounds or its tail.
+    /// </summary>
+    /// <param name="point">The point to test.</param>
+    /// <returns>True if the point is within the bounds; otherwise, false.</returns>
+    public override bool HitTest(Point point)
+    {
+        GeometryGroup geometryGroup = new GeometryGroup();
+        Rect bubbleRect = new Rect(Position, Size);
+        geometryGroup.Children.Add(new RectangleGeometry(bubbleRect));
+        geometryGroup.Children.Add(new LineGeometry(bubbleRect.BottomLeft, EndTailPoint));
+
+        return geometryGroup.FillContains(point) || IsNearHandle(point, EndTailPoint);
+    }
+
+    /// <summary>
+    /// Gets the bounding rectangle of the speech bubble.
+    /// </summary>
+    /// <returns>A <see cref="Rect"/> representing the bounds of the speech bubble.</returns>
+    public override Rect GetBounds()
+    {
+        FormattedText formattedText = new FormattedText(
+            Text,
+            System.Globalization.CultureInfo.CurrentCulture,
+            FlowDirection.LeftToRight,
+            new Typeface("Arial"),
+            12,
+            Brushes.Black);
+
+        Size textSize = new Size(formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
+        double width = Math.Max(Size.Width, textSize.Width);
+        double height = Size.Height + textSize.Height;
+
+        return new Rect(Position, new Size(width, height));
+    }
+
+    /// <summary>
+    /// Moves the speech bubble by the given vector.
+    /// </summary>
+    /// <param name="delta">The vector by which to move the speech bubble.</param>
+    public override void Move(Vector delta)
+    {
+        if (isTailBeingDragged)
         {
-            // Ustawienie minimalnych rozmiarów dymku
-            double minWidth = 100.0;
-            double minHeight = 50.0;
-
-            // Obliczanie wymiarów tekstu
-            FormattedText formattedText = new FormattedText(
-                Text,
-                System.Globalization.CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                Typeface,
-                FontSize, // Użyj aktualnego rozmiaru czcionki
-                Brush);
-            Size textSize = new Size(formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
-
-            // Dostosowanie rozmiaru dymku do tekstu
-            double bubbleWidth = Math.Max(minWidth, textSize.Width + 20); // Dodatkowe miejsce na marginesy
-            double bubbleHeight = Math.Max(minHeight, textSize.Height + 20);
-
-            // Ustawianie nowego rozmiaru dymku
-            Size = new Size(bubbleWidth, bubbleHeight);
-            Rect rect = new Rect(Position, Size);
-
-            // Rysowanie ogonka dymku
-            DrawSpeechBubbleTail(context, rect, EndTailPoint);
-
-            // Rysowanie prostokąta dymku
-            double cornerRadius = 10.0;
-            context.DrawRoundedRectangle(Brushes.White, new Pen(Brushes.Black, 1), rect, cornerRadius, cornerRadius);
-
-            // Rysowanie tekstu
-            Point textPosition = new Point(Position.X + 10, Position.Y + 10); // Dodatkowe marginesy
-            context.DrawText(formattedText, textPosition);
-
-            // Rysowanie ramki selekcyjnej, jeśli jest zaznaczony
-            if (IsSelected)
-            {
-                UpdateHandlePoints(); // Aktualizuj pozycje uchwytów
-                DrawSelectionHandles(context); // Narysuj uchwyty
-            }
+            EndTailPoint = new Point(EndTailPoint.X + delta.X, EndTailPoint.Y + delta.Y);
         }
-
-        private void DrawSpeechBubbleTail(DrawingContext context, Rect bubbleRect, Point endPoint)
+        else
         {
-            // Punkt startowy ogonka na środku dolnej krawędzi dymku
-            Point tailStart = new Point(bubbleRect.Left + bubbleRect.Width / 2, bubbleRect.Bottom - bubbleRect.Height / 2);
-
-            // Obliczenie wektora kierunkowego od środka ogonka do endPoint
-            Vector direction = endPoint - tailStart;
-            direction.Normalize();
-
-            // Obliczanie ortogonalnego wektora do kierunku
-            Vector orthogonal = new Vector(-direction.Y, direction.X) * (20 / 2); // 20 to szerokość ogonka
-
-            // Punkt lewy i prawy na krawędzi dymku
-            Point leftPoint = tailStart + orthogonal;
-            Point rightPoint = tailStart - orthogonal;
-
-            StreamGeometry tailGeometry = new StreamGeometry();
-            using (StreamGeometryContext geometryContext = tailGeometry.Open())
-            {
-                geometryContext.BeginFigure(leftPoint, true /* is filled */, true /* is closed */);
-                geometryContext.LineTo(endPoint, true /* is stroked */, false /* is smooth join */);
-                geometryContext.LineTo(rightPoint, true /* is stroked */, false /* is smooth join */);
-                geometryContext.LineTo(leftPoint, true /* is stroked */, false /* is smooth join */); // Zamknięcie kształtu
-            }
-
-            context.DrawGeometry(Brushes.White, new Pen(Brushes.Black, 1), tailGeometry);
+            Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
+            EndTailPoint = new Point(EndTailPoint.X + delta.X, EndTailPoint.Y + delta.Y);
         }
+    }
 
-        protected override void UpdateHandlePoints()
+    /// <summary>
+    /// Sets whether the tail is currently being dragged by the user.
+    /// </summary>
+    /// <param name="value">A boolean indicating whether the tail is being dragged.</param>
+    public void SetTailBeingDragged(bool value)
+    {
+        isTailBeingDragged = value;
+    }
+
+    /// <summary>
+    /// Creates a clone of the current speech bubble.
+    /// </summary>
+    /// <returns>A new instance of <see cref="DrawableSpeechBubble"/> with the same properties.</returns>
+    public override DrawableElement Clone()
+    {
+        return new DrawableSpeechBubble
         {
-            HandlePoints[0] = EndTailPoint; // Pozycja uchwytu na końcówce ogonka
-        }
+            Text = this.Text,
+            EndTailPoint = this.EndTailPoint,
+            Color = this.Color,
+            Position = new Point(Position.X + 5, Position.Y + 5),
+            Size = this.Size,
+            Scale = this.Scale,
+            FontSize = this.FontSize,
+            Typeface = this.Typeface,
+            Brush = this.Brush,
+        };
+    }
 
-        public override bool HitTest(Point point)
-        {
-            // Utwórz geometrię obejmującą zarówno ciało dymku, jak i ogonek
-            GeometryGroup geometryGroup = new GeometryGroup();
-            Rect bubbleRect = new Rect(Position, Size);
-            geometryGroup.Children.Add(new RectangleGeometry(bubbleRect));
-            geometryGroup.Children.Add(new LineGeometry(bubbleRect.BottomLeft, EndTailPoint)); // Przykładowa geometria dla ogonka
-
-            // Sprawdzenie, czy punkt znajduje się w obrębie geometrii
-            return geometryGroup.FillContains(point) || IsNearHandle(point, EndTailPoint);
-        }
-
-        public override Rect GetBounds()
-        {
-            // Tworzenie FormattedText dla wymiarów tekstu
-            FormattedText formattedText = new FormattedText(
-                Text,
-                System.Globalization.CultureInfo.CurrentCulture,
-                FlowDirection.LeftToRight,
-                new Typeface("Arial"),
-                12,
-                Brushes.Black);
-
-            // Uzyskiwanie rozmiaru tekstu
-            Size textSize = new Size(formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
-
-            // Obliczanie końcowych wymiarów prostokąta dymku
-            double width = Math.Max(Size.Width, textSize.Width);
-            double height = Size.Height + textSize.Height;
-
-            // Uwzględnienie pozycji dymku
-            return new Rect(Position, new Size(width, height));
-        }
-
-        public override void Move(Vector delta)
-        {
-            if (isTailBeingDragged)
-            {
-                // Przesuwanie tylko ogonka
-                EndTailPoint = new Point(EndTailPoint.X + delta.X, EndTailPoint.Y + delta.Y);
-            }
-            else
-            {
-                // Przesuwanie całego dymku
-                Position = new Point(Position.X + delta.X, Position.Y + delta.Y);
-
-                // Aktualizacja pozycji ogonka względem przesunięcia całego dymku
-                EndTailPoint = new Point(EndTailPoint.X + delta.X, EndTailPoint.Y + delta.Y);
-            }
-        }
-
-
-        public void SetTailBeingDragged(bool value)
-        {
-            isTailBeingDragged = value;
-        }
-
-        private bool IsNearHandle(Point point, Point handle)
-        {
-            double handleRadius = 10; // Promień, w którym punkt jest uznawany za bliski uchwytowi
-            return (point - handle).Length <= handleRadius;
-        }
-
-        public override DrawableElement Clone()
-        {
-            return new DrawableSpeechBubble
-            {
-                Text = this.Text,
-                EndTailPoint = this.EndTailPoint,
-                Color = this.Color,
-                Position = new Point(Position.X + 5, Position.Y + 5),
-                Size = this.Size,
-                Scale = this.Scale,
-                FontSize = this.FontSize,
-                Typeface = this.Typeface,
-                Brush = this.Brush,
-            };
-        }
+    /// <summary>
+    /// Determines whether a given point is near a specific handle point.
+    /// </summary>
+    /// <param name="point">The point to be tested.</param>
+    /// <param name="handle">The position of the handle point.</param>
+    /// <returns>True if the point is near the handle point; otherwise, false.</returns>
+    private bool IsNearHandle(Point point, Point handle)
+    {
+        double handleRadius = 10;
+        return (point - handle).Length <= handleRadius;
     }
 }

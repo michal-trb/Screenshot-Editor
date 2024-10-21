@@ -1,10 +1,14 @@
-﻿using System.Windows.Media;
+﻿namespace screenerWpf.Models;
 
-namespace screenerWpf.Models
+using System.Windows.Media;
+
+/// <summary>
+/// Represents a color information object that holds a color brush.
+/// </summary>
+public class ColorInfo
 {
-    public class ColorInfo
-    {
-        public required SolidColorBrush ColorBrush { get; set; }
-    }
-
+    /// <summary>
+    /// Gets or sets the color brush used for rendering.
+    /// </summary>
+    public required SolidColorBrush ColorBrush { get; set; }
 }

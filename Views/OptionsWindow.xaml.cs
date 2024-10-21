@@ -1,82 +1,49 @@
-﻿using screenerWpf.ViewModels;
-using System.Linq;
+﻿namespace screenerWpf.Views;
+
+using screenerWpf.ViewModels;
 using System;
 using System.Windows;
 
-namespace screenerWpf.Views
+/// <summary>
+/// Interaction logic for OptionsWindow.xaml.
+/// This window allows users to configure application settings, such as changing themes and saving preferences.
+/// </summary>
+public partial class OptionsWindow : Window
 {
-    public partial class OptionsWindow : Window
+    /// <summary>
+    /// Initializes a new instance of the <see cref="OptionsWindow"/> class.
+    /// Sets the initial theme and binds the provided ViewModel.
+    /// </summary>
+    /// <param name="optionsViewModel">ViewModel to bind data to the view.</param>
+    public OptionsWindow(OptionsViewModel optionsViewModel)
     {
-        public OptionsWindow(OptionsViewModel optionsViewModel)
+        InitializeComponent();
+        DataContext = optionsViewModel;
+
+        var savedTheme = Properties.Settings.Default.Theme;
+        if (!string.IsNullOrEmpty(savedTheme))
         {
-            InitializeComponent();
-            DataContext = optionsViewModel;
-            var savedTheme = Properties.Settings.Default.Theme;
-            
-            //if (!string.IsNullOrEmpty(savedTheme))
-            //{
-            //    themeToggleButton.IsChecked = savedTheme == "Dark";
-            //}
-
-            if (!string.IsNullOrEmpty(savedTheme))
-            {
-                if (savedTheme == "Dark")
-                {
-                    ChangeTheme("Views\\DarkStyle.xaml");
-                }
-                else
-                {
-                    ChangeTheme("Views\\LightStyle.xaml");
-                }
-            }
-        }
-
-        private void ThemeToggleButton_Checked(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("Views\\DarkStyle.xaml");
-            Properties.Settings.Default.Theme = "Dark";
-            Properties.Settings.Default.Save();
-        }
-
-        private void ThemeToggleButton_Unchecked(object sender, RoutedEventArgs e)
-        {
-            ChangeTheme("Views\\LightStyle.xaml");
-            Properties.Settings.Default.Theme = "Light";
-            Properties.Settings.Default.Save();
-        }
-
-        private void ChangeTheme(string themePath)
-        {
-            var newDict = new ResourceDictionary { Source = new Uri(themePath, UriKind.Relative) };
-            Application.Current.Resources.MergedDictionaries[1] = newDict;
-        }
-
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            var viewModel = DataContext as OptionsViewModel;
-            viewModel?.SaveSettings();
-            this.Close();
-        }
-
-        private void ChangeTheme(bool dark)
-        {
-            var appResources = Application.Current.Resources.MergedDictionaries;
-            var lightThemePath = @"pack://application:,,,/Views/LightStyle.xaml";
-            var darkThemePath = @"pack://application:,,,/Views/DarkStyle.xaml";
-
-            var currentTheme = appResources.FirstOrDefault(rd => rd.Source != null && (rd.Source.OriginalString.Contains("LightStyle") || rd.Source.OriginalString.Contains("DarkStyle")));
-
-            if (dark)
-            {
-                appResources.Remove(currentTheme);
-                appResources.Add(new ResourceDictionary { Source = new Uri(darkThemePath, UriKind.Absolute) });
-            }
-            else
-            {
-                appResources.Remove(currentTheme);
-                appResources.Add(new ResourceDictionary { Source = new Uri(lightThemePath, UriKind.Absolute) });
-            }
+            ChangeTheme(savedTheme == "Dark" ? "Views\\DarkStyle.xaml" : "Views\\LightStyle.xaml");
         }
     }
-}
 
+    /// <summary>
+    /// Changes the theme of the application by loading the specified resource dictionary.
+    /// </summary>
+    /// <param name="themePath">The path to the theme's resource dictionary.</param>
+    private void ChangeTheme(string themePath)
+    {
+        var newDict = new ResourceDictionary { Source = new Uri(themePath, UriKind.Relative) };
+        Application.Current.Resources.MergedDictionaries[1] = newDict;
+    }
+
+    /// <summary>
+    /// Saves the current settings when the save button is clicked.
+    /// </summary>
+    private void SaveButton_Click(object sender, RoutedEventArgs e)
+    {
+        var viewModel = DataContext as OptionsViewModel;
+        viewModel?.SaveSettings();
+        this.Close();
+    }
+}
