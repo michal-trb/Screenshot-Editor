@@ -117,7 +117,6 @@ This project is licensed under the MIT License. See the LICENSE file for details
 ## Credits
 
 - **[ScreenRecorderLib](https://github.com/sskodje/ScreenRecorderLib)** for enabling screen recording functionality.
-- **[Tesseract OCR](https://github.com/tesseract-ocr/tesseract)** for the text recognition feature.
 - **[MediaToolkit](https://github.com/AydinAdn/MediaToolkit)** for video thumbnail generation.
 
 Author Michał Trybulec
