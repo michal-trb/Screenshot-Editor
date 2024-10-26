@@ -3,6 +3,7 @@
 using global::Helpers.DpiHelper;
 using System.Drawing;
 using System.Windows;
+using System.Windows.Forms;
 using Size = System.Drawing.Size;
 
 /// <summary>
@@ -16,15 +17,12 @@ public class FullScreenshot
     /// <returns>A <see cref="Bitmap"/> containing the screenshot of the entire primary screen.</returns>
     public static Bitmap CaptureScreen()
     {
-        // Get the DPI scaling factor
-        var presentationSource = PresentationSource.FromVisual(Application.Current.MainWindow);
-
         DpiHelper.UpdateDpi();
         var currentDpi = DpiHelper.CurrentDpi;
 
         // Calculate the width and height based on DPI
-        int screenWidth = (int)(SystemParameters.PrimaryScreenWidth * currentDpi.DpiX / 96);
-        int screenHeight = (int)(SystemParameters.PrimaryScreenHeight * currentDpi.DpiY / 96);
+        int screenWidth = (int)(SystemParameters.VirtualScreenWidth * currentDpi.DpiX / 96);
+        int screenHeight = (int)(SystemParameters.VirtualScreenHeight * currentDpi.DpiY / 96);
 
         // Create a bitmap with the screen dimensions
         Bitmap bitmap = new Bitmap(screenWidth, screenHeight);
@@ -32,7 +30,13 @@ public class FullScreenshot
         // Capture the screen onto the bitmap
         using (Graphics g = Graphics.FromImage(bitmap))
         {
-            g.CopyFromScreen(0, 0, 0, 0, new Size(screenWidth, screenHeight));
+            g.CopyFromScreen(
+                SystemInformation.VirtualScreen.X,
+                SystemInformation.VirtualScreen.Y,
+                0,
+                0,
+                SystemInformation.VirtualScreen.Size,
+                CopyPixelOperation.SourceCopy);
         }
 
         return bitmap;
