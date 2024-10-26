@@ -1,9 +1,12 @@
 ﻿namespace screenerWpf.Services.CaptureServices;
 
+using global::Helpers.DpiHelper;
 using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Forms;
+using Size = System.Drawing.Size;
 
 /// <summary>
 /// Provides methods to capture screenshots of the entire screen or specific areas.
@@ -28,24 +31,29 @@ public class AreaScreenshot
     /// <returns>A <see cref="Bitmap"/> representing the entire screen.</returns>
     public static Bitmap CaptureScreen()
     {
-        IntPtr desktopWindow = GetDesktopWindow();
-        IntPtr desktopDC = GetWindowDC(desktopWindow);
+        DpiHelper.UpdateDpi();
+        var currentDpi = DpiHelper.CurrentDpi;
 
-        // Get the dimensions of the entire virtual screen.
-        int screenWidth = Convert.ToInt32(SystemParameters.VirtualScreenWidth);
-        int screenHeight = Convert.ToInt32(SystemParameters.VirtualScreenHeight);
+        // Calculate the width and height based on DPI
+        int screenWidth = (int)(SystemParameters.VirtualScreenWidth * currentDpi.DpiX / 96);
+        int screenHeight = (int)(SystemParameters.VirtualScreenHeight * currentDpi.DpiY / 96);
 
-        Bitmap screenImage = new Bitmap(screenWidth, screenHeight);
+        // Create a bitmap with the screen dimensions
+        Bitmap bitmap = new Bitmap(screenWidth, screenHeight);
 
-        using (Graphics g = Graphics.FromImage(screenImage))
+        // Capture the screen onto the bitmap
+        using (Graphics g = Graphics.FromImage(bitmap))
         {
-            IntPtr gHdc = g.GetHdc();
-            BitBlt(gHdc, 0, 0, screenWidth, screenHeight, desktopDC, 0, 0, CopyPixelOperation.SourceCopy);
-            g.ReleaseHdc(gHdc);
+            g.CopyFromScreen(
+                SystemInformation.VirtualScreen.X,
+                SystemInformation.VirtualScreen.Y,
+                0,
+                0,
+                SystemInformation.VirtualScreen.Size,
+                CopyPixelOperation.SourceCopy);
         }
 
-        ReleaseDC(desktopWindow, desktopDC);
-        return screenImage;
+        return bitmap;
     }
 
     /// <summary>
