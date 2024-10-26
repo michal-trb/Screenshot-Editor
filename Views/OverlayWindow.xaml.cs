@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Runtime.InteropServices;
 using System.Windows.Interop;
+using static screenerWpf.Sevices.CaptureServices.WindowScreenshot;
 
 /// <summary>
 /// A window that overlays the screen or a target window. It highlights areas of interest and manages a control window.
@@ -31,9 +32,9 @@ public partial class OverlayWindow : Window
     }
 
     /// <summary>
-    /// Creates an overlay window based on the provided rectangle dimensions.
+    /// Creates and displays an overlay window based on the provided rectangle, with DPI adjustments.
     /// </summary>
-    /// <param name="rect">The rectangle dimensions to use for creating the overlay.</param>
+    /// <param name="rect">The rectangle representing the area to overlay, with coordinates in screen space.</param>
     public void CreateOverlayFromRect(System.Drawing.Rectangle rect)
     {
         var dpiScale = VisualTreeHelper.GetDpi(this);
@@ -60,25 +61,11 @@ public partial class OverlayWindow : Window
     }
 
     /// <summary>
-    /// Updates the position and size of the overlay window based on the target window handle.
+    /// Updates the position and size of the overlay window based on the provided RECT, adjusting to ignore the window's shadow area if present.
     /// </summary>
-    /// <param name="targetWindowHandle">The handle of the window for which the overlay should adjust.</param>
-    public void UpdatePositionAndSize(IntPtr targetWindowHandle)
+    /// <param name="rect">The RECT structure representing the adjusted window boundaries excluding any shadow area.</param>
+    public void UpdatePositionAndSize(RECT rect)
     {
-        IntPtr desktopWindowHandle = GetDesktopWindow();
-
-        if (targetWindowHandle == desktopWindowHandle)
-        {
-            highlightBorder.Visibility = Visibility.Hidden;
-            return;
-        }
-        else
-        {
-            highlightBorder.Visibility = Visibility.Visible;
-        }
-
-        GetWindowRect(targetWindowHandle, out RECT rect);
-
         var dpiScale = VisualTreeHelper.GetDpi(this);
         var dpiFactorX = dpiScale.DpiScaleX;
         var dpiFactorY = dpiScale.DpiScaleY;
@@ -87,7 +74,7 @@ public partial class OverlayWindow : Window
         this.Top = rect.Top / dpiFactorY;
         this.Width = (rect.Right - rect.Left) / dpiFactorX;
         this.Height = (rect.Bottom - rect.Top) / dpiFactorY;
-        this.InvalidateVisual(); // Refreshes the overlay window.
+        this.InvalidateVisual();
     }
 
     /// <summary>
@@ -129,22 +116,10 @@ public partial class OverlayWindow : Window
     }
 
     [DllImport("user32.dll")]
-    private static extern IntPtr GetDesktopWindow();
-
-    [DllImport("user32.dll")]
-    static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
-    [DllImport("user32.dll")]
     static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
     [DllImport("user32.dll")]
     static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct RECT
-    {
-        public int Left, Top, Right, Bottom;
-    }
 
     private const int GWL_EXSTYLE = -20;
     private const int WS_EX_LAYERED = 0x80000;

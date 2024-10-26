@@ -27,7 +27,7 @@ public class WindowScreenshot
     }
 
     /// <summary>
-    /// Highlights and allows the user to select a window by clicking on it.
+    /// Highlights and allows the user to select a window by clicking on it, ignoring the window's shadow area if present.
     /// </summary>
     /// <returns>An <see cref="IntPtr"/> representing the handle of the selected window.</returns>
     private IntPtr HighlightAndSelectWindow()
@@ -46,10 +46,36 @@ public class WindowScreenshot
 
             if (currentWindowUnderCursor != lastWindowUnderCursor)
             {
-                overlay.UpdatePositionAndSize(currentWindowUnderCursor);
+                // Pobierz RECT okna, aby uwzględnić obszar cienia (shadow area)
+                RECT windowRect;
+                GetWindowRect(currentWindowUnderCursor, out windowRect);
+
+                // Użycie DwmGetWindowAttribute do uzyskania rozszerzonej ramki okna
+                RECT frameRect;
+                int result = DwmGetWindowAttribute(currentWindowUnderCursor, DWMWA_EXTENDED_FRAME_BOUNDS, out frameRect, Marshal.SizeOf(typeof(RECT)));
+
+                // Jeśli uzyskano ramkę rozszerzoną, dostosuj obwódkę, aby nie obejmowała cienia
+                if (result == 0) // 0 oznacza, że operacja DwmGetWindowAttribute zakończyła się sukcesem
+                {
+                    // Obliczamy wielkość cienia na podstawie różnicy między ramką rozszerzoną a rzeczywistym obszarem okna
+                    int shadowLeft = frameRect.Left - windowRect.Left;
+                    int shadowTop = frameRect.Top - windowRect.Top;
+                    int shadowRight = windowRect.Right - frameRect.Right;
+                    int shadowBottom = windowRect.Bottom - frameRect.Bottom;
+
+                    // Zmniejszenie obszaru do wyróżnienia o obszar cienia
+                    windowRect.Left += shadowLeft;
+                    windowRect.Top += shadowTop;
+                    windowRect.Right -= shadowRight;
+                    windowRect.Bottom -= shadowBottom;
+                }
+
+                // Aktualizacja pozycji i rozmiaru okna overlay z uwzględnieniem cienia okna
+                overlay.UpdatePositionAndSize(windowRect);
                 lastWindowUnderCursor = currentWindowUnderCursor;
             }
 
+            // Sprawdzenie, czy użytkownik kliknął lewy przycisk myszy (wybór okna)
             if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0)
             {
                 selectedWindow = currentWindowUnderCursor;
@@ -63,40 +89,37 @@ public class WindowScreenshot
         return selectedWindow;
     }
 
+
     /// <summary>
-    /// Captures a screenshot of the specified window using its handle.
+    /// Captures a screenshot of a specific window by its handle.
     /// </summary>
-    /// <param name="hWnd">The handle of the window to capture.</param>
-    /// <returns>A <see cref="Bitmap"/> containing the screenshot of the specified window.</returns>
+    /// <param name="hWnd">Handle to the window to capture.</param>
+    /// <returns>A Bitmap containing the captured image of the window.</returns>
     public static Bitmap CaptureWindow(IntPtr hWnd)
     {
-        RECT rect;
-        int size = Marshal.SizeOf(typeof(RECT));
-        DwmGetWindowAttribute(hWnd, DWMWA_EXTENDED_FRAME_BOUNDS, out rect, size);
+        var rect = GetWindowRectangle(hWnd);
+
+        if (rect.Left == 0 && rect.Top == 0 && rect.Right == 0 && rect.Bottom == 0)
+        {
+            GetWindowRect(hWnd, out rect);
+        }
 
         int width = rect.Right - rect.Left;
         int height = rect.Bottom - rect.Top;
 
+        // Utwórz bitmapę na podstawie wymiarów okna
         Bitmap bmp = new Bitmap(width, height, PixelFormat.Format32bppArgb);
         using (Graphics g = Graphics.FromImage(bmp))
         {
-            g.CopyFromScreen(rect.Left, rect.Top, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);
+            g.CopyFromScreen(rect.Left, rect.Top, 0, 0, new System.Drawing.Size(width, height), CopyPixelOperation.SourceCopy);
         }
+
         return bmp;
     }
 
-    [DllImport("user32.dll")]
-    private static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, uint nFlags);
-
-    [DllImport("user32.dll")]
-    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
-
     [DllImport("dwmapi.dll")]
-    private static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
+    public static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
 
-    private const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
-
-    [StructLayout(LayoutKind.Sequential)]
     public struct RECT
     {
         public int Left;
@@ -104,6 +127,46 @@ public class WindowScreenshot
         public int Right;
         public int Bottom;
     }
+
+    [Flags]
+    private enum DwmWindowAttribute : uint
+    {
+        DWMWA_NCRENDERING_ENABLED = 1,
+        DWMWA_NCRENDERING_POLICY,
+        DWMWA_TRANSITIONS_FORCEDISABLED,
+        DWMWA_ALLOW_NCPAINT,
+        DWMWA_CAPTION_BUTTON_BOUNDS,
+        DWMWA_NONCLIENT_RTL_LAYOUT,
+        DWMWA_FORCE_ICONIC_REPRESENTATION,
+        DWMWA_FLIP3D_POLICY,
+        DWMWA_EXTENDED_FRAME_BOUNDS,
+        DWMWA_HAS_ICONIC_BITMAP,
+        DWMWA_DISALLOW_PEEK,
+        DWMWA_EXCLUDED_FROM_PEEK,
+        DWMWA_CLOAK,
+        DWMWA_CLOAKED,
+        DWMWA_FREEZE_REPRESENTATION,
+        DWMWA_LAST
+    }
+
+    /// <summary>
+    /// Gets the extended frame bounds of the given window, including any shadows or frame extensions.
+    /// </summary>
+    /// <param name="hWnd">Handle of the window to retrieve the frame bounds.</param>
+    /// <returns>A <see cref="RECT"/> structure containing the dimensions of the extended frame bounds of the window.</returns>
+    public static RECT GetWindowRectangle(IntPtr hWnd)
+    {
+        RECT rect;
+
+        int size = Marshal.SizeOf(typeof(RECT));
+        DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out rect, size);
+
+        return rect;
+    }
+
+    private const int DWMWA_EXTENDED_FRAME_BOUNDS = 9;
+    [DllImport("user32.dll")]
+    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
 
     [DllImport("user32.dll")]
     private static extern bool GetCursorPos(out POINT lpPoint);
