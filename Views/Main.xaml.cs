@@ -268,10 +268,7 @@ public partial class Main : Window
     /// <param name="element">The ImageEditorControl element used to determine the new size.</param>
     private void AdjustWindowSize(ImageEditorControl element)
     {
-        double newWidth = element.Width + 40;
-        double newHeight = element.Height + 40;
-
-        this.Width = Math.Max(this.Width, newWidth);
-        this.Height = Math.Max(this.Height, newHeight);
+        this.Width = element.Width + 40;
+        this.Height = element.Height + 40;
     }
 }
