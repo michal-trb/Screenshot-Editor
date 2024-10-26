@@ -96,7 +96,6 @@
             <!-- Capture Fullscreen Screenshot Button -->
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Button
-                    Margin="3,3,0,3"
                     Command="{Binding CaptureFullCommand}"
                     FontFamily="Segoe UI Semibold"
                     Style="{DynamicResource RoundedButtonStyle}"
@@ -108,7 +107,6 @@
             <!-- Capture Area Screenshot Button -->
             <StackPanel Grid.Column="1" Orientation="Horizontal">
                 <Button
-                    Margin="3,3,0,3"
                     Command="{Binding CaptureAreaCommand}"
                     FontFamily="Segoe UI Semibold"
                     Style="{DynamicResource RoundedButtonStyle}"
@@ -120,7 +118,6 @@
             <!-- Capture Window Screenshot Button -->
             <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <Button
-                    Margin="3,3,0,3"
                     Command="{Binding CaptureWindowCommand}"
                     FontFamily="Segoe UI Semibold"
                     Style="{DynamicResource RoundedButtonStyle}"
@@ -132,7 +129,6 @@
             <!-- Record Fullscreen Video Button -->
             <StackPanel Grid.Column="4" Orientation="Horizontal">
                 <Button
-                    Margin="3,3,0,3"
                     Command="{Binding RecordVideoCommand}"
                     FontFamily="Segoe UI Semibold"
                     Style="{DynamicResource RoundedButtonStyle}"
@@ -144,7 +140,6 @@
             <!-- Record Area Video Button -->
             <StackPanel Grid.Column="5" Orientation="Horizontal">
                 <Button
-                    Margin="3,3,0,3"
                     Command="{Binding RecordAreaVideoCommand}"
                     FontFamily="Segoe UI Semibold"
                     Style="{DynamicResource RoundedButtonStyle}"

@@ -18,7 +18,7 @@
     <!-- Light grey for title bar -->
     <Color x:Key="Button800">#DDE1E6</Color>
     <!-- Light grey for buttons -->
-    <Color x:Key="Button600">#C5C9CF</Color>
+    <Color x:Key="Button600">#fafbfc</Color>
     <!-- Medium light grey for buttons -->
     <Color x:Key="Button500">#B2B6BC</Color>
     <!-- Slightly darker grey for buttons -->
