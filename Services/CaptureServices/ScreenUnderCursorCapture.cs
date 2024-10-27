@@ -1,8 +1,7 @@
 namespace screenerWpf.Services.CaptureServices;
 
-using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
+using System.Linq;
 using System.Windows.Forms;
 using global::Helpers.DpiHelper;
 
@@ -13,22 +12,28 @@ public static class ScreenUnderCursorCapture
         DpiHelper.UpdateDpi();
         var currentDpi = DpiHelper.CurrentDpi;
 
-        // Znajdź monitor, na którym znajduje się kursor
-        Screen screenWithCursor = Screen.FromPoint(cursorPosition);
+        var virtualScreenWidth = SystemInformation.VirtualScreen.Width;
+        var virtualScreenLeft = SystemInformation.VirtualScreen.Left;
 
-        // Oblicz rzeczywiste wymiary ekranu z uwzględnieniem DPI
-        int screenWidth = (int)(screenWithCursor.Bounds.Width * currentDpi.DpiX / 96);
-        int screenHeight = (int)(screenWithCursor.Bounds.Height * currentDpi.DpiY / 96);
+        var adjustedCursorPosition = new Point(
+            cursorPosition.X + virtualScreenLeft,
+            cursorPosition.Y
+        );
 
-        // Utwórz prostokąt reprezentujący obszar ekranu do przechwycenia
+        Screen targetScreen = Screen.AllScreens
+            .FirstOrDefault(screen => screen.Bounds.Contains(adjustedCursorPosition))
+            ?? Screen.PrimaryScreen;
+
+        int screenWidth = (int)(targetScreen.Bounds.Width * currentDpi.DpiX / 96);
+        int screenHeight = (int)(targetScreen.Bounds.Height * currentDpi.DpiY / 96);
+
         Rectangle captureArea = new Rectangle(
-            screenWithCursor.Bounds.X,
-            screenWithCursor.Bounds.Y,
+            targetScreen.Bounds.X - virtualScreenLeft, 
+            targetScreen.Bounds.Y,
             screenWidth,
             screenHeight
         );
 
-        // Użyj metody CaptureArea z klasy AreaScreenshot do przechwycenia ekranu
         return AreaScreenshot.CaptureArea(captureArea);
     }
 }
