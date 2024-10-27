@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Platforms>x64</Platforms>
@@ -15,7 +15,6 @@
     <None Remove="obj\**" />
     <Page Remove="obj\**" />
   </ItemGroup>
-
 
   <ItemGroup>
     <None Remove="Icons\arrow-left-64.png" />
@@ -227,5 +226,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
-
 </Project>

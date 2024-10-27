@@ -6,9 +6,13 @@ using System;
 using System.IO;
 using System.Windows;
 using screenerWpf.Properties;
-using screenerWpf.Sevices.CaptureServices;
 using screenerWpf.Services.CaptureServices;
 using screenerWpf.Views;
+using Point = System.Drawing.Point;
+using System.Windows.Forms;
+using System.Linq;
+using Application = System.Windows.Application;
+using screenerWpf.Sevices.CaptureServices;
 
 
 /// <summary>
@@ -63,6 +67,16 @@ public class ScreenCaptureService : IScreenCaptureService
     }
 
     /// <summary>
+    /// Captures a screenshot of the screen under the cursor.
+    /// </summary>
+    /// <param name="cursorPosition">The <see cref="Point"/> representing the cursor position.</param>
+    /// <returns>A <see cref="Bitmap"/> representing the captured screen under the cursor.</returns>
+    public Bitmap CaptureScreenUnderCursor(System.Drawing.Point cursorPosition)
+    {
+        return ScreenUnderCursorCapture.CaptureScreenUnderCursor(cursorPosition);
+    }
+
+    /// <summary>
     /// Starts recording the entire screen.
     /// </summary>
     public void StartRecording()
@@ -109,3 +123,4 @@ public class ScreenCaptureService : IScreenCaptureService
         return windowsScreenshot.CaptureSingleWindow();
     }
 }
+

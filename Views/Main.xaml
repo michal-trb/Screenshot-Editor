@@ -88,6 +88,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
@@ -126,8 +127,20 @@
                 </Button>
             </StackPanel>
 
+            <!-- Button to capture screen under cursor -->            
+            <StackPanel Grid.Column="3" Orientation="Horizontal">
+                <Button
+                    Command="{Binding CaptureScreenUnderCursorCommand}"
+                    FontFamily="Segoe UI Semibold"
+                    Style="{DynamicResource RoundedButtonStyle}">
+                    <Image Source="{DynamicResource ScreenshotCursor}" />
+                </Button>
+            </StackPanel>
+            
+            <Grid Grid.Column="4" />
+
             <!-- Record Fullscreen Video Button -->
-            <StackPanel Grid.Column="4" Orientation="Horizontal">
+            <StackPanel Grid.Column="5" Orientation="Horizontal">
                 <Button
                     Command="{Binding RecordVideoCommand}"
                     FontFamily="Segoe UI Semibold"
@@ -138,7 +151,7 @@
             </StackPanel>
 
             <!-- Record Area Video Button -->
-            <StackPanel Grid.Column="5" Orientation="Horizontal">
+            <StackPanel Grid.Column="6" Orientation="Horizontal">
                 <Button
                     Command="{Binding RecordAreaVideoCommand}"
                     FontFamily="Segoe UI Semibold"

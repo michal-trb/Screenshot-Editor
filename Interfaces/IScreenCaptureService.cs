@@ -21,6 +21,12 @@ public interface IScreenCaptureService
     Bitmap CaptureArea(Rectangle area);
 
     /// <summary>
+    /// Captures the screen under the cursor as a bitmap image.
+    /// </summary>
+    /// <returns>A <see cref="Bitmap"/> representing the captured screen under the cursor.</returns>
+    Bitmap CaptureScreenUnderCursor(System.Drawing.Point cursorPosition);
+
+    /// <summary>
     /// Starts recording the entire screen.
     /// </summary>
     void StartRecording();

@@ -1,4 +1,4 @@
-﻿namespace screenerWpf.Sevices.CaptureServices;
+﻿namespace screenerWpf.Services.CaptureServices;
 
 using global::Helpers.DpiHelper;
 using System.Drawing;

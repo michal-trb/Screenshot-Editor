@@ -1,4 +1,4 @@
-﻿namespace screenerWpf;
+namespace screenerWpf;
 
 using screenerWpf.Commands;
 using screenerWpf.Interfaces;
@@ -22,6 +22,7 @@ public class MainViewModel : INotifyPropertyChanged
 
     private readonly IScreenCaptureService screenCaptureService;
     private readonly IWindowService windowService;
+    private readonly ScreenSelector screenSelector;
 
     public ObservableCollection<LastScreenshot> LastScreenshots { get; private set; }
     public ObservableCollection<LastVideo> LastVideos { get; private set; }
@@ -29,6 +30,7 @@ public class MainViewModel : INotifyPropertyChanged
     public ICommand CaptureFullCommand { get; private set; }
     public ICommand CaptureAreaCommand { get; private set; }
     public ICommand CaptureWindowCommand { get; private set; }
+    public ICommand CaptureScreenUnderCursorCommand { get; private set; }
     public ICommand RecordVideoCommand { get; private set; }
     public ICommand RecordAreaVideoCommand { get; private set; }
 
@@ -42,6 +44,7 @@ public class MainViewModel : INotifyPropertyChanged
         CaptureFullCommand = new RelayCommand(async param => await ExecuteCaptureFullAsync());
         CaptureAreaCommand = new RelayCommand(async param => await ExecuteCaptureAreaAsync());
         CaptureWindowCommand = new RelayCommand(async param => await ExecuteCaptureWindowAsync());
+        CaptureScreenUnderCursorCommand = new RelayCommand(async param => await ExecuteCaptureScreenUnderCursorAsync());
         RecordVideoCommand = new RelayCommand(async param => await ExecuteRecordVideoAsync());
         RecordAreaVideoCommand = new RelayCommand(async param => await ExecuteAreaRecordVideoAsync());
 
@@ -99,6 +102,27 @@ public class MainViewModel : INotifyPropertyChanged
             if (!area.IsEmpty)
             {
                 var bitmap = screenCaptureService.CaptureArea(area);
+                await ShowEditorWindowAsync(bitmap);
+            }
+            else
+            {
+                RestoreMainWindow();
+            }
+        });
+    }
+
+    /// <summary>
+    /// Captures the screen under the cursor asynchronously and opens the editor window to display the capture.
+    /// </summary>
+    public async Task ExecuteCaptureScreenUnderCursorAsync()
+    {
+        await CaptureAsync(async () =>
+        {
+            var screenSelector = new ScreenSelector();
+            if (screenSelector.ShowDialog() == true)
+            {
+                System.Drawing.Point cursorPosition = screenSelector.GetSelectedCursorPosition();
+                using var bitmap = screenCaptureService.CaptureScreenUnderCursor(cursorPosition);
                 await ShowEditorWindowAsync(bitmap);
             }
             else

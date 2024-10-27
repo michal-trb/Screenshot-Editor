@@ -123,6 +123,9 @@
   <data name="CaptureWindowScroll" xml:space="preserve">
     <value>Capture Window Scroll</value>
   </data>
+    <data name="CaptureScreenUnderCursor" xml:space="preserve">
+    <value>Capture Screen Under Cursor</value>
+  </data>
   <data name="FullScreen" xml:space="preserve">
     <value>Full Screen</value>
   </data>
