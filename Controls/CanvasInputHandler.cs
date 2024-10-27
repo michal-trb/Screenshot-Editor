@@ -26,19 +26,20 @@ public class CanvasInputHandler : ICanvasInputHandler
     public static double Transparency { get; private set; } = 0;
     public static Color SelectedColor { get; private set; } = Colors.Black;
 
+    private EditAction currentAction = EditAction.None;
+
     /// <summary>
     /// Initializes a new instance of the CanvasInputHandler class.
     /// </summary>
     /// <param name="canvas">The drawable canvas that will handle the user interactions.</param>
-    public CanvasInputHandler(
-        DrawableCanvas canvas)
+    public CanvasInputHandler(DrawableCanvas canvas)
     {
         drawableCanvas = canvas;
 
         actionHandler = new CanvasActionHandler(drawableCanvas);
         editingHandler = new CanvasEditingHandler(drawableCanvas);
         savingHandler = new CanvasSavingHandler(drawableCanvas);
-        selectionHandler = new CanvasSelectionHandler(drawableCanvas, editingHandler);
+        selectionHandler = new CanvasSelectionHandler(drawableCanvas, editingHandler, actionHandler);
     }
 
     /// <summary>
@@ -48,8 +49,14 @@ public class CanvasInputHandler : ICanvasInputHandler
     /// <param name="e">The mouse button event arguments.</param>
     public void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        // First try to handle selection
         selectionHandler.HandleLeftButtonDown(e);
-        actionHandler.HandleLeftButtonDown(e);
+
+        // If no element is selected, handle drawing
+        if (!selectionHandler.HasSelectedElement())
+        {
+            actionHandler.HandleLeftButtonDown(e);
+        }
     }
 
     /// <summary>
@@ -93,12 +100,32 @@ public class CanvasInputHandler : ICanvasInputHandler
     }
 
     /// <summary>
+    /// Toggles the drawing action and updates the current action state.
+    /// </summary>
+    /// <param name="action">The action to toggle</param>
+    private void ToggleAction(EditAction action)
+    {
+        if (currentAction == action)
+        {
+            // Disable current action
+            currentAction = EditAction.None;
+            actionHandler.SetCurrentAction(EditAction.None);
+        }
+        else
+        {
+            // Enable new action
+            currentAction = action;
+            actionHandler.SetCurrentAction(action);
+        }
+        UpdateDrawingColorAndThickness();
+    }
+
+    /// <summary>
     /// Sets the action to draw an arrow on the canvas.
     /// </summary>
     public void DrawArrow()
     {
-        actionHandler.SetCurrentAction(EditAction.DrawArrow);
-        UpdateDrawingColorAndThickness();
+        ToggleAction(EditAction.DrawArrow);
     }
 
     /// <summary>
@@ -106,8 +133,7 @@ public class CanvasInputHandler : ICanvasInputHandler
     /// </summary>
     public void DrawRect()
     {
-        actionHandler.SetCurrentAction(EditAction.DrawRectangle);
-        UpdateDrawingColorAndThickness();
+        ToggleAction(EditAction.DrawRectangle);
     }
 
     /// <summary>
@@ -115,7 +141,7 @@ public class CanvasInputHandler : ICanvasInputHandler
     /// </summary>
     public void AddText()
     {
-        actionHandler.SetCurrentAction(EditAction.AddText);
+        ToggleAction(EditAction.AddText);
     }
 
     /// <summary>
@@ -156,7 +182,7 @@ public class CanvasInputHandler : ICanvasInputHandler
     /// </summary>
     public void SpeechBubble()
     {
-        actionHandler.SetCurrentAction(EditAction.AddBubble);
+        ToggleAction(EditAction.AddBubble);
     }
 
     /// <summary>
@@ -164,7 +190,7 @@ public class CanvasInputHandler : ICanvasInputHandler
     /// </summary>
     public void Blur()
     {
-        actionHandler.SetCurrentAction(EditAction.DrawBlur);
+        ToggleAction(EditAction.DrawBlur);
     }
 
     /// <summary>
@@ -172,7 +198,7 @@ public class CanvasInputHandler : ICanvasInputHandler
     /// </summary>
     public void Brush()
     {
-        actionHandler.SetCurrentAction(EditAction.BrushPainting);
+        ToggleAction(EditAction.BrushPainting);
     }
 
     /// <summary>

@@ -14,9 +14,21 @@ using System.Windows.Media.Imaging;
 /// </summary>
 public enum EditAction
 {
-    None, DrawArrow, AddText, Move, Delete, AddBubble, DrawRectangle,
-    DrawBlur, BrushPainting,
-    RecognizeText
+    None,               // No action / Selection mode
+    DrawArrow,          // Drawing arrow
+    AddText,           // Adding text
+    Move,              // Moving element
+    Delete,            // Deleting element
+    AddBubble,         // Adding speech bubble
+    DrawRectangle,     // Drawing rectangle
+    DrawBlur,          // Drawing blur
+    BrushPainting,     // Brush painting
+    RecognizeText,     // Text recognition
+    Select,            // Element selection
+    EditText,          // Text editing
+    EditBubble,        // Speech bubble editing
+    DragTail,          // Dragging speech bubble tail
+    DragArrow,
 }
 
 /// <summary>
@@ -76,9 +88,6 @@ public class CanvasActionHandler : ICanvasActionHandler
             case EditAction.BrushPainting:
                 brushDrawer.StartDrawing(e);
                 break;
-            default:
-                SelectElementAtMousePosition(e);
-                break;
         }
     }
 
@@ -109,8 +118,6 @@ public class CanvasActionHandler : ICanvasActionHandler
                 brushDrawer.FinishDrawing();
                 break;
         }
-
-        currentAction = EditAction.None;
     }
 
     /// <summary>
@@ -191,5 +198,14 @@ public class CanvasActionHandler : ICanvasActionHandler
     private void SelectElementAtMousePosition(MouseButtonEventArgs e)
     {
         drawableCanvas.SelectElementAtPoint(e.GetPosition(drawableCanvas));
+    }
+
+    /// <summary>
+    /// Gets the current action being performed on the canvas.
+    /// </summary>
+    /// <returns>The current EditAction.</returns>
+    public EditAction GetCurrentAction()
+    {
+        return currentAction;
     }
 }

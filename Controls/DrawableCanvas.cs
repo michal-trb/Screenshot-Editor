@@ -203,7 +203,7 @@ public class DrawableCanvas : Canvas
     /// Selects the specified element and brings it to the front of the canvas.
     /// </summary>
     /// <param name="element">The drawable element to be selected.</param>
-    private void SelectElement(DrawableElement element)
+    public void SelectElement(DrawableElement element)
     {
         if (selectedElement != null)
         {
@@ -243,7 +243,7 @@ public class DrawableCanvas : Canvas
     /// <summary>
     /// Deselects the currently selected element, if any.
     /// </summary>
-    private void DeselectCurrentElement()
+    public void DeselectCurrentElement()
     {
         if (selectedElement != null)
         {

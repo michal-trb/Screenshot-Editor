@@ -20,16 +20,18 @@ public class CanvasSelectionHandler : ICanvasSelectionHandler
     private ICanvasEditingHandler editingHandler;
     private const double SpeechBubbleTailTolerance = 40;
     private const double ArrowTolerance = 30;
+    private ICanvasActionHandler actionHandler;
 
     /// <summary>
     /// Initializes a new instance of the CanvasSelectionHandler class with the specified canvas and editing handler.
     /// </summary>
     /// <param name="canvas">The drawable canvas on which elements are managed.</param>
     /// <param name="editingHandler">The handler used to edit selected elements on the canvas.</param>
-    public CanvasSelectionHandler(DrawableCanvas canvas, ICanvasEditingHandler editingHandler)
+    public CanvasSelectionHandler(DrawableCanvas canvas, ICanvasEditingHandler editingHandler, ICanvasActionHandler actionHandler)
     {
-        drawableCanvas = canvas;
+        this.drawableCanvas = canvas;
         this.editingHandler = editingHandler;
+        this.actionHandler = actionHandler;
     }
 
     /// <summary>
@@ -47,20 +49,9 @@ public class CanvasSelectionHandler : ICanvasSelectionHandler
         Point clickPosition = e.GetPosition(drawableCanvas);
         lastMousePosition = clickPosition;
 
-        if (!TrySelectSpeechBubbleTail(clickPosition) && !TrySelectElement(clickPosition))
-        {
-            // If no speech bubble tail or arrow was clicked, check for other elements
-            var element = drawableCanvas.elementManager.GetElementAtPoint(clickPosition);
-
-            if (element != null)
-            {
-                selectedElement = element;
-            }
-            else
-            {
-                DeselectCurrentElement();
-            }
-        }
+        TrySelectSpeechBubbleTail(clickPosition);
+        TrySelectElement(clickPosition);
+        TrySelectElementAtMousePosition(clickPosition);
     }
 
     /// <summary>
@@ -70,31 +61,22 @@ public class CanvasSelectionHandler : ICanvasSelectionHandler
     public void HandleDoubleClick(MouseButtonEventArgs e)
     {
         Point clickPosition = e.GetPosition(drawableCanvas);
-        lastMousePosition = clickPosition;
-
-        if (drawableCanvas.isFirstClick)
-        {
-            drawableCanvas.originalTargetBitmap = drawableCanvas.GetRenderTargetBitmap();
-            drawableCanvas.isFirstClick = false;
-        }
-
         var element = drawableCanvas.elementManager.GetElementAtPoint(clickPosition);
+
         if (element != null)
         {
             selectedElement = element;
 
-            if (element is DrawableText drawableText)
+            if (element is DrawableText)
             {
-                editingHandler.StartEditing(drawableText, clickPosition);
+                actionHandler.SetCurrentAction(EditAction.EditText);
+                editingHandler.StartEditing(element, clickPosition);
             }
-            else if (element is DrawableSpeechBubble speechBubble)
+            else if (element is DrawableSpeechBubble)
             {
-                editingHandler.StartEditing(speechBubble, clickPosition);
+                actionHandler.SetCurrentAction(EditAction.EditBubble);
+                editingHandler.StartEditing(element, clickPosition);
             }
-        }
-        else
-        {
-            DeselectCurrentElement();
         }
     }
 
@@ -169,6 +151,9 @@ public class CanvasSelectionHandler : ICanvasSelectionHandler
     {
         if (e.LeftButton == MouseButtonState.Pressed && selectedElement != null)
         {
+            // Disable drawing mode when moving an element
+            actionHandler.SetCurrentAction(EditAction.Move);
+
             Point currentMousePosition = e.GetPosition(drawableCanvas);
             Vector delta = currentMousePosition - lastMousePosition;
             selectedElement.Move(delta);
@@ -183,24 +168,27 @@ public class CanvasSelectionHandler : ICanvasSelectionHandler
     /// <param name="e">The mouse button event arguments.</param>
     public void HandleLeftButtonUp(MouseButtonEventArgs e)
     {
-        if (selectedElement is DrawableSpeechBubble speechBubble)
-        {
-            speechBubble.SetTailBeingDragged(false);
-        }
-        else if (selectedElement is DrawableArrow arrow)
-        {
-            arrow.SetEndBeingDragged(false);
-            arrow.SetStartBeingDragged(false);
-        }
-    }
+        var currentAction = actionHandler.GetCurrentAction();
 
-    /// <summary>
-    /// Deselects the currently selected element.
-    /// </summary>
-    private void DeselectCurrentElement()
-    {
-        selectedElement = null;
-        drawableCanvas.InvalidateVisual();
+        switch (currentAction)
+        {
+            case EditAction.DragTail:
+                if (selectedElement is DrawableSpeechBubble speechBubble)
+                {
+                    speechBubble.SetTailBeingDragged(false);
+                }
+                actionHandler.SetCurrentAction(EditAction.None);
+                break;
+
+            case EditAction.DragArrow:
+                if (selectedElement is DrawableArrow arrow)
+                {
+                    arrow.SetEndBeingDragged(false);
+                    arrow.SetStartBeingDragged(false);
+                }
+                actionHandler.SetCurrentAction(EditAction.None);
+                break;
+        }
     }
 
     /// <summary>
@@ -211,8 +199,9 @@ public class CanvasSelectionHandler : ICanvasSelectionHandler
         if (selectedElement != null)
         {
             drawableCanvas.RemoveElement(selectedElement);
-            DeselectCurrentElement();
+            drawableCanvas.DeselectCurrentElement();
             drawableCanvas.InvalidateVisual();
+            this.selectedElement = null;
         }
     }
 
@@ -232,5 +221,46 @@ public class CanvasSelectionHandler : ICanvasSelectionHandler
     public IDrawable GetSelectedElement()
     {
         return selectedElement;
+    }
+
+    private bool TrySelectArrowEndpoints(Point clickPoint)
+    {
+        if (selectedElement is DrawableArrow arrow)
+        {
+            if (IsNearPoint(arrow.Position, clickPoint, ArrowTolerance))
+            {
+                arrow.SetStartBeingDragged(true);
+                actionHandler.SetCurrentAction(EditAction.DragArrow);
+                return true;
+            }
+            if (IsNearPoint(arrow.EndPoint, clickPoint, ArrowTolerance))
+            {
+                arrow.SetEndBeingDragged(true);
+                actionHandler.SetCurrentAction(EditAction.DragArrow);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /// <summary>
+    /// Selects an element on the canvas at the specified mouse position.
+    /// </summary>
+    /// <param name="e">The mouse button event arguments.</param>
+    private void TrySelectElementAtMousePosition(Point clickPosition)
+    {
+        var element = drawableCanvas.elementManager.GetElementAtPoint(clickPosition);
+
+        if (element != null)
+        {
+            selectedElement = element;
+            drawableCanvas.SelectElement(element as DrawableElement);
+            actionHandler.SetCurrentAction(EditAction.Select);
+        }
+        else
+        {
+            drawableCanvas.DeselectCurrentElement();
+            this.selectedElement = null;
+        }
     }
 }

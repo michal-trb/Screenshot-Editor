@@ -41,4 +41,10 @@ public interface ICanvasActionHandler
     /// </summary>
     /// <param name="action">The action to set, which determines the type of operation on the canvas.</param>
     void SetCurrentAction(EditAction action);
+
+    /// <summary>
+    /// Gets the current action being performed on the canvas.
+    /// </summary>
+    /// <returns>The current action.</returns>
+    EditAction GetCurrentAction();
 }
