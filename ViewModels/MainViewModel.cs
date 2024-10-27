@@ -146,8 +146,7 @@ public class MainViewModel : INotifyPropertyChanged
         }
         catch (Exception ex)
         {
-            // Log the error or show a message to the user
-            MessageBox.Show($"An error occurred while taking a screenshot: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
         }
         finally
         {

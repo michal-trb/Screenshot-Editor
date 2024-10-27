@@ -42,31 +42,38 @@ namespace screenerWpf.Views
         {
             base.OnRender(drawingContext);
 
+            // Pobierz informacje o przestrzeni wirtualnej
+            var virtualScreenLeft = SystemParameters.VirtualScreenLeft;
+            var virtualScreenTop = SystemParameters.VirtualScreenTop;
+
+            // Konwertuj pozycjê kursora do wspó³rzêdnych systemowych
+            var systemCursorPosition = new Drawing.Point(
+                selectedCursorPosition.X + (int)virtualScreenLeft,
+                selectedCursorPosition.Y + (int)virtualScreenTop
+            );
+
             foreach (WinForms.Screen screen in WinForms.Screen.AllScreens)
             {
                 Rect screenRect = new Rect(
-                    screen.Bounds.X,
-                    screen.Bounds.Y,
+                    screen.Bounds.X - virtualScreenLeft,  // Konwertuj do przestrzeni wirtualnej
+                    screen.Bounds.Y - virtualScreenTop,   // Konwertuj do przestrzeni wirtualnej
                     screen.Bounds.Width,
                     screen.Bounds.Height
                 );
 
-                if (screen == currentScreen)
+                // SprawdŸ, czy kursor jest na tym ekranie
+                bool isActiveScreen = screen.Bounds.Contains(systemCursorPosition);
+
+                if (isActiveScreen)
                 {
+                    // Aktywny ekran jest przezroczysty
                     drawingContext.DrawRectangle(WPFBrushes.Transparent, null, screenRect);
                 }
                 else
                 {
+                    // Nieaktywne ekrany s¹ przyciemnione
                     drawingContext.DrawRectangle(new SolidColorBrush(WPFColor.FromArgb(128, 0, 0, 0)), null, screenRect);
                 }
-            }
-
-            if (currentScreen != null)
-            {
-                double size = 20;
-                WPFPen redPen = new WPFPen(WPFBrushes.Red, 2);
-                drawingContext.DrawLine(redPen, new WPFPoint(selectedCursorPosition.X - size, selectedCursorPosition.Y), new WPFPoint(selectedCursorPosition.X + size, selectedCursorPosition.Y));
-                drawingContext.DrawLine(redPen, new WPFPoint(selectedCursorPosition.X, selectedCursorPosition.Y - size), new WPFPoint(selectedCursorPosition.X, selectedCursorPosition.Y + size));
             }
         }
 

@@ -46,36 +46,36 @@ public class WindowScreenshot
 
             if (currentWindowUnderCursor != lastWindowUnderCursor)
             {
-                // Pobierz RECT okna, aby uwzględnić obszar cienia (shadow area)
+                // Get the RECT of the window to account for the shadow area
                 RECT windowRect;
                 GetWindowRect(currentWindowUnderCursor, out windowRect);
 
-                // Użycie DwmGetWindowAttribute do uzyskania rozszerzonej ramki okna
+                // Use DwmGetWindowAttribute to get the extended frame bounds of the window
                 RECT frameRect;
                 int result = DwmGetWindowAttribute(currentWindowUnderCursor, DWMWA_EXTENDED_FRAME_BOUNDS, out frameRect, Marshal.SizeOf(typeof(RECT)));
 
-                // Jeśli uzyskano ramkę rozszerzoną, dostosuj obwódkę, aby nie obejmowała cienia
-                if (result == 0) // 0 oznacza, że operacja DwmGetWindowAttribute zakończyła się sukcesem
+                // If we successfully got the extended frame, adjust the highlight to exclude the shadow
+                if (result == 0) // 0 indicates that DwmGetWindowAttribute operation was successful
                 {
-                    // Obliczamy wielkość cienia na podstawie różnicy między ramką rozszerzoną a rzeczywistym obszarem okna
+                    // Calculate the shadow size based on the difference between the extended frame and the actual window area
                     int shadowLeft = frameRect.Left - windowRect.Left;
                     int shadowTop = frameRect.Top - windowRect.Top;
                     int shadowRight = windowRect.Right - frameRect.Right;
                     int shadowBottom = windowRect.Bottom - frameRect.Bottom;
 
-                    // Zmniejszenie obszaru do wyróżnienia o obszar cienia
+                    // Adjust the highlight area to exclude the shadow
                     windowRect.Left += shadowLeft;
                     windowRect.Top += shadowTop;
                     windowRect.Right -= shadowRight;
                     windowRect.Bottom -= shadowBottom;
                 }
 
-                // Aktualizacja pozycji i rozmiaru okna overlay z uwzględnieniem cienia okna
+                // Update the overlay window position and size, taking the window shadow into consideration
                 overlay.UpdatePositionAndSize(windowRect);
                 lastWindowUnderCursor = currentWindowUnderCursor;
             }
 
-            // Sprawdzenie, czy użytkownik kliknął lewy przycisk myszy (wybór okna)
+            // Check if the user clicked the left mouse button to select the window
             if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0)
             {
                 selectedWindow = currentWindowUnderCursor;
@@ -88,7 +88,6 @@ public class WindowScreenshot
         overlay.Close();
         return selectedWindow;
     }
-
 
     /// <summary>
     /// Captures a screenshot of a specific window by its handle.

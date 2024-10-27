@@ -1,8 +1,16 @@
 ﻿namespace screenerWpf;
 
+using System;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Globalization;
+using System.Windows.Media.TextFormatting;
+using System.Windows.Media.Imaging;
+using System.Drawing;
+using Point = System.Windows.Point;
+using Pen = System.Windows.Media.Pen;
+using Brushes = System.Windows.Media.Brushes;
 
 /// <summary>
 /// A window that allows the user to select a specific area on the screen by drawing a rectangle.
@@ -16,6 +24,10 @@ public partial class AreaSelector : Window
 
     private Point startPoint;
     private Point currentPoint;
+
+    private const int MAGNIFIER_SIZE = 120;  // Size of the magnifier window
+    private const int MAGNIFIER_ZOOM = 2;    // Magnification level
+    private const int CROSSHAIR_SIZE = 10;   // Size of the crosshair in magnifier
 
     /// <summary>
     /// Initializes a new instance of the <see cref="AreaSelector"/> class.
@@ -63,6 +75,49 @@ public partial class AreaSelector : Window
 
         // Draw the red border of the selected rectangle.
         drawingContext.DrawRectangle(null, new Pen(Brushes.Red, 2), SelectedRectangle);
+
+        // Add dimension information only if we are selecting an area
+        if (SelectedRectangle.Width > 0 && SelectedRectangle.Height > 0)
+        {
+            // Prepare text with dimensions
+            var dimensionsText = $"{(int)SelectedRectangle.Width} x {(int)SelectedRectangle.Height}";
+
+            // Create formatted text
+            var formattedText = new FormattedText(
+                dimensionsText,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                new Typeface("Segoe UI"),
+                14,
+                Brushes.White,
+                VisualTreeHelper.GetDpi(this).PixelsPerDip);
+
+            // Add background under text for better readability
+            var textBackground = new Rect(
+                currentPoint.X + 20,  // Offset from cursor
+                currentPoint.Y + 20,
+                formattedText.Width + 10,  // Add padding
+                formattedText.Height + 6   // Add padding
+            );
+
+            drawingContext.DrawRectangle(
+                new SolidColorBrush(System.Windows.Media.Color.FromArgb(200, 0, 0, 0)),  // Semi-transparent black background
+                null,
+                textBackground
+            );
+
+            // Draw the text
+            drawingContext.DrawText(
+                formattedText,
+                new Point(textBackground.X + 5, textBackground.Y + 3)  // Center the text in the background
+            );
+        }
+
+        // Only draw magnifier while selecting
+        if (Mouse.LeftButton == MouseButtonState.Pressed)
+        {
+            DrawMagnifier(drawingContext, currentPoint);
+        }
     }
 
     /// <summary>
@@ -92,7 +147,7 @@ public partial class AreaSelector : Window
         if (e.LeftButton == MouseButtonState.Pressed)
         {
             startPoint = e.GetPosition(this);
-            SelectedRectangle = new Rect(startPoint, new Size(0, 0));
+            SelectedRectangle = new Rect(startPoint, new System.Windows.Size(0, 0));
             this.InvalidateVisual();
         }
     }
@@ -126,6 +181,94 @@ public partial class AreaSelector : Window
                 this.DialogResult = false;
             }
             this.Close();
+        }
+    }
+
+    /// <summary>
+    /// Draws a magnifying glass effect near the cursor position to help with precise selection.
+    /// The magnifier shows a zoomed view of the area around the cursor with a crosshair for accurate positioning.
+    /// </summary>
+    /// <param name="drawingContext">The drawing context to render the magnifier</param>
+    /// <param name="cursorPosition">Current cursor position on screen</param>
+    private void DrawMagnifier(DrawingContext drawingContext, Point cursorPosition)
+    {
+        // Capture the actual screen content
+        using (var screenBmp = new Bitmap(
+            (int)this.ActualWidth,
+            (int)this.ActualHeight))
+        {
+            using (var g = Graphics.FromImage(screenBmp))
+            {
+                g.CopyFromScreen(
+                    (int)this.Left,
+                    (int)this.Top,
+                    0,
+                    0,
+                    new System.Drawing.Size((int)this.ActualWidth, (int)this.ActualHeight)
+                );
+            }
+
+            // Convert GDI+ bitmap to WPF bitmap
+            var bmpSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                screenBmp.GetHbitmap(),
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions());
+
+            // Calculate magnifier position (offset from cursor)
+            double magnifierX = cursorPosition.X + 50;
+            double magnifierY = cursorPosition.Y + 50;
+
+            // Ensure magnifier stays within screen bounds
+            if (magnifierX + MAGNIFIER_SIZE > this.ActualWidth)
+                magnifierX = cursorPosition.X - MAGNIFIER_SIZE - 50;
+            if (magnifierY + MAGNIFIER_SIZE > this.ActualHeight)
+                magnifierY = cursorPosition.Y - MAGNIFIER_SIZE - 50;
+
+            // Calculate source area for magnification (centered on cursor)
+            int sourceSize = MAGNIFIER_SIZE / MAGNIFIER_ZOOM;
+            int sourceX = (int)cursorPosition.X - sourceSize / 2;
+            int sourceY = (int)cursorPosition.Y - sourceSize / 2;
+
+            // Clamp source area to screen bounds
+            sourceX = Math.Max(0, Math.Min(sourceX, (int)this.ActualWidth - sourceSize));
+            sourceY = Math.Max(0, Math.Min(sourceY, (int)this.ActualHeight - sourceSize));
+
+            // Crop the source area for magnification
+            var sourceCrop = new CroppedBitmap(bmpSource,
+                new Int32Rect(sourceX, sourceY, sourceSize, sourceSize));
+
+            // Create circular magnifier geometry
+            var magnifierEllipse = new EllipseGeometry(
+                new Point(magnifierX + MAGNIFIER_SIZE / 2, magnifierY + MAGNIFIER_SIZE / 2),
+                MAGNIFIER_SIZE / 2, MAGNIFIER_SIZE / 2);
+
+            // Draw magnifier background
+            drawingContext.DrawGeometry(
+                new SolidColorBrush(Colors.Black) { Opacity = 0.1 },
+                new Pen(Brushes.White, 2),
+                magnifierEllipse);
+
+            // Draw magnified image
+            drawingContext.PushClip(magnifierEllipse);
+            drawingContext.DrawImage(sourceCrop,
+                new Rect(magnifierX, magnifierY, MAGNIFIER_SIZE, MAGNIFIER_SIZE));
+
+            // Calculate crosshair position to match the cursor position in magnified view
+            var magnifiedCursorX = magnifierX + MAGNIFIER_SIZE / 2;
+            var magnifiedCursorY = magnifierY + MAGNIFIER_SIZE / 2;
+
+            // Draw crosshair at the magnified cursor position
+            drawingContext.DrawLine(
+                new Pen(Brushes.Red, 1),
+                new Point(magnifiedCursorX - CROSSHAIR_SIZE, magnifiedCursorY),
+                new Point(magnifiedCursorX + CROSSHAIR_SIZE, magnifiedCursorY));
+            drawingContext.DrawLine(
+                new Pen(Brushes.Red, 1),
+                new Point(magnifiedCursorX, magnifiedCursorY - CROSSHAIR_SIZE),
+                new Point(magnifiedCursorX, magnifiedCursorY + CROSSHAIR_SIZE));
+
+            drawingContext.Pop();
         }
     }
 }
