@@ -1,7 +1,9 @@
 namespace screenerWpf.Services.CaptureServices;
 
+using System;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using global::Helpers.DpiHelper;
 
