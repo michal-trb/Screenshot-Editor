@@ -172,19 +172,19 @@ public class CanvasSelectionHandler : ICanvasSelectionHandler
 
         switch (currentAction)
         {
-            case EditAction.DragTail:
-                if (selectedElement is DrawableSpeechBubble speechBubble)
-                {
-                    speechBubble.SetTailBeingDragged(false);
-                }
-                actionHandler.SetCurrentAction(EditAction.None);
-                break;
-
             case EditAction.DragArrow:
                 if (selectedElement is DrawableArrow arrow)
                 {
                     arrow.SetEndBeingDragged(false);
                     arrow.SetStartBeingDragged(false);
+                }
+                actionHandler.SetCurrentAction(EditAction.None);
+                break;
+
+            case EditAction.Move:
+                if (selectedElement is DrawableSpeechBubble speechBubble)
+                {
+                    speechBubble.SetTailBeingDragged(false);
                 }
                 actionHandler.SetCurrentAction(EditAction.None);
                 break;

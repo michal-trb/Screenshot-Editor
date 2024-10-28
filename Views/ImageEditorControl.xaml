@@ -39,7 +39,9 @@
             Key="Z"
             Command="{Binding RedoCommand}"
             Modifiers="Control+Shift" />
-        <KeyBinding Key="Delete" Command="{Binding DeleteCommand}" />
+        <KeyBinding 
+            Key="Delete" 
+            Command="{Binding DeleteCommand}" />
     </UserControl.InputBindings>
 
     <!-- Main Layout Grid for the UserControl -->

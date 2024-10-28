@@ -104,6 +104,7 @@ public class CanvasActionHandler : ICanvasActionHandler
                 break;
             case EditAction.AddText:
                 textDrawer.FinishDrawing();
+                SetCurrentAction(EditAction.None);
                 break;
             case EditAction.AddBubble:
                 speechBubbleDrawer.FinishDrawing();
@@ -189,15 +190,6 @@ public class CanvasActionHandler : ICanvasActionHandler
     public void SetCurrentAction(EditAction action)
     {
         currentAction = action;
-    }
-
-    /// <summary>
-    /// Selects an element on the canvas at the current mouse position.
-    /// </summary>
-    /// <param name="e">The mouse button event arguments.</param>
-    private void SelectElementAtMousePosition(MouseButtonEventArgs e)
-    {
-        drawableCanvas.SelectElementAtPoint(e.GetPosition(drawableCanvas));
     }
 
     /// <summary>

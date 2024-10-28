@@ -103,20 +103,10 @@ public class CanvasInputHandler : ICanvasInputHandler
     /// Toggles the drawing action and updates the current action state.
     /// </summary>
     /// <param name="action">The action to toggle</param>
-    private void ToggleAction(EditAction action)
+    public void ToggleAction(EditAction action)
     {
-        if (currentAction == action)
-        {
-            // Disable current action
-            currentAction = EditAction.None;
-            actionHandler.SetCurrentAction(EditAction.None);
-        }
-        else
-        {
-            // Enable new action
-            currentAction = action;
-            actionHandler.SetCurrentAction(action);
-        }
+        actionHandler.SetCurrentAction(action);
+
         UpdateDrawingColorAndThickness();
     }
 

@@ -32,6 +32,15 @@ public class TextDrawer : DrawableElementDrawer
     /// <param name="e">Mouse button event data that provides the location where drawing should begin.</param>
     public override void StartDrawing(MouseButtonEventArgs e)
     {
+        // Clean up any existing textbox
+        if (editableTextBox != null)
+        {
+            editableTextBox.LostFocus -= EditableTextBox_LostFocus;
+            DrawableCanvas.Children.Remove(editableTextBox);
+            editableTextBox = null;
+            return; // Exit if we're cleaning up existing textbox
+        }
+
         Point location = e.GetPosition(DrawableCanvas);
 
         editableTextBox = new TextBox
@@ -50,10 +59,31 @@ public class TextDrawer : DrawableElementDrawer
 
         Canvas.SetLeft(editableTextBox, location.X);
         Canvas.SetTop(editableTextBox, location.Y);
+
+        // Add event handlers
+        editableTextBox.LostFocus += EditableTextBox_LostFocus;
+        DrawableCanvas.MouseDown += Canvas_MouseDown;
+
         DrawableCanvas.Children.Add(editableTextBox);
         editableTextBox.Focus();
+        editableTextBox.SelectAll();
+    }
 
-        editableTextBox.LostFocus += EditableTextBox_LostFocus;
+    private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (editableTextBox != null)
+        {
+            Point clickPoint = e.GetPosition(DrawableCanvas);
+            Point textBoxPoint = new Point(Canvas.GetLeft(editableTextBox), Canvas.GetTop(editableTextBox));
+            Rect textBoxBounds = new Rect(textBoxPoint, new Size(editableTextBox.Width, editableTextBox.Height));
+
+            if (!textBoxBounds.Contains(clickPoint))
+            {
+                // Click was outside the textbox
+                DrawableCanvas.MouseDown -= Canvas_MouseDown;
+                EditableTextBox_LostFocus(editableTextBox, new RoutedEventArgs());
+            }
+        }
     }
 
     /// <summary>
@@ -63,7 +93,14 @@ public class TextDrawer : DrawableElementDrawer
     /// <param name="e">The event data.</param>
     private void EditableTextBox_LostFocus(object sender, RoutedEventArgs e)
     {
+        if (editableTextBox == null) return;
+
         TextBox textBox = (TextBox)sender;
+
+        // Remove event handlers
+        textBox.LostFocus -= EditableTextBox_LostFocus;
+        DrawableCanvas.MouseDown -= Canvas_MouseDown;
+
         Point textLocation = new Point(Canvas.GetLeft(textBox), Canvas.GetTop(textBox));
 
         var drawableText = new DrawableText
@@ -77,7 +114,9 @@ public class TextDrawer : DrawableElementDrawer
 
         DrawableCanvas.AddElement(drawableText);
         DrawableCanvas.Children.Remove(textBox);
-        editableTextBox = null; // Clear the temporary TextBox
+        editableTextBox = null;
+
+        DrawableCanvas.InvalidateVisual();
     }
 
     /// <summary>

@@ -21,7 +21,7 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
     /// <summary>
     /// The text box used for editing the text inside the speech bubble.
     /// </summary>
-    private TextBox EditableTextBox { get; set; }
+    private TextBox editableTextBox { get; set; }
 
     /// <summary>
     /// Gets or sets the initial text of the speech bubble.
@@ -43,7 +43,15 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
     /// </summary>
     /// <param name="e">Mouse button event data that provides the location where drawing should begin.</param>
     public override void StartDrawing(MouseButtonEventArgs e)
-    {
+    {        // Clean up any existing textbox
+        if (editableTextBox != null)
+        {
+            editableTextBox.LostFocus -= EditableTextBox_LostFocus;
+            DrawableCanvas.Children.Remove(editableTextBox);
+            editableTextBox = null;
+            return; // Exit if we're cleaning up existing textbox
+        }
+
         Point location = e.GetPosition(DrawableCanvas);
         CurrentSpeechBubble = new DrawableSpeechBubble
         {
@@ -59,6 +67,26 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
         DrawableCanvas.AddElement(CurrentSpeechBubble);
 
         CreateEditableTextBox(location, CurrentSpeechBubble);
+
+        // Add canvas mouse down handler
+        DrawableCanvas.MouseDown += Canvas_MouseDown;
+    }
+
+    private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (editableTextBox != null)
+        {
+            Point clickPoint = e.GetPosition(DrawableCanvas);
+            Point textBoxPoint = new Point(Canvas.GetLeft(editableTextBox), Canvas.GetTop(editableTextBox));
+            Rect textBoxBounds = new Rect(textBoxPoint, new Size(editableTextBox.Width, editableTextBox.Height));
+
+            if (!textBoxBounds.Contains(clickPoint))
+            {
+                // Click was outside the textbox
+                DrawableCanvas.MouseDown -= Canvas_MouseDown;
+                FinishTextEditingInSpeechBubble(editableTextBox, CurrentSpeechBubble);
+            }
+        }
     }
 
     /// <summary>
@@ -68,7 +96,7 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
     /// <param name="speechBubble">The speech bubble element that the text box is linked to.</param>
     private void CreateEditableTextBox(Point location, DrawableSpeechBubble speechBubble)
     {
-        EditableTextBox = new TextBox
+        editableTextBox = new TextBox
         {
             Width = speechBubble.Size.Width - 20,
             Height = speechBubble.Size.Height - 20,
@@ -82,13 +110,13 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
             AcceptsTab = true
         };
 
-        Canvas.SetLeft(EditableTextBox, location.X + 10);
-        Canvas.SetTop(EditableTextBox, location.Y + 10);
-        DrawableCanvas.Children.Add(EditableTextBox);
-        EditableTextBox.Focus();
+        Canvas.SetLeft(editableTextBox, location.X + 10);
+        Canvas.SetTop(editableTextBox, location.Y + 10);
+        DrawableCanvas.Children.Add(editableTextBox);
+        editableTextBox.Focus();
 
-        EditableTextBox.LostFocus += (sender, e) => FinishTextEditingInSpeechBubble(sender as TextBox, speechBubble);
-        EditableTextBox.TextChanged += (sender, e) => TextChangedInSpeechBubble(sender as TextBox, speechBubble);
+        editableTextBox.LostFocus += (sender, e) => FinishTextEditingInSpeechBubble(sender as TextBox, speechBubble);
+        editableTextBox.TextChanged += (sender, e) => TextChangedInSpeechBubble(sender as TextBox, speechBubble);
     }
 
     /// <summary>
@@ -98,19 +126,17 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
     /// <param name="speechBubble">The speech bubble that contains the text.</param>
     private void FinishTextEditingInSpeechBubble(TextBox textBox, DrawableSpeechBubble speechBubble)
     {
-        if (textBox == null)
-            return;
+        if (textBox == null) return;
 
-        speechBubble.Text = textBox.Text; // Update the speech bubble's text
+        speechBubble.Text = textBox.Text;
 
-        // Remove the TextBox after editing is complete
-        if (!textBox.IsKeyboardFocusWithin)
-        {
-            DrawableCanvas.Children.Remove(textBox);
-            EditableTextBox = null;
-        }
+        // Remove event handlers
+        textBox.LostFocus -= (sender, e) => FinishTextEditingInSpeechBubble(sender as TextBox, speechBubble);
+        DrawableCanvas.MouseDown -= Canvas_MouseDown;
 
-        DrawableCanvas.InvalidateVisual(); // Redraw the canvas to reflect updated text in the speech bubble
+        DrawableCanvas.Children.Remove(textBox);
+        editableTextBox = null;
+        DrawableCanvas.InvalidateVisual();
     }
 
     /// <summary>
@@ -167,5 +193,36 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
     public override void FinishDrawing()
     {
         CurrentSpeechBubble = null;
+    }
+
+    /// <summary>
+    /// Handles the LostFocus event of the text box, finalizing the input and adding it as a drawable text element.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The event data.</param>
+    private void EditableTextBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (editableTextBox == null) return;
+
+        TextBox textBox = (TextBox)sender;
+
+        // Remove event handlers
+        textBox.LostFocus -= EditableTextBox_LostFocus;
+        DrawableCanvas.MouseDown -= Canvas_MouseDown;
+
+        Point textLocation = new Point(Canvas.GetLeft(textBox), Canvas.GetTop(textBox));
+
+        var drawableText = new DrawableText
+        {
+            Position = textLocation,
+            Text = textBox.Text,
+            Typeface = CanvasInputHandler.GetCurrentTypeface(),
+            FontSize = CanvasInputHandler.GetCurrentFontSize(),
+            Color = CanvasInputHandler.GetCurrentColor(),
+        };
+
+        DrawableCanvas.AddElement(drawableText);
+        DrawableCanvas.Children.Remove(textBox);
+        editableTextBox = null;
     }
 }
