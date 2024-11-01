@@ -46,10 +46,12 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
     {        // Clean up any existing textbox
         if (editableTextBox != null)
         {
+            editableTextBox.TextChanged -= (sender, e) => TextChangedInSpeechBubble(sender as TextBox, CurrentSpeechBubble);
             editableTextBox.LostFocus -= EditableTextBox_LostFocus;
             DrawableCanvas.Children.Remove(editableTextBox);
             editableTextBox = null;
-            return; // Exit if we're cleaning up existing textbox
+            CurrentSpeechBubble = null;
+            return;
         }
 
         Point location = e.GetPosition(DrawableCanvas);
@@ -126,7 +128,14 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
     /// <param name="speechBubble">The speech bubble that contains the text.</param>
     private void FinishTextEditingInSpeechBubble(TextBox textBox, DrawableSpeechBubble speechBubble)
     {
-        if (textBox == null) return;
+        if (speechBubble == null)
+        {
+            textBox.TextChanged -= (sender, e) => TextChangedInSpeechBubble(sender as TextBox, speechBubble);
+            textBox.LostFocus -= EditableTextBox_LostFocus;
+            DrawableCanvas.Children.Remove(textBox);
+            editableTextBox = null;
+            return;
+        }
 
         speechBubble.Text = textBox.Text;
 
@@ -146,8 +155,14 @@ public class SpeechBubbleDrawer : DrawableElementDrawer
     /// <param name="speechBubble">The speech bubble containing the text box.</param>
     private void TextChangedInSpeechBubble(TextBox textBox, DrawableSpeechBubble speechBubble)
     {
-        if (textBox == null)
+        if (speechBubble == null)
+        {
+            textBox.TextChanged -= (sender, e) => TextChangedInSpeechBubble(sender as TextBox, speechBubble);
+            textBox.LostFocus -= EditableTextBox_LostFocus;
+            DrawableCanvas.Children.Remove(textBox);
+            editableTextBox = null;
             return;
+        }
 
         speechBubble.Text = textBox.Text; // Update the speech bubble's text
         double fontSize = textBox.FontSize;

@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:screenerWpf.Views"
+        xmlns:colorpicker="clr-namespace:ColorPicker;assembly=ColorPicker"
         Title="Options" Height="600" Width="920"
         Style="{DynamicResource WindowStyle}">
 
@@ -9,6 +10,12 @@
         <!-- Row Definitions for Main Grid -->
         <Grid.RowDefinitions>
             <!-- Row for Theme Toggle Button -->
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -26,14 +33,6 @@
 
         <!-- Grid for Theme Toggle Button -->
         <Grid Grid.Row="0" Margin="10">
-            <Grid.ColumnDefinitions>
-                <!-- Column for "Light Mode" Label -->
-                <ColumnDefinition Width="Auto"/>
-                <!-- Column for ToggleButton -->
-                <ColumnDefinition Width="Auto"/>
-                <!-- Column for "Dark Mode" Label -->
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
 
             <!-- Light Mode Label -->
             <!-- Uncomment if needed -->
@@ -84,19 +83,45 @@
         <TextBox x:Name="recordsSavePath" Style="{DynamicResource TextBoxStyle}" Grid.Row="3" Grid.Column="1" Margin="0,5" 
                  Text="{Binding RecordsSavePath, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <!-- Dropbox App Key (Optional Section) -->
-        <!-- Uncomment if needed -->
-        <!--<TextBlock Text="Dropbox App Key" Grid.Row="4" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
-        <TextBox x:Name="dropboxAppKey" Style="{DynamicResource TextBoxStyle}" Grid.Row="4" Grid.Column="1" Margin="0,5" 
-                 Text="{Binding DropboxAppKey, UpdateSourceTrigger=PropertyChanged}"/>-->
+        <!-- Auto Save Screenshots -->
+        <TextBlock Text="Auto Save Screenshots" Grid.Row="4" Grid.Column="0" Margin="10,5,10,5" 
+                   VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" VerticalAlignment="Center"
+                  IsChecked="{Binding AutoSaveScreenshots, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <!-- Dropbox App Secret (Optional Section) -->
-        <!-- Uncomment if needed -->
-        <!--<TextBlock Text="Dropbox App Secret" Grid.Row="5" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
-        <TextBox x:Name="dropboxAppSecret" Style="{DynamicResource TextBoxStyle}" Grid.Row="5" Grid.Column="1" Margin="0,5" 
-                 Text="{Binding DropboxAppSecret, UpdateSourceTrigger=PropertyChanged}"/>-->
+        <!-- Po Auto Save Screenshots -->
+        <TextBlock Text="Default Font Family" Grid.Row="5" Grid.Column="0" Margin="10,5,10,5" 
+                   VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <ComboBox Grid.Row="5" Grid.Column="1" Margin="0,5" 
+                  ItemsSource="{Binding FontFamilies}"
+                  SelectedValue="{Binding DefaultFontFamily, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <!-- Save Button -->
-        <Button Content="Save" Style="{DynamicResource RoundedButtonStyle}" Grid.Row="6" Grid.Column="1" Margin="0,10,10,10" HorizontalAlignment="Right"/>
+        <TextBlock Text="Default Font Size" Grid.Row="6" Grid.Column="0" Margin="10,5,10,5" 
+                   VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <ComboBox Grid.Row="6" Grid.Column="1" Margin="0,5" 
+                  ItemsSource="{Binding FontSizes}"
+                  SelectedValue="{Binding DefaultFontSize, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <TextBlock Text="Default Thickness" Grid.Row="7" Grid.Column="0" Margin="10,5,10,5" 
+                   VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <ComboBox Grid.Row="7" Grid.Column="1" Margin="0,5" 
+                  ItemsSource="{Binding Thicknesses}"
+                  SelectedValue="{Binding DefaultThickness, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <TextBlock Text="Default Transparency" Grid.Row="8" Grid.Column="0" Margin="10,5,10,5" 
+                   VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <ComboBox Grid.Row="8" Grid.Column="1" Margin="0,5" 
+                  ItemsSource="{Binding TransparencySizes}"
+                  SelectedValue="{Binding DefaultTransparency, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <TextBlock Text="Default Color" Grid.Row="9" Grid.Column="0" Margin="10,5,10,5" 
+                   VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
+        <colorpicker:PortableColorPicker Grid.Row="9" Grid.Column="1" Margin="0,5"
+                     SelectedColor="{Binding DefaultColor, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <!-- Przesuń Save Button na Row="10" -->
+        <Button Content="Save" Style="{DynamicResource RoundedButtonStyle}" 
+                Grid.Row="10" Grid.Column="1" Margin="0,10,10,10" 
+                HorizontalAlignment="Right" Click="SaveButton_Click"/>
     </Grid>
 </Window>

@@ -419,4 +419,9 @@ public class CanvasInputHandler : ICanvasInputHandler
     {
         actionHandler.HandlePaste();
     }
+
+    public void SetCurrentAction(EditAction select)
+    {
+        actionHandler.SetCurrentAction(select);
+    }
 }

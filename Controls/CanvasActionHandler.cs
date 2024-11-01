@@ -108,6 +108,7 @@ public class CanvasActionHandler : ICanvasActionHandler
                 break;
             case EditAction.AddBubble:
                 speechBubbleDrawer.FinishDrawing();
+                SetCurrentAction(EditAction.None);
                 break;
             case EditAction.DrawRectangle:
                 rectangleDrawer.FinishDrawing();

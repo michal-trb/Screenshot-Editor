@@ -2,6 +2,7 @@
 
 using screenerWpf.Controls;
 using screenerWpf.Models.DrawableElements;
+using screenerWpf.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -115,8 +116,15 @@ public class TextDrawer : DrawableElementDrawer
         DrawableCanvas.AddElement(drawableText);
         DrawableCanvas.Children.Remove(textBox);
         editableTextBox = null;
-
         DrawableCanvas.InvalidateVisual();
+
+
+        // Reset UI state to selection mode
+        if (DrawableCanvas.DataContext is ImageEditorViewModel viewModel)
+        {
+            viewModel.ResetToSelectionMode();
+        }
+
     }
 
     /// <summary>

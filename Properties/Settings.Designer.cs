@@ -8,90 +8,202 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace screenerWpf.Properties {
-    
-    
+namespace screenerWpf.Properties
+{
+
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
+    {
+
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
-        public static Settings Default {
-            get {
+
+        public static Settings Default
+        {
+            get
+            {
                 return defaultInstance;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\xmich\\Desktop\\screenshots")]
-        public string RecordsSavePath {
-            get {
+        public string RecordsSavePath
+        {
+            get
+            {
                 return ((string)(this["RecordsSavePath"]));
             }
-            set {
+            set
+            {
                 this["RecordsSavePath"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\xmich\\Desktop\\screenshots")]
-        public string ScreenshotsSavePath {
-            get {
+        public string ScreenshotsSavePath
+        {
+            get
+            {
                 return ((string)(this["ScreenshotsSavePath"]));
             }
-            set {
+            set
+            {
                 this["ScreenshotsSavePath"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\xmich\\Desktop\\screenshots")]
-        public string ScreenshotsLibrary {
-            get {
+        public string ScreenshotsLibrary
+        {
+            get
+            {
                 return ((string)(this["ScreenshotsLibrary"]));
             }
-            set {
+            set
+            {
                 this["ScreenshotsLibrary"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DropboxAppKey {
-            get {
+        public string DropboxAppKey
+        {
+            get
+            {
                 return ((string)(this["DropboxAppKey"]));
             }
-            set {
+            set
+            {
                 this["DropboxAppKey"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DropboxAppSecret {
-            get {
+        public string DropboxAppSecret
+        {
+            get
+            {
                 return ((string)(this["DropboxAppSecret"]));
             }
-            set {
+            set
+            {
                 this["DropboxAppSecret"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Theme {
-            get {
+        public string Theme
+        {
+            get
+            {
                 return ((string)(this["Theme"]));
             }
-            set {
+            set
+            {
                 this["Theme"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoSaveScreenshots
+        {
+            get
+            {
+                return ((bool)(this["AutoSaveScreenshots"]));
+            }
+            set
+            {
+                this["AutoSaveScreenshots"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Arial")]
+        public string DefaultFontFamily
+        {
+            get
+            {
+                return ((string)(this["DefaultFontFamily"]));
+            }
+            set
+            {
+                this["DefaultFontFamily"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public int DefaultFontSize
+        {
+            get
+            {
+                return ((int)(this["DefaultFontSize"]));
+            }
+            set
+            {
+                this["DefaultFontSize"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int DefaultThickness
+        {
+            get
+            {
+                return ((int)(this["DefaultThickness"]));
+            }
+            set
+            {
+                this["DefaultThickness"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public int DefaultTransparency
+        {
+            get
+            {
+                return ((int)(this["DefaultTransparency"]));
+            }
+            set
+            {
+                this["DefaultTransparency"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("#FF000000")]
+        public string DefaultColor
+        {
+            get
+            {
+                return ((string)(this["DefaultColor"]));
+            }
+            set
+            {
+                this["DefaultColor"] = value;
             }
         }
     }

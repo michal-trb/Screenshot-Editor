@@ -6,6 +6,7 @@ using screenerWpf.Interfaces;
 using screenerWpf.Models;
 using screenerWpf.Models.DrawableElement;
 using screenerWpf.Models.DrawableElements;
+using screenerWpf.Properties;
 using screenerWpf.Views;
 using System;
 using System.Collections.Generic;
@@ -90,11 +91,15 @@ internal class ImageEditorViewModel : INotifyPropertyChanged
     /// </summary>
     private void InitializeStartValues()
     {
-        SelectedFontFamily = "Arial";
-        SelectedFontSize = 12;
-        SelectedThickness = 2;
-        SelectedTransparency = 100;
-        SelectedColor = System.Windows.Media.Colors.Black;
+        SelectedFontFamily = Settings.Default.DefaultFontFamily;
+        SelectedFontSize = Settings.Default.DefaultFontSize;
+        SelectedThickness = Settings.Default.DefaultThickness;
+        SelectedTransparency = Settings.Default.DefaultTransparency;
+
+        // Konwertuj kolor z formatu string na Color
+        var colorConverter = new BrushConverter();
+        var defaultColor = (Color)ColorConverter.ConvertFromString(Settings.Default.DefaultColor);
+        SelectedColor = defaultColor;
     }
 
     /// <summary>
@@ -677,5 +682,11 @@ internal class ImageEditorViewModel : INotifyPropertyChanged
             drawableCanvas.elementManager.BringToFront(scaledElement);
         }
         drawableCanvas.InvalidateVisual();
+    }
+
+    public void ResetToSelectionMode()
+    {
+        UpdateVisibility(false, false, false, false, false);
+        inputHandler.SetCurrentAction(EditAction.Select);
     }
 }

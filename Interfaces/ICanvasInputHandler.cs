@@ -1,5 +1,6 @@
 ﻿namespace screenerWpf.Interfaces;
 
+using screenerWpf.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -120,4 +121,5 @@ public interface ICanvasInputHandler
     /// Executes the paste command to paste the copied element.
     /// </summary>
     void CommandBinding_PasteExecuted();
+    void SetCurrentAction(EditAction select);
 }

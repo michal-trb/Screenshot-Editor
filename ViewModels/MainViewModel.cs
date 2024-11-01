@@ -165,6 +165,25 @@ public class MainViewModel : INotifyPropertyChanged
             return;
         }
 
+        // Automatyczne zapisywanie, jeœli opcja jest w³¹czona
+        if (Settings.Default.AutoSaveScreenshots)
+        {
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            string fileName = $"Image_{timestamp}.png";
+            string fullPath = Path.Combine(Settings.Default.ScreenshotsSavePath, fileName);
+
+            try
+            {
+                bitmap.Save(fullPath, System.Drawing.Imaging.ImageFormat.Png);
+                LoadLastScreenshots(); // Odœwie¿amy listê ostatnich screenshotów
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Nie uda³o siê automatycznie zapisaæ screenshota: {ex.Message}",
+                              "B³¹d", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         BitmapSource bitmapSource = ConvertBitmapToBitmapSource(bitmap);
         await Application.Current.Dispatcher.InvokeAsync(() =>
         {

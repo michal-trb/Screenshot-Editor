@@ -42,8 +42,10 @@ public partial class OptionsWindow : Window
     /// </summary>
     private void SaveButton_Click(object sender, RoutedEventArgs e)
     {
-        var viewModel = DataContext as OptionsViewModel;
-        viewModel?.SaveSettings();
-        this.Close();
+        if (DataContext is OptionsViewModel viewModel)
+        {
+            viewModel.SaveSettings();
+            this.Close();
+        }
     }
 }
