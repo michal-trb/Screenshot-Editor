@@ -4,6 +4,9 @@
 
 screenerWpf is a Windows Presentation Foundation (WPF) application designed for screen capturing, video recording, and basic image editing. It includes a variety of tools to help users capture specific areas of the screen, record videos, and edit images with intuitive drawing and annotation features.
 
+Design:
+![image](https://github.com/user-attachments/assets/5739e693-d3fe-4563-b44d-ee4036c15160)
+
 ## Features
 
 ### 1. Screen Capture and Video Recording
