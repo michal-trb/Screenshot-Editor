@@ -6,7 +6,7 @@ screenerWpf is a Windows Presentation Foundation (WPF) application designed for 
 
 Design:
 
-![image](https://github.com/user-attachments/assets/5739e693-d3fe-4563-b44d-ee4036c15160)
+![screenshot-editor](https://github.com/user-attachments/assets/49d6195f-045d-4ba4-a89c-d07b06266630)
 
 ## Features
 
