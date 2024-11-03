@@ -72,6 +72,7 @@
     <BitmapImage x:Key="ScreenshotWindow" UriSource="/Icons/screenshot-window-64.png"/>
     <BitmapImage x:Key="ScreenshotFullscreen" UriSource="/Icons/screenshot-fullscreen-64.png"/>
     <BitmapImage x:Key="ScreenshotArea" UriSource="/Icons/screenshot-area-64.png"/>
+    <BitmapImage x:Key="ScreenshotMonitor" UriSource="/Icons/screenshot-monitor-64.png"/>
     <BitmapImage x:Key="RecordFullscreen" UriSource="/Icons/record-fullscreen-64.png"/>
     <BitmapImage x:Key="RecordArea" UriSource="/Icons/record-area-64.png"/>
     <BitmapImage x:Key="Exit" UriSource="/Icons/exit-32.png"/>
@@ -81,5 +82,5 @@
     <BitmapImage x:Key="UndoIcon" UriSource="/Icons/undo-64.png"/>
     <BitmapImage x:Key="RedoIcon" UriSource="/Icons/redo-64.png"/>
     <BitmapImage x:Key="ResizeIcon" UriSource="/Icons/resize-64.png"/>
-
+    
 </ResourceDictionary>

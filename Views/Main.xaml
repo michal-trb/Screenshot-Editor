@@ -133,7 +133,7 @@
                     Command="{Binding CaptureScreenUnderCursorCommand}"
                     FontFamily="Segoe UI Semibold"
                     Style="{DynamicResource RoundedButtonStyle}">
-                    <Image Source="{DynamicResource ScreenshotCursor}" />
+                    <Image Source="{DynamicResource ScreenshotMonitor}" />
                 </Button>
             </StackPanel>
             

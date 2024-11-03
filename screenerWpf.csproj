@@ -48,6 +48,7 @@
     <None Remove="Icons\save-wh-64.png" />
     <None Remove="Icons\screenshot-area-64.png" />
     <None Remove="Icons\screenshot-fullscreen-64.png" />
+    <None Remove="Icons\screenshot-monitor-64.png" />
     <None Remove="Icons\screenshot-window-64.png" />
     <None Remove="Icons\text-64.png" />
     <None Remove="Icons\text-wh-64.png" />
@@ -169,6 +170,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\undo-64.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\screenshot-monitor-64.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <EmbeddedResource Include="Properties\Settings.settings">
