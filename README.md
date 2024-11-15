@@ -34,20 +34,21 @@ Design:
 - **ColorPicker** for color selection when annotating images.
   
 ## Installation
+### Download ready to use build
+https://github.com/michal-trb/Screenshot-Editor/releases/tag/v0.1
 
-1. **Clone the Repository:**
-    ```bash
+### od clone the repository:
+    
     git clone https://github.com/michal-trb/Screenshot-Editor.git
-    ```
-2. **Install Dependencies:**
+    
+    Install Dependencies:
     Ensure you have the necessary NuGet packages installed. You can use the `Package Manager Console` in Visual Studio to install them:
-    ```bash
+    
     Install-Package ScreenRecorderLib
     Install-Package Tesseract
     Install-Package MediaToolkit
-    ```
-
-3. **Build the Project:**
+    
+    Build the Project:
     Open the solution in Visual Studio, restore any missing dependencies, and build the project.
 
 ## Usage
