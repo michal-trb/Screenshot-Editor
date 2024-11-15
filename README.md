@@ -1,4 +1,4 @@
-# screenerWpf
+# Screenshot-Editor
 
 ## Overview
 
