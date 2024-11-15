@@ -8,115 +8,114 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace screenerWpf.Properties
-{
+using System;
+using System.IO;
 
-
+namespace screenerWpf.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.7.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "17.11.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\xmich\\Desktop\\screenshots")]
-        public string RecordsSavePath
-        {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string RecordsSavePath {
             get
             {
-                return ((string)(this["RecordsSavePath"]));
+                if (string.IsNullOrEmpty((string)this["RecordsSavePath"]))
+                {
+                    string defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos));
+                    this["RecordsSavePath"] = defaultPath;
+                }
+                return (string)this["RecordsSavePath"];
             }
-            set
-            {
+            set {
                 this["RecordsSavePath"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\xmich\\Desktop\\screenshots")]
-        public string ScreenshotsSavePath
-        {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ScreenshotsSavePath {
             get
             {
-                return ((string)(this["ScreenshotsSavePath"]));
+                if (string.IsNullOrEmpty((string)this["ScreenshotsSavePath"]))
+                {
+                    string defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+                    this["ScreenshotsSavePath"] = defaultPath;
+                }
+                return (string)this["ScreenshotsSavePath"];
             }
-            set
-            {
+            set {
                 this["ScreenshotsSavePath"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\xmich\\Desktop\\screenshots")]
-        public string ScreenshotsLibrary
-        {
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ScreenshotsLibrary {
             get
             {
-                return ((string)(this["ScreenshotsLibrary"]));
+                if (string.IsNullOrEmpty((string)this["ScreenshotsLibrary"]))
+                {
+                    string defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures));
+                    this["ScreenshotsLibrary"] = defaultPath;
+                }
+                return (string)this["ScreenshotsLibrary"];
             }
-            set
-            {
+            set {
                 this["ScreenshotsLibrary"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DropboxAppKey
-        {
-            get
-            {
+        public string DropboxAppKey {
+            get {
                 return ((string)(this["DropboxAppKey"]));
             }
-            set
-            {
+            set {
                 this["DropboxAppKey"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string DropboxAppSecret
-        {
-            get
-            {
+        public string DropboxAppSecret {
+            get {
                 return ((string)(this["DropboxAppSecret"]));
             }
-            set
-            {
+            set {
                 this["DropboxAppSecret"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string Theme
-        {
-            get
-            {
+        public string Theme {
+            get {
                 return ((string)(this["Theme"]));
             }
-            set
-            {
+            set {
                 this["Theme"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
@@ -126,27 +125,23 @@ namespace screenerWpf.Properties
             {
                 return ((bool)(this["AutoSaveScreenshots"]));
             }
-            set
-            {
+            set {
                 this["AutoSaveScreenshots"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("Arial")]
-        public string DefaultFontFamily
-        {
-            get
-            {
+        public string DefaultFontFamily {
+            get {
                 return ((string)(this["DefaultFontFamily"]));
             }
-            set
-            {
+            set {
                 this["DefaultFontFamily"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("12")]
@@ -156,12 +151,11 @@ namespace screenerWpf.Properties
             {
                 return ((int)(this["DefaultFontSize"]));
             }
-            set
-            {
+            set {
                 this["DefaultFontSize"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("2")]
@@ -171,12 +165,11 @@ namespace screenerWpf.Properties
             {
                 return ((int)(this["DefaultThickness"]));
             }
-            set
-            {
+            set {
                 this["DefaultThickness"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("100")]
@@ -186,12 +179,11 @@ namespace screenerWpf.Properties
             {
                 return ((int)(this["DefaultTransparency"]));
             }
-            set
-            {
+            set {
                 this["DefaultTransparency"] = value;
             }
         }
-
+        
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF000000")]
@@ -201,8 +193,7 @@ namespace screenerWpf.Properties
             {
                 return ((string)(this["DefaultColor"]));
             }
-            set
-            {
+            set {
                 this["DefaultColor"] = value;
             }
         }
