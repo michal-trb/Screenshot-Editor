@@ -35,9 +35,10 @@ Design:
   
 ## Installation
 ### Download ready to use build
-https://github.com/michal-trb/Screenshot-Editor/releases/tag/v0.1
 
-### od clone the repository:
+    https://github.com/michal-trb/Screenshot-Editor/releases/tag/v0.1
+
+### or clone the repository:
     
     git clone https://github.com/michal-trb/Screenshot-Editor.git
     
