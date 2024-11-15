@@ -37,7 +37,7 @@ Design:
 
 1. **Clone the Repository:**
     ```bash
-    git clone [https://github.com/yourusername/screenerWpf.git](https://github.com/michal-trb/Screenshot-Editor.git)
+    git clone https://github.com/michal-trb/Screenshot-Editor.git
     ```
 2. **Install Dependencies:**
     Ensure you have the necessary NuGet packages installed. You can use the `Package Manager Console` in Visual Studio to install them:
