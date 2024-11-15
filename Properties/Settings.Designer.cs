@@ -36,7 +36,7 @@ namespace screenerWpf.Properties {
                 {
                     string defaultPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos));
                     this["RecordsSavePath"] = defaultPath;
-                }
+            }
                 return (string)this["RecordsSavePath"];
             }
             set {
@@ -187,10 +187,8 @@ namespace screenerWpf.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("#FF000000")]
-        public string DefaultColor
-        {
-            get
-            {
+        public string DefaultColor {
+            get {
                 return ((string)(this["DefaultColor"]));
             }
             set {
