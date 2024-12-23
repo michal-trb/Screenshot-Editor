@@ -6,7 +6,7 @@
     xmlns:local="clr-namespace:screenerWpf.Resources"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Width="304"
-    Height="145"
+    Height="95"
     mc:Ignorable="d"
     Style="{DynamicResource WindowStyle}"
     Title="{x:Static local:Resource.MainTitle}"
@@ -164,102 +164,6 @@
 
         <!-- Screenshot Editor Grid -->
         <Grid Grid.Row="2" x:Name="ScreenshotEditorGrid">
-        </Grid>
-
-        <!-- Last Screenshots Grid with Expander -->
-        <Grid Grid.Row="3" x:Name="GridScreenshots" Margin="0,0,0,3">
-            <Expander
-                x:Name="ExpanderScreenshots"
-                Collapsed="Expander_Collapsed"
-                Expanded="Expander_Expanded"
-                FontSize="9"
-                Foreground="{DynamicResource ForegroundBrush}"
-                Header="{x:Static local:Resource.LastScreenshots}"
-                IsExpanded="False">
-
-                <!-- ItemsControl for Displaying Last Screenshots -->
-                <Viewbox Margin="0,5,0,5" Stretch="Uniform">
-                    <ItemsControl ItemsSource="{Binding LastScreenshots}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="5" Rows="1" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Style="{DynamicResource ThumbnailBorderStyle}">
-                                    <Grid Width="150" Height="150">
-                                        <!-- Set fixed width and height for each item -->
-                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-                                            <Image Height="90" MouseDown="Screenshot_MouseDown" Source="{Binding Thumbnail}" />
-                                            <TextBlock FontSize="13" Foreground="{DynamicResource ForegroundBrush}" Text="{Binding FileName}" TextAlignment="Center" TextWrapping="Wrap" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Viewbox>
-            </Expander>
-
-            <!-- Button for Opening Screenshots Folder -->
-            <Button
-                Margin="0,0,5,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Background="Transparent"
-                BorderThickness="0"
-                Click="OpenScreenshotsFolder">
-                <Image Width="16" Height="16" Source="{DynamicResource FolderScIcon}" ToolTip="{x:Static local:Resource.OpenScreenshots}" />
-            </Button>
-        </Grid>
-
-        <!-- Last Videos Grid with Expander -->
-        <Grid Grid.Row="4" x:Name="GridVideos">
-            <Expander
-                x:Name="ExpanderVideos"
-                Collapsed="Expander_Collapsed"
-                Expanded="Expander_Expanded"
-                FontSize="9"
-                Foreground="{DynamicResource ForegroundBrush}"
-                Header="{x:Static local:Resource.LastVideos}"
-                IsExpanded="False">
-
-                <!-- ItemsControl for Displaying Last Videos -->
-                <Viewbox Margin="0,5,0,5" Stretch="Uniform">
-                    <ItemsControl ItemsSource="{Binding LastVideos}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <UniformGrid Columns="5" Rows="1" />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Border Style="{DynamicResource ThumbnailBorderStyle}">
-                                    <Grid Width="150" Height="150">
-                                        <!-- Set fixed width and height for each item -->
-                                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
-                                            <Image Height="90" MouseDown="Video_MouseDown" Source="{Binding Thumbnail}" />
-                                            <TextBlock FontSize="13" Foreground="{DynamicResource ForegroundBrush}" Text="{Binding FileName}" TextAlignment="Center" TextWrapping="Wrap" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </Viewbox>
-            </Expander>
-
-            <!-- Button for Opening Videos Folder -->
-            <Button
-                Margin="0,0,5,0"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Background="Transparent"
-                BorderThickness="0"
-                Click="OpenVideosFolder">
-                <Image Width="16" Height="16" Source="{DynamicResource FolderViIcon}" ToolTip="{x:Static local:Resource.OpenVideos}" />
-            </Button>
         </Grid>
     </Grid>
 </Window>

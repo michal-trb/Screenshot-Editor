@@ -187,23 +187,7 @@ public partial class Main : Window
     /// </summary>
     private void UpdateWindowWidth()
     {
-        if (IsAnyExpanderExpanded())
-        {
-            this.Width = 520; // Increase width if any Expander is expanded
-        }
-        else
-        {
             this.Width = 304; // Decrease width when all Expanders are collapsed
-        }
-    }
-
-    /// <summary>
-    /// Checks if any Expander control is expanded.
-    /// </summary>
-    /// <returns>True if any Expander is expanded, otherwise false.</returns>
-    private bool IsAnyExpanderExpanded()
-    {
-        return ExpanderScreenshots.IsExpanded || ExpanderVideos.IsExpanded;
     }
 
     /// <summary>
@@ -248,10 +232,6 @@ public partial class Main : Window
         screenshotEditor.LoadedAndSizeUpdated += ScreenshotEditor_LoadedAndSizeUpdated;
         ScreenshotEditorGrid.Children.Clear();
         ScreenshotEditorGrid.Children.Add(screenshotEditor);
-
-        // Hide other grids
-        GridScreenshots.Visibility = Visibility.Collapsed;
-        GridVideos.Visibility = Visibility.Collapsed;
     }
 
     /// <summary>
