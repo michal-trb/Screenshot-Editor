@@ -37,6 +37,8 @@ public partial class Main : Window
         this.optionsWindowFactory = optionsWindowFactory;
         this.viewModel = viewModel;
         DataContext = viewModel;
+
+        this.SizeChanged += Main_SizeChanged;
     }
 
     /// <summary>
@@ -250,5 +252,20 @@ public partial class Main : Window
     {
         this.Width = element.Width + 40;
         this.Height = element.Height + 40;
+    }
+
+    private void Main_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        if (ScreenshotEditorGrid.Children.Count > 0 && ScreenshotEditorGrid.Children[0] is ImageEditorControl editor)
+        {
+            double minWidth = 920;
+            double minHeight = 600;
+
+            double newWidth = Math.Max(e.NewSize.Width - 40, minWidth);
+            double newHeight = Math.Max(e.NewSize.Height - 40, minHeight);
+
+            editor.Width = newWidth;
+            editor.Height = newHeight;
+        }
     }
 }
