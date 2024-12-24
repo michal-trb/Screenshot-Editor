@@ -41,10 +41,10 @@ public partial class OverlayWindow : Window
         var dpiFactorX = dpiScale.DpiScaleX;
         var dpiFactorY = dpiScale.DpiScaleY;
 
-        this.Left = rect.Left / dpiFactorX;
-        this.Top = rect.Top / dpiFactorY;
-        this.Width = (rect.Right - rect.Left) / dpiFactorX;
-        this.Height = (rect.Bottom - rect.Top) / dpiFactorY;
+        this.Left = rect.Left / dpiFactorX -2;
+        this.Top = rect.Top / dpiFactorY -2;
+        this.Width = (rect.Right - rect.Left) / dpiFactorX +4;
+        this.Height = (rect.Bottom - rect.Top) / dpiFactorY +4;
 
         this.Show(); // Shows the overlay window.
     }
