@@ -103,11 +103,6 @@ public interface ICanvasInputHandler
     string SaveFast();
 
     /// <summary>
-    /// Saves the canvas content to a PDF file.
-    /// </summary>
-    void SavePdf();
-
-    /// <summary>
     /// Executes the delete command to remove the selected element.
     /// </summary>
     void CommandBinding_DeleteExecuted();

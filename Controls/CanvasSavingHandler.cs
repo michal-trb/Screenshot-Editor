@@ -122,52 +122,6 @@ public class CanvasSavingHandler : ICanvasSavingHandler
     }
 
     /// <summary>
-    /// Opens a dialog to save the canvas content as a PDF file.
-    /// </summary>
-    public void SaveCanvasToPdfFile()
-    {
-        string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-        string fileName = $"Image_{timestamp}";
-        var saveFileDialog = new SaveFileDialog
-        {
-            FileName = fileName,
-            DefaultExt = ".pdf",
-            Filter = "PDF Files (*.pdf)|*.pdf",
-            InitialDirectory = Settings.Default.ScreenshotsSavePath
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-            WriteableBitmap editedImage = GetEditedImageBitmap();
-            SaveImageToPdf(editedImage, saveFileDialog.FileName);
-        }
-    }
-
-    /// <summary>
-    /// Saves the given image as a PDF file.
-    /// </summary>
-    /// <param name="editedImage">The image to be saved as a PDF.</param>
-    /// <param name="filename">The file path where the PDF will be saved.</param>
-    private void SaveImageToPdf(WriteableBitmap editedImage, string filename)
-    {
-        using (var stream = new FileStream(filename, FileMode.Create))
-        {
-            var pageSize = new Rectangle(0, 0, editedImage.PixelWidth, editedImage.PixelHeight);
-
-            Document document = new Document(pageSize, 0, 0, 0, 0);
-            PdfWriter.GetInstance(document, stream);
-            document.Open();
-
-            var image = WriteableBitmapToPdfImage(editedImage);
-            image.ScaleToFit(pageSize.Width, pageSize.Height);
-
-            document.Add(image);
-
-            document.Close();
-        }
-    }
-
-    /// <summary>
     /// Converts a <see cref="WriteableBitmap"/> to an iTextSharp image that can be added to a PDF.
     /// </summary>
     /// <param name="writeableBitmap">The bitmap to be converted.</param>

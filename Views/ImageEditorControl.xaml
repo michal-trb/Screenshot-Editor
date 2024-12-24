@@ -102,19 +102,6 @@
                 </Button.Content>
             </Button>
 
-            <!-- Save as PDF Button -->
-            <Button
-                Grid.Row="0"
-                Grid.Column="1"
-                Width="{DynamicResource StandardWidth}"
-                Height="{DynamicResource StandardHeight}"
-                Command="{Binding SavePdfCommand}"
-                Style="{DynamicResource RoundedButtonStyle}">
-                <Button.Content>
-                    <Image Source="{DynamicResource PdfFileIcon}" />
-                </Button.Content>
-            </Button>
-
             <!-- Draw Arrow Button -->
             <Button
                 Grid.Row="1"

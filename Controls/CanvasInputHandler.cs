@@ -143,14 +143,6 @@ public class CanvasInputHandler : ICanvasInputHandler
     }
 
     /// <summary>
-    /// Saves the current canvas to a PDF file.
-    /// </summary>
-    public void SavePdf()
-    {
-        savingHandler.SaveCanvasToPdfFile();
-    }
-
-    /// <summary>
     /// Saves the current canvas quickly to a file and returns the file path.
     /// </summary>
     /// <returns>The file path of the saved canvas.</returns>

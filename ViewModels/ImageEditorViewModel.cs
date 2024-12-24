@@ -35,7 +35,6 @@ internal class ImageEditorViewModel : INotifyPropertyChanged
     public ICommand MinimizeCommand { get; private set; }
     public ICommand MaximizeRestoreCommand { get; private set; }
     public ICommand CloseCommand { get; private set; }
-    public ICommand SavePdfCommand { get; private set; }
     public ICommand DrawArrowCommand { get; private set; }
     public ICommand AddTextCommand { get; private set; }
     public ICommand DrawRectCommand { get; private set; }
@@ -142,7 +141,6 @@ internal class ImageEditorViewModel : INotifyPropertyChanged
     /// </summary>
     private void InitializeCommands()
     {
-        SavePdfCommand = new RelayCommand(ExecuteSavePdf);
         DrawArrowCommand = new RelayCommand(ExecuteDrawArrow);
         AddTextCommand = new RelayCommand(ExecuteAddText);
         DrawRectCommand = new RelayCommand(ExecuteDrawRect);
@@ -252,14 +250,6 @@ internal class ImageEditorViewModel : INotifyPropertyChanged
     private void ExecuteSave(object obj)
     {
         inputHandler.Save();
-    }
-
-    /// <summary>
-    /// Executes the Save PDF command to save the current state of the canvas as a PDF file.
-    /// </summary>
-    private void ExecuteSavePdf(object obj)
-    {
-        inputHandler.SavePdf();
     }
 
     /// <summary>

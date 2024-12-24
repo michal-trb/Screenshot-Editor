@@ -12,9 +12,4 @@ public interface ICanvasSavingHandler
     /// </summary>
     /// <returns>The full path of the saved image file.</returns>
     string SaveCanvasToFileFast();
-
-    /// <summary>
-    /// Opens a dialog to save the canvas content to a PDF file.
-    /// </summary>
-    void SaveCanvasToPdfFile();
 }
