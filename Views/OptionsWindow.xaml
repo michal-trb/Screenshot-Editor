@@ -7,9 +7,13 @@
         Style="{DynamicResource WindowStyle}">
 
     <Grid>
-        <!-- Row Definitions for Main Grid -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
-            <!-- Row for Theme Toggle Button -->
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -24,49 +28,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-        <!-- Column Definitions for Main Grid -->
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <!-- Grid for Theme Toggle Button -->
-        <Grid Grid.Row="0" Margin="10">
-
-            <!-- Light Mode Label -->
-            <!-- Uncomment if needed -->
-            <!--<TextBlock Text="Light Mode" Grid.Column="0" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>-->
-
-            <!-- Theme ToggleButton -->
-            <!-- Uncomment if needed -->
-            <!--<ToggleButton x:Name="themeToggleButton" Grid.Column="1" Width="40" Height="20" Margin="10,0" VerticalAlignment="Center" HorizontalAlignment="Center" Checked="ThemeToggleButton_Checked" Unchecked="ThemeToggleButton_Unchecked">
-                <ToggleButton.Template>
-                    <ControlTemplate TargetType="ToggleButton">
-                        <Border x:Name="border" Width="40" Height="20" Background="{TemplateBinding Background}" CornerRadius="10">
-                            <Grid>
-                                <Ellipse x:Name="switch" Width="18" Height="18" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="1" Fill="White"/>
-                            </Grid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="border" Property="Background" Value="DarkSlateGray"/>
-                                <Setter TargetName="switch" Property="HorizontalAlignment" Value="Right"/>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter TargetName="border" Property="Background" Value="Gainsboro"/>
-                                <Setter TargetName="switch" Property="HorizontalAlignment" Value="Left"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </ToggleButton.Template>
-            </ToggleButton>-->
-
-            <!-- Dark Mode Label -->
-            <!-- Uncomment if needed -->
-            <!--<TextBlock Text="Dark Mode" Grid.Column="2" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>-->
-
-        </Grid>
 
         <!-- Screenshots Save Path -->
         <TextBlock Text="Screenshots Save Path" Grid.Row="1" Grid.Column="0" Margin="10,5,10,5" VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
@@ -89,37 +50,41 @@
         <CheckBox Grid.Row="4" Grid.Column="1" Margin="0,5" VerticalAlignment="Center"
                   IsChecked="{Binding AutoSaveScreenshots, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <!-- Po Auto Save Screenshots -->
+        <!-- Default Font Family -->
         <TextBlock Text="Default Font Family" Grid.Row="5" Grid.Column="0" Margin="10,5,10,5" 
                    VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
         <ComboBox Grid.Row="5" Grid.Column="1" Margin="0,5" 
                   ItemsSource="{Binding FontFamilies}"
                   SelectedValue="{Binding DefaultFontFamily, UpdateSourceTrigger=PropertyChanged}"/>
 
+        <!-- Default Font Size -->
         <TextBlock Text="Default Font Size" Grid.Row="6" Grid.Column="0" Margin="10,5,10,5" 
                    VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
         <ComboBox Grid.Row="6" Grid.Column="1" Margin="0,5" 
                   ItemsSource="{Binding FontSizes}"
                   SelectedValue="{Binding DefaultFontSize, UpdateSourceTrigger=PropertyChanged}"/>
 
+        <!-- Default Thickness -->
         <TextBlock Text="Default Thickness" Grid.Row="7" Grid.Column="0" Margin="10,5,10,5" 
                    VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
         <ComboBox Grid.Row="7" Grid.Column="1" Margin="0,5" 
                   ItemsSource="{Binding Thicknesses}"
                   SelectedValue="{Binding DefaultThickness, UpdateSourceTrigger=PropertyChanged}"/>
 
+        <!-- Default Transparency -->
         <TextBlock Text="Default Transparency" Grid.Row="8" Grid.Column="0" Margin="10,5,10,5" 
                    VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
         <ComboBox Grid.Row="8" Grid.Column="1" Margin="0,5" 
                   ItemsSource="{Binding TransparencySizes}"
                   SelectedValue="{Binding DefaultTransparency, UpdateSourceTrigger=PropertyChanged}"/>
 
+        <!-- Default Color -->
         <TextBlock Text="Default Color" Grid.Row="9" Grid.Column="0" Margin="10,5,10,5" 
                    VerticalAlignment="Center" Foreground="{DynamicResource ForegroundBrush}"/>
         <colorpicker:PortableColorPicker Grid.Row="9" Grid.Column="1" Margin="0,5"
                      SelectedColor="{Binding DefaultColor, UpdateSourceTrigger=PropertyChanged}"/>
 
-        <!-- Przesuń Save Button na Row="10" -->
+        <!-- Save Button -->
         <Button Content="Save" Style="{DynamicResource RoundedButtonStyle}" 
                 Grid.Row="10" Grid.Column="1" Margin="0,10,10,10" 
                 HorizontalAlignment="Right" Click="SaveButton_Click"/>
